@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.user_routes import user_router
+from api.translation_routes import translation_router
+from api.idiom_routes import idiom_router
 from databases.connection import Settings
 import os
-
 import uvicorn
 
 app = FastAPI()
@@ -18,7 +19,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(user_router, prefix="/api/user", tags=["User"])
+app.include_router(user_router, prefix="/user")
+app.include_router(translation_router, prefix="/translation")
+app.include_router(idiom_router, prefix="/idiom")
 
 @app.on_event("startup")
 async def on_startup():
