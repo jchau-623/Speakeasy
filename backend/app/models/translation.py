@@ -1,8 +1,10 @@
 from beanie import Document
 from pydantic import BaseModel, Field
-from typing import Optional
+from bson import ObjectId
 
 class Translation(Document):
+    idiom_id: ObjectId
+    slang_id: ObjectId
     translation: str
     target_language: str
 
