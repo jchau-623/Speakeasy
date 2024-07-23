@@ -4,26 +4,29 @@ import { Link, useNavigate } from "react-router-dom";
  
 
 export default function SignIn() {
-  const [userName, setUsername] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonActive, setIsButtonActive] = useState(false);
+  const [error, setError] = useState({});
 
   const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(userName  + " " + password);
+    console.log(userEmail  + " " + password);
     navigate("/home");
   }
 
-
   useEffect(() => {
-    if (userName && password) {
-      setIsButtonActive(true);
-    } else {
-      setIsButtonActive(false);
-    }
-  }, [userName, password]);
+    const errors = {};
+    if (!userEmail) errors.email = "Please enter your email";
+    if (!userEmail.includes("@")) errors.email = "Please enter a valid email";
+    if (!password) errors.password = "Please enter your password";
+
+    setError(errors);
+    
+  }, [userEmail, password]);
+  
 
   return (
     <>
@@ -43,8 +46,8 @@ export default function SignIn() {
               <input
                 type="email"
                 placeholder="User email"
-                value={userName}
-                onChange={(e) => setUsername(e.target.value)}
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
                 className="text-center text-sm sm:text-xl p-2 rounded-full bg-secondary placeholder-white outline-none text-white font-semibold"
               />
             </div>
@@ -59,8 +62,8 @@ export default function SignIn() {
             </div>
 
             <button
-              disabled={!userName || !password}
-              className={`bg-secondary w-fit mx-auto py-1 px-2 rounded-full text-white text-sm sm:text-xl font-bold disabled:bg-slate-300 disabled:text-white ${
+              disabled={Object.values(error).length > 0}
+              className={`bg-secondary w-fit mx-auto py-1 px-2 rounded-full text-white text-sm sm:text-lg font-bold disabled:bg-slate-300 disabled:text-white ${
                 isButtonActive ? "animate__animated animate__rotateIn" : ""
               }`}
             >
