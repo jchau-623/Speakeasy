@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
-            database=client.speakeasy,
+            database=client.get_default_database(),
             document_models=[User, Idiom]
         )
 
@@ -28,6 +28,7 @@ class Settings(BaseSettings):
         model_config = SettingsConfigDict(case_sensitive=True)
 
 
+        env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
