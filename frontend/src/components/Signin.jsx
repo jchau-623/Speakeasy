@@ -24,6 +24,7 @@ export default function SignIn() {
     if (!password) errors.password = "Please enter your password";
 
     setError(errors);
+    setIsButtonActive(Object.values(errors).length === 0);
     
   }, [userEmail, password]);
   
