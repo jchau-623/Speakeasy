@@ -89,9 +89,9 @@ export default function Home() {
             className="w-[40px] h-[40px] absolute top-[30px] right-[50px]"
           />
 
-          <div className="flex flex-col bg-[#F5FBF9] w-[70%] h-[60%] rounded-xl">
-            <div className="container mx-auto">
-              <div className="grid grid-cols-4 w-full h-[60px] bg-primary">
+          <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
+            <div className="container w-[100%] h-full">
+              <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
                 <div
                   className={` ${
                     showChatBot
@@ -106,7 +106,7 @@ export default function Home() {
                   className={` ${
                     showHistory
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
-                      : "rounded-t-xl bg-primary border border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
+                      : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                   }`}
                   onClick={handleHistoryRender}
                 >
@@ -134,7 +134,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 p-5">
+              <div className="grid grid-cols-1 p-5 w-full h-[90%]">
                 {showChatBot && <ChatBot />}
                 {showHistory && <History />}
                 {showFavorite && <Favorites />}
