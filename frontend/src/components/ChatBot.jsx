@@ -1,7 +1,5 @@
 import chatBotImg from "../assets/chat-bot.gif";
-import userImg from "../assets/profile.gif";
-import speechImg from "../assets/speech.png";
-import speechUserImg from "../assets/speech-user.png";
+import askImg from "../assets/ask-bubble.gif";
 import { useEffect, useState } from "react";
 import Result from "./Result";
 
@@ -19,6 +17,28 @@ export default function ChatBot() {
     setUserInput("");
   }
 
+  const typingEffect = (elementId, text, typingSpeed) => {
+    const element = document.getElementById(elementId);
+    let index = 0;
+    element.innerText = ""; // Clear existing text
+  
+    const type = () => {
+      if (index < text.length) {
+        element.append(text.charAt(index));
+        index++;
+        setTimeout(type, typingSpeed);
+      }
+    };
+  
+    type(); // Start typing effect
+  };
+  
+  // Trigger the typing effect
+  document.addEventListener("DOMContentLoaded", () => {
+    const text = "Hi! What slang or idioms would you like to learn today?";
+    typingEffect("typingEffect", text, 50); // Adjust typingSpeed as needed
+  });
+
   useEffect(() => {
     const errors = {};
     if (userInput === "") {
@@ -29,54 +49,61 @@ export default function ChatBot() {
     setIsButtonActive(Object.values(errors).length === 0);
   }, [userInput]);
 
+  useEffect(() => {
+    const text = "Hi! What slang or idioms would you like to learn today?";
+    typingEffect("typingEffect", text, 50); // Adjust typingSpeed as needed
+  }, []);
+
   return (
     <>
       {showResult ? (
         <div className="w-full h-full overflow-hidden">
-
-          <Result handleShowResult={ setShowResult }/>
+          <Result handleShowResult={setShowResult} />
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col overflow-hidden">
-          <div className="flex w-full h-[45%] items-end justify-start animate__animated animate__fadeInLeft">
+        <div className="w-full h-full flex flex-col justify-around">
+          <div className="flex gap-5 w-full xl:w-[60%] p-2 md:p-8 items-center justify-start animate__animated animate__fadeInLeft border-4 border-secondary rounded-full overflow-hidden">
             <img
               src={chatBotImg}
               alt="chat-bot"
-              className="w-[80px] h-[80px]"
+              className="w-[40px] h-[40px] sm:w-[80px] sm:h-[80px]"
             />
-            <div className="flex items-center justify-start relative w-full h-[45%] ">
-              <img src={speechImg} alt="" className="w-1/2 relative -top-10" />
-              <p className="z-10 absolute -top-5 left-16 w-[35%] text-center">
-                Hi! What slang or idioms would you like to learn today?
-              </p>
-            </div>
+            <p id="typingEffect" className="w-full break-words">
+              Hi! What slang or idioms would you like to learn today?
+            </p>
           </div>
-          <div className="flex w-full h-[45%] justify-end items-center relative animate__animated animate__fadeInRight">
-            <div className="flex justify-center items-center relative -top-16 -right-20 ">
-              <img src={speechUserImg} alt="" className="w-2/3 " />
-              <form className="absolute flex" onSubmit={handlesubmit}>
+          <div
+            className={`flex w-full xl:w-[60%] self-end justify-end items-center relative animate__animated animate__fadeInRight border-4 ${
+              userInput.length > 0 ? "border-secondary" : "border-slate-300"
+            } rounded-full`}
+          >
+            <div className="flex justify-center items-center p-2 md:p-8 w-full">
+              <form
+                className="w-full flex items-center gap-5"
+                onSubmit={handlesubmit}
+              >
                 <textarea
                   type="text"
                   placeholder="Input the word or phrase"
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
-                  className="outline-none text-center p-2 bg-container placeholder-secondary scrollbar-hide resize-none"
+                  rows={1}
+                  className="flex items-center outline-none text-center p-2 bg-container placeholder-secondary w-[90%] placeholder-center resize-none"
                 />
                 <button
                   disabled={Object.values(error).length > 0}
-                  className={`${
-                    isButtonActive ? "text-secondary" : "text-slate-300"
-                  } `}
+                  className={`text-2xl
+                    ${isButtonActive ? "text-secondary" : "text-slate-300"} `}
                 >
                   <RiSendPlane2Fill />
                 </button>
               </form>
+              <img
+                src={askImg}
+                alt="user ask icon"
+                className="hidden sm:block sm:w-[40px] sm:h-[40px] md:w-[80px] md:h-[80px]"
+              />
             </div>
-            <img
-              src={userImg}
-              alt="user animated icon"
-              className="w-[60px] h-[60px]"
-            />
           </div>
         </div>
       )}

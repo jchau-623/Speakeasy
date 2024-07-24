@@ -10,7 +10,7 @@ import loadingImg from "../assets/loading.gif";
 import chatBotImg from "../assets/chat-bot.gif";
 import historyImg from "../assets/history.gif";
 import favoriteImg from "../assets/favorites.gif";
-import profileImg from "../assets/profile.gif";
+import profileImg from "../assets/user-profile.gif";
 
 export default function Home() {
   const [showLoading, setShowLoading] = useState(true);
@@ -79,7 +79,7 @@ export default function Home() {
         )}
 
         <div
-          className={`mainContent flex justify-center items-center w-full h-full ${
+          className={`flex justify-center items-center w-full h-full ${
             showMainContent ? "animate__animated animate__fadeIn" : "hidden"
           }`}
         >
@@ -116,7 +116,7 @@ export default function Home() {
                   className={` ${
                     showFavorite
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
-                      : "rounded-t-xl bg-primary border border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
+                      : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                   }`}
                   onClick={handleFavoriteRender}
                 >
@@ -126,7 +126,7 @@ export default function Home() {
                   className={` ${
                     showProfile
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
-                      : "rounded-t-xl bg-primary border border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
+                      : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                   }`}
                   onClick={handleProfileRender}
                 >
@@ -134,7 +134,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 p-5 w-full h-[90%]">
+              <div className="grid grid-cols-1 p-8 w-full h-[90%]">
                 {showChatBot && <ChatBot />}
                 {showHistory && <History />}
                 {showFavorite && <Favorites />}
