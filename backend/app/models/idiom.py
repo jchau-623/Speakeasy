@@ -3,21 +3,22 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 class Idiom(Document):
-    idiom: str
-    language: str
+    name: str
+    meaning: str
+    example: Optional[str]
+    user_id: str
 
     class Settings:
-        name = "idioms"
+        collection = "idioms"
+
+class IdiomCreate(BaseModel):
+    name: str
+    meaning: str
+    example: Optional[str]
+
+class IdiomResponse(IdiomCreate):
+    id: str = Field(..., alias="_id")
 
     class Config:
-        schema_extra = {
-            "example": {
-                "idiom": "Break the ice",
-                "language": "en"
-            }
-        }
-
-
-class IdiomResponse(BaseModel):
-    idiom: str
-    language: str
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
