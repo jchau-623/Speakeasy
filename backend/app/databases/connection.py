@@ -4,6 +4,7 @@ from typing import Optional, Any, List
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from models.user import User
+from models.idiom import Idiom 
 
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
@@ -13,11 +14,11 @@ class Settings(BaseSettings):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
             database=client.get_default_database(),
-            document_models=[User]
+            document_models=[User, Idiom]
         )
 
     class Config:
-        env_file = "../../.env"
+        env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
