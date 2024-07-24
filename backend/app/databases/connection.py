@@ -19,13 +19,14 @@ class Settings(BaseSettings):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
             database=client.get_default_database(),
-            document_models=[User]
+            document_models=[User, Idiom]
         )
 
     class Config:
         model_config = SettingsConfigDict(case_sensitive=True)
 
 
+        env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
