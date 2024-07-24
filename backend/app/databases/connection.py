@@ -29,7 +29,6 @@ class Settings(BaseSettings):
 
 
 
-
 class Database:
     def __init__(self, model):
         self.model = model
