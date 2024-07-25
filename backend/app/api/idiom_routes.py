@@ -14,7 +14,7 @@ async def create_idiom(idiom: IdiomCreate, user_id: str):
     await database.save(new_idiom)
     return IdiomResponse(**new_idiom.dict(by_alias=True))
 
-@idiom_router.get("/{id}", response_model=IdiomResponse)
+@idiom_router.get("/{id}", response_model=IdiomResponse) 
 async def get_idiom(id: UUID):
     idiom = await database.get(id)
     if not idiom:
