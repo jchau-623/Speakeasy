@@ -4,6 +4,7 @@ from typing import Optional, Any, List
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from models.user import User
+from models.idiom import Idiom
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -11,14 +12,15 @@ import os
 
 load_dotenv(find_dotenv(".env"))
 
+
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
-        await init_beanie( 
-            database=client.get_default_database(),
+        await init_beanie(
+            database=client.speakeasy,
             document_models=[User, Idiom]
         )
 
