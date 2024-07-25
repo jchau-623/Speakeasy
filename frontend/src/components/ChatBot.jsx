@@ -20,8 +20,8 @@ export default function ChatBot() {
   const typingEffect = (elementId, text, typingSpeed) => {
     const element = document.getElementById(elementId);
     let index = 0;
-    element.innerText = ""; // Clear existing text
-  
+    element.innerText = "";
+
     const type = () => {
       if (index < text.length) {
         element.append(text.charAt(index));
@@ -29,15 +29,9 @@ export default function ChatBot() {
         setTimeout(type, typingSpeed);
       }
     };
-  
-    type(); // Start typing effect
+
+    type();
   };
-  
-  // Trigger the typing effect
-  document.addEventListener("DOMContentLoaded", () => {
-    const text = "Hi! What slang or idioms would you like to learn today?";
-    typingEffect("typingEffect", text, 50); // Adjust typingSpeed as needed
-  });
 
   useEffect(() => {
     const errors = {};
@@ -50,9 +44,12 @@ export default function ChatBot() {
   }, [userInput]);
 
   useEffect(() => {
-    const text = "Hi! What slang or idioms would you like to learn today?";
-    typingEffect("typingEffect", text, 50); // Adjust typingSpeed as needed
-  }, []);
+    if (!showResult) {
+      const text = "Hi! What slang or idioms would you like to learn today?";
+      typingEffect("typingEffect", text, 50);
+    }
+  }, [showResult]);
+
 
   return (
     <>
@@ -61,7 +58,7 @@ export default function ChatBot() {
           <Result handleShowResult={setShowResult} />
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col justify-around">
+        <div className="chatBot w-full h-full flex flex-col justify-around">
           <div className="flex gap-5 w-full xl:w-[60%] p-2 md:p-8 items-center justify-start animate__animated animate__fadeInLeft border-4 border-secondary rounded-full overflow-hidden">
             <img
               src={chatBotImg}

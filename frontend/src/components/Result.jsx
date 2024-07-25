@@ -30,7 +30,7 @@ export default function Result({ handleShowResult }) {
                 <img
                   src={FavoriteImg}
                   alt="favorite icon"
-                  className="w-[30px] h-[30px]"
+                  className="w-[30px] h-[30px] cursor-pointer rotate-30"
                   onClick={removeFromFavorite}
                 />
               ) : (
@@ -44,7 +44,7 @@ export default function Result({ handleShowResult }) {
                 
               )}
 
-              <span className="absolute bottom-full mb-1 hidden group-hover:block px-2 py-1 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+              <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
                 {favorite ?  "Remove from Favorite" : "Add to Favorite"}
               </span>
             </div>
