@@ -12,14 +12,15 @@ import os
 
 load_dotenv(find_dotenv(".env"))
 
+
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
-        await init_beanie( 
-            database=client.get_default_database(),
+        await init_beanie(
+            database=client.speakeasy,
             document_models=[User, Idiom]
         )
 
