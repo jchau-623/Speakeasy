@@ -14,6 +14,9 @@ class Idiom(Document):
         collection = "idioms"
         arbitrary_types_allowed = True
 
+    class Config:
+        arbitrary_types_allowed = True
+
 class IdiomCreate(BaseModel):
     name: str
     meaning: str
