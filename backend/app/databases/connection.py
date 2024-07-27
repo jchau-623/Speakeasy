@@ -6,8 +6,12 @@ from pydantic_settings import BaseSettings
 from models.user import User
 
 
+import os #leslie
+    
+    
 class Settings(BaseSettings):
-    SECRET_KEY: Optional[str] = None
+    # SECRET_KEY: Optional[str] = None
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "your_default_secret_key") #leslie
     DATABASE_URL: Optional[str] = None
 
     async def initialize_database(self):

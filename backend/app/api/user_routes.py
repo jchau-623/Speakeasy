@@ -50,8 +50,10 @@ async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
     #     return {
     #         "message": "User signed in successfully"
     #     }
+    # print(f"{user} User signed in successfully") #leslie
 
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Invalid details passed"
     )
+    
