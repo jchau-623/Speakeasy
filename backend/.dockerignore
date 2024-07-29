@@ -1,4 +1,13 @@
-.venv
+._*
+
+.DS_Store
+.idea
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Local development environments
 .env
 .git
-._*
+.vscode
+.venv/

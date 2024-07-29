@@ -1,10 +1,13 @@
 import asyncio
 import httpx
 import pytest
+# import pytest_asyncio
+import os
 
-from app.main import app
-from app.databases.connection import Settings
-from app.models.user import User
+from main import app
+from databases.connection import Settings
+from models.user import User
+
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -18,10 +21,10 @@ async def init_db():
 
     await test_settings.initialize_database()
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 async def default_client():
     await init_db()
     async with httpx.AsyncClient(app=app, base_url="http://app") as client:
         yield client
         #Clean up resources
-        await User.find_all().delete()
+        # await User.find_all().delete()

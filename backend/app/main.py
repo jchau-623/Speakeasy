@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.user_routes import user_router
-from app.databases.connection import Settings
+from api.user_routes import user_router
+from databases.connection import Settings
 import os
 
 import uvicorn
