@@ -1,6 +1,6 @@
 from beanie import init_beanie, PydanticObjectId, Document
 from motor.motor_asyncio import AsyncIOMotorClient
-from typing import Optional, Any, List, Type
+from typing import Optional, Type, List
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from models.idiom import Idiom
@@ -26,14 +26,13 @@ class Database:
     async def save(self, document: BaseModel) -> None:
         await document.create()
 
-    async def get(self, id: PydanticObjectId) -> Any:
-        doc = await self.model.get(id)
-        return doc if doc else None
+    async def get(self, id: PydanticObjectId) -> Optional[Document]:
+        return await self.model.get(id)
 
-    async def get_all(self) -> List[Any]:
+    async def get_all(self) -> List[Document]:
         return await self.model.find_all().to_list()
 
-    async def update(self, id: PydanticObjectId, body: BaseModel) -> Any:
+    async def update(self, id: PydanticObjectId, body: BaseModel) -> Optional[Document]:
         des_body = {k: v for k, v in body.dict().items() if v is not None}
         update_query = {"$set": des_body}
         
