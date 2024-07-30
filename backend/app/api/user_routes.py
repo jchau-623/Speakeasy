@@ -4,6 +4,7 @@ from auth.hash_password import HashPassword
 from auth.jwt_handler import create_access_token
 from databases.connection import Database
 from models.user import User, TokenResponse
+# import pytest
 
 user_router = APIRouter(
     tags=["User"]
@@ -46,10 +47,6 @@ async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
             "access_token": access_token,
             "token_type": "Bearer"
         }
-    # if user_exist.password == user.password:
-    #     return {
-    #         "message": "User signed in successfully"
-    #     }
 
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
