@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(user_router, prefix="/user")
+app.include_router(user_router, prefix="/user", tags=["User"])
 
 @app.on_event("startup")
 async def on_startup():
