@@ -16,6 +16,7 @@ class Settings(BaseSettings):
         await init_beanie(
             database=client.speakeasy,
             document_models=[User, Idiom, Slang]
+           
         )
 
     class Config:
