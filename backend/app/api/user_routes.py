@@ -34,6 +34,7 @@ async def sign_new_user(user: User) -> dict:
 
 @user_router.post("/signin", response_model=TokenResponse)
 async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
+    
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
         raise HTTPException(

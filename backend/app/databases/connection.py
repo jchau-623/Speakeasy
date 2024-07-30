@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from models.user import User
 from models.idiom import Idiom
+from models.slang import Slang
 
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
@@ -14,7 +15,7 @@ class Settings(BaseSettings):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
             database=client.speakeasy,
-            document_models=[User, Idiom]
+            document_models=[User, Idiom, Slang]
         )
 
     class Config:

@@ -11,9 +11,9 @@ def create_access_token(user: str) -> str:
         "user": user,
         "expires": time.time() + 3600
     }
-
+    
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
-
+ 
     return token
 
 
