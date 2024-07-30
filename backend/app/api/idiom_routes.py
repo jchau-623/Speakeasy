@@ -1,13 +1,14 @@
 from fastapi import APIRouter, HTTPException, status
 from beanie import PydanticObjectId
+from typing import Dict
 from models.idiom import Idiom, IdiomResponse
 
 idiom_router = APIRouter(
     tags=["Idiom"]
 )
 
-@idiom_router.post("/", response_model=IdiomResponse)
-async def create_idiom(idiom: Idiom) -> IdiomResponse:
+@idiom_router.post("/", response_model=Dict[str, str])
+async def create_idiom(idiom: Idiom) -> Dict[str, str]:
     idiom_exist = await Idiom.find_one(Idiom.idiom == idiom.idiom)
     if idiom_exist:
         raise HTTPException(
@@ -16,7 +17,7 @@ async def create_idiom(idiom: Idiom) -> IdiomResponse:
         )
 
     await idiom.insert()
-    return IdiomResponse(**idiom.dict())
+    return {"id": str(idiom.id), "idiom": idiom.idiom, "language": idiom.language}
 
 @idiom_router.get("/{idiom_id}", response_model=IdiomResponse)
 async def get_idiom(idiom_id: PydanticObjectId) -> IdiomResponse:
@@ -37,8 +38,9 @@ async def update_idiom(idiom_id: PydanticObjectId, idiom_data: Idiom) -> IdiomRe
             detail="Idiom not found"
         )
 
-    await idiom.set(idiom_data.dict())
-    return IdiomResponse(**idiom.dict())
+    await idiom.update({"$set": idiom_data.dict(exclude_unset=True)})
+    updated_idiom = await Idiom.get(idiom_id)
+    return IdiomResponse(**updated_idiom.dict())
 
 @idiom_router.delete("/{idiom_id}")
 async def delete_idiom(idiom_id: PydanticObjectId) -> dict:
