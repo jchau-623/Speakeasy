@@ -1,8 +1,9 @@
-from beanie import Document
+from beanie import Document, PydanticObjectId
 from pydantic import BaseModel, EmailStr
 from typing import List
 
 class User(Document):
+    id: PydanticObjectId = None  # leslie
     email: EmailStr
     password: str
 
@@ -19,5 +20,12 @@ class User(Document):
 
 
 class TokenResponse(BaseModel):
+    # access_token: str
+    # token_type: str
+    user: User
+    
+    
+class SignupResponse(BaseModel):
     access_token: str
     token_type: str
+    new_user: User

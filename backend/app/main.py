@@ -19,6 +19,7 @@ app.add_middleware(
 
 app.include_router(user_router, prefix="/user")
 app.include_router(idiom_router, prefix="/idiom")
+app.include_router(user_router, prefix="/user", tags=["User"])
 
 @app.on_event("startup")
 async def on_startup():
