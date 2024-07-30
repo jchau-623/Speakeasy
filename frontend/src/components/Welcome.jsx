@@ -30,8 +30,8 @@ export default function Welcome() {
               fadeOut ? "animate__fadeOut" : ""
             }`}
           >
-            <img src={logo} alt="speak logo" className="w-[20%]" />
-            <p className="text-3xl lg:text-6xl font-semibold lg:font-bold text-white">
+            <img src={logo} alt="speak logo" className="w-[15%]" />
+            <p className="text-4xl lg:text-6xl font-semibold lg:font-bold text-white">
               Welcome to SpeakEasy!
             </p>
           </div>
