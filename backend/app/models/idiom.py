@@ -1,6 +1,5 @@
 from beanie import Document
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel
 
 class Idiom(Document):
     idiom: str
@@ -16,7 +15,6 @@ class Idiom(Document):
                 "language": "en"
             }
         }
-
 
 class IdiomResponse(BaseModel):
     idiom: str
