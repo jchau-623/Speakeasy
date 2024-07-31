@@ -13,7 +13,7 @@ WORKDIR /app
 COPY Pipfile /app
 COPY Pipfile.lock /app
 
-RUN pipenv install --deploy --ignore-pipfile
+RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
 COPY ./app /app
 

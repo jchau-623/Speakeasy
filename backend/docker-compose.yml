@@ -18,14 +18,9 @@ services:
     image: mongo:latest
     container_name: backend_database
     ports:
-      - "27017:27017"
-    volumes:
-      - data:/data/db
-    healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    - "27017"
+#     volumes:
+#      - data:/data/db
 
-volumes:
-  data:
+# volumes:
+#   data:
