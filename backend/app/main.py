@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.user_routes import user_router
 from api.idiom_routes import idiom_router
+from api.slang_routes import slang_router
 from databases.connection import Settings
 import uvicorn
 
@@ -19,6 +20,7 @@ app.add_middleware(
 
 app.include_router(user_router, prefix="/user")
 app.include_router(idiom_router, prefix="/idiom")
+app.include_router(slang_router, prefix="/slangs")
 
 @app.on_event("startup")
 async def on_startup():

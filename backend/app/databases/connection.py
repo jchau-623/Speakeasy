@@ -5,20 +5,25 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from models.user import User
 from models.idiom import Idiom
+from models.slang import Slang
 
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
             database=client.speakeasy,
-            document_models=[User, Idiom]
+            document_models=[User, Idiom, Slang]
         )
 
     class Config:
         env_file = ".env.prod"
+
+settings = Settings()
+print(f"Loaded SECRET_KEY: {settings.SECRET_KEY}")  # Проверка загрузки SECRET_KEY
 
 class Database:
     def __init__(self, model):
