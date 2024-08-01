@@ -6,6 +6,7 @@ class User(Document):
     id: PydanticObjectId = None  # leslie
     email: EmailStr
     password: str
+    favorite: List[str] = []
 
     class Settings:
         name = "users"
@@ -25,7 +26,5 @@ class TokenResponse(BaseModel):
     user: User
     
     
-class SignupResponse(BaseModel):
-    access_token: str
-    token_type: str
-    new_user: User
+class MessageResponse(BaseModel):
+    message: str

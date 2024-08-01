@@ -8,7 +8,7 @@ import uvicorn
 
 app = FastAPI()
 
-origins = ["*"]
+origins = ["http://localhost:5173"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(user_router, prefix="/user", tags=["User"])
+app.include_router(user_router, prefix="/api/user", tags=["User"])
 
 @app.on_event("startup")
 async def on_startup():

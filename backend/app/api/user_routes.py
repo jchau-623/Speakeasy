@@ -1,13 +1,11 @@
-# from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi import APIRouter, Depends, HTTPException, status, Request, Response #logout
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.hash_password import HashPassword
-# from auth.jwt_handler import create_access_token
-from auth.jwt_handler import create_access_token, verify_access_token #logout
+from auth.jwt_handler import create_access_token
 from databases.connection import Database
-from models.user import User, TokenResponse, SignupResponse
+from models.user import User, TokenResponse, MessageResponse
 from auth.authenticate import authenticate
-from typing import List #logout
+from typing import List
 
 user_router = APIRouter(
     tags=["User"]
@@ -20,7 +18,6 @@ token_blacklist: List[str] = [] #logout for dev only
 
 
 @user_router.post("/signup")
-# async def sign_new_user(user: User) -> dict:
 async def sign_new_user(user: User, response: Response) -> User:
     user_exist = await User.find_one(User.email == user.email)
     if user_exist:
@@ -34,7 +31,6 @@ async def sign_new_user(user: User, response: Response) -> User:
 
     await user_database.save(user)
     
-    #leslie
     db = Database(User)
     new_user = await db.get_by_email(user.email)
     access_token = create_access_token(user.email)
@@ -47,15 +43,9 @@ async def sign_new_user(user: User, response: Response) -> User:
     response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True)
     
     return new_user
-    #leslie
-
-    # return {
-    #     "message": "User created successfully"
-    # }
 
 
 @user_router.post("/signin", response_model=TokenResponse)
-# async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
 async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Depends()) -> dict:
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
@@ -67,14 +57,10 @@ async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Dep
         access_token = create_access_token(user_exist.email)
         response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True)
         return {"user": user_exist}
-    # if user_exist.password == user.password:
-    #     return {
-    #         "message": "User signed in successfully"
-    #     }
 
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
-        detail="Invalid details passed"
+        detail="Invalid details passed")
     
 
 @user_router.get("/", response_model=User)
@@ -89,8 +75,8 @@ async def get_user(request: Request, current_user_email: str = Depends(authentic
         )
     return user
 
-@user_router.delete("/", response_model=User)
-async def delete_user(current_user_email: str = Depends(authenticate)) -> User:
+@user_router.delete("/", response_model=MessageResponse)
+async def delete_user(current_user_email: str = Depends(authenticate)) -> MessageResponse:
     """Delete current user"""
     db = Database(User)
     user = await db.get_by_email(current_user_email)
@@ -100,7 +86,7 @@ async def delete_user(current_user_email: str = Depends(authenticate)) -> User:
             detail="User not found"
         )
     await user.delete()
-    return "User deleted successfully."
+    return MessageResponse(message="User deleted successfully.")
 
 
 @user_router.post("/logout")
