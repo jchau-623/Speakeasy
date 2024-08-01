@@ -4,20 +4,17 @@ services:
   api:
     build: .
     image: speakeasy:latest
-    container_name: backend_api
     ports:
       - "8080:8080"
     env_file:
       - .env.prod
-    environment:
-      - PYTHONPATH=/app
-    depends_on:
-      - database
 
   database:
-    image: mongo:latest
-    container_name: backend_database
+    image: mongo
     ports:
     - "27017"
 #     volumes:
 #      - data:/data/db
+
+# volumes:
+#   data:

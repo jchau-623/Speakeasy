@@ -1,10 +1,10 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.user_routes import user_router
 from api.idiom_routes import idiom_router
 from api.history_routes import history_router
 from databases.connection import Settings
-import uvicorn
 
 app = FastAPI()
 
