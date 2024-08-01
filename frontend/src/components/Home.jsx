@@ -28,14 +28,15 @@ export default function Home() {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  console.log('user', user);
 
   const handleLogOut = async () => {
-    await dispatch(logoutThunk());
-    navigate("/");
+    const result = await dispatch(logoutThunk());
+    if (result.success) {
+      navigate("/");
+    } else {
+      alert(result.error.message);
+    }
   }
-  
   
   function handleHomeRender() {
     setShowChatBot(true);
@@ -153,10 +154,10 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 p-8 w-full h-[90%]">
-                {showChatBot && <ChatBot />}
+                {showChatBot && <ChatBot user={user}/>}
                 {showHistory && <History />}
                 {showFavorite && <Favorites />}
-                {showProfile && <Profile />}
+                {showProfile && <Profile user={user}/>}
               </div>
             </div>
           </div>
