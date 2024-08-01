@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import robot from "../assets/chat-bot.gif";
 import { Link, useNavigate } from "react-router-dom";
-import { signinThunk, getUserThunk } from "../store/userReducer";
+import { signinThunk } from "../store/userReducer";
 import { useDispatch } from "react-redux";
  
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,12 +19,10 @@ export default function SignIn() {
 
     const result = await dispatch(signinThunk({ username, password }));
     if (result.success) {
-      setUser(result.user);
-      console.log("user", user);
       navigate("/home");
     } else {
       const errors = {};
-      errors.email = result.error.message || "Invalid email or password";
+      errors.error = result.error.detail || "Invalid email or password";
       setError(errors); 
     }
 }
@@ -75,6 +71,12 @@ export default function SignIn() {
                 className="text-center text-sm sm:text-xl p-2 rounded-full bg-secondary placeholder-white outline-none text-white font-semibold"
               />
             </div>
+
+            
+              <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full">
+                {error.error}
+              </div>
+          
 
             <button
               disabled={Object.values(error).length > 0}

@@ -60,7 +60,7 @@ async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Dep
 
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
-        detail="Invalid details passed")
+        detail="Invalid password.")
     
 
 @user_router.get("/", response_model=User)
