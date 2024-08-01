@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { signupThunk } from "../store/userReducer";
+
 import profileImg from "../assets/user-profile.gif"
 
 export default function SignUp() {
@@ -8,12 +12,20 @@ export default function SignUp() {
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [error, setError] = useState({});
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userEmail + " " + password);
-    navigate("/home");
+    const result = await dispatch(signupThunk({ email: userEmail, password }));
+
+    if (result.success) {
+      navigate("/home");
+    } else {  
+      const errors = {};
+      errors.error = result.error.detail || "Invalid email or password";
+      setError(errors); 
+    }
   }
 
   useEffect(() => {
@@ -68,6 +80,10 @@ export default function SignUp() {
                 className="text-center text-sm sm:text-xl p-2 rounded-full bg-[#F5FBF9] placeholder-secondary outline-none text-secondary font-semibold"
               />
             </div>
+
+            <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full">
+                {error.error}
+              </div>
 
             <button
               disabled={Object.values(error).length > 0}

@@ -42,7 +42,7 @@ const deleteUser = () => {
 
 //thunk action creator
 export const signinThunk = (user) => async (dispatch) => {
-    console.log("in the signinThunk")
+    // console.log("in the signinThunk")
     try {
         const response = await fetch('/api/user/signin', {
             method: 'POST',
@@ -119,6 +119,7 @@ export const logoutThunk = () => async (dispatch) => {
         });
         if (response.ok) {
             dispatch(userLogout());
+            return { success: true };
         } else {
             const error = await response.json();
             console.error("Logout failed:", error);
