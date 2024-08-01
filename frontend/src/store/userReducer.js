@@ -58,7 +58,7 @@ export const signinThunk = (user) => async (dispatch) => {
             return { success: true, user };
         } else {
             const error = await response.json();
-            return { success: false, error };
+            return { success: false, error: error };
         }
     } catch (err) {
         return { success: false, error: { message: 'Network error' } };

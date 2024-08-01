@@ -12,6 +12,8 @@ import historyImg from "../assets/history.gif";
 import favoriteImg from "../assets/favorites.gif";
 import profileImg from "../assets/user-profile.gif";
 
+import { logoutThunk } from "../store/userReducer";
+
 export default function Home() {
   const [showLoading, setShowLoading] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
