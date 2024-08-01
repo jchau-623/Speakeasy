@@ -91,28 +91,42 @@ export const signupThunk = (user) => async (dispatch) => {
 
 export const getUserThunk = () => async (dispatch) => {
     try {
-
-        const response = await fetch('/api/user/');
+        const response = await fetch('/api/user/', {
+            method: 'GET',
+            credentials: 'include' // Ensure cookies are sent with the request
+        });
         if (response.ok) {
             const user = await response.json();
             dispatch(getUser(user));
             return user;
+        } else {
+            const error = await response.json();
+            console.error("Error fetching user:", error);
+            return error;
         }
     } catch (err) {
-        const error = await error.json();
-        return error;
+        console.error("Network error:", err);
+        return { error: "Network error" };
     }
 }
 
 export const logoutThunk = () => async (dispatch) => {
+    console.log("in the logoutThunk");
     try {
-        const response = await fetch('/api/user/logout');
+        const response = await fetch('/api/user/logout', {
+            method: 'POST',
+            credentials: 'include' // This ensures cookies are sent with the request
+        });
         if (response.ok) {
             dispatch(userLogout());
+        } else {
+            const error = await response.json();
+            console.error("Logout failed:", error);
+            return error;
         }
     } catch (err) {
-        const error = await error.json();
-        return error;
+        console.error("Network error:", err);
+        return { error: "Network error" };
     }
 }
 

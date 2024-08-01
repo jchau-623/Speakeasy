@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import signout from "../assets/signout.png";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import ChatBot from "./ChatBot";
 import History from "./History";
@@ -11,6 +12,7 @@ import chatBotImg from "../assets/chat-bot.gif";
 import historyImg from "../assets/history.gif";
 import favoriteImg from "../assets/favorites.gif";
 import profileImg from "../assets/user-profile.gif";
+import signout from "../assets/signout.png";
 
 import { logoutThunk } from "../store/userReducer";
 
@@ -22,21 +24,19 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false);
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const { user } = useSelector((state) => state.users);
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  console.log('user', user);
 
-  useEffect(() => {
-    const fadeOutTimer = setTimeout(() => {
-      setFadeOut(true);
-      setTimeout(() => {
-        setShowLoading(false);
-        setShowContainer(true);
-      }, 2000);
-    }, 3000);
-
-    return () => {
-      clearTimeout(fadeOutTimer);
-    };
-  }, []);
-
+  const handleLogOut = async () => {
+    await dispatch(logoutThunk());
+    navigate("/");
+  }
+  
+  
   function handleHomeRender() {
     setShowChatBot(true);
     setShowHistory(false);
@@ -65,6 +65,21 @@ export default function Home() {
     setShowProfile(true);
   }
 
+  useEffect(() => {
+      const fadeOutTimer = setTimeout(() => {
+        setFadeOut(true);
+        setTimeout(() => {
+          setShowLoading(false);
+          setShowContainer(true);
+        }, 2000);
+      }, 3000);
+
+      return () => {
+        clearTimeout(fadeOutTimer);
+      };
+    }, []);
+
+
   return (
     <>
       <div className="bg-primary w-screen h-screen flex justify-center items-center">
@@ -89,6 +104,7 @@ export default function Home() {
             src={signout}
             alt="log out button"
             className="w-[40px] h-[40px] absolute top-[30px] right-[50px]"
+            onClick={handleLogOut}
           />
 
           <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
