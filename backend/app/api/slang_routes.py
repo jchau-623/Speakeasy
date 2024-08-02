@@ -105,28 +105,18 @@ async def get_slang(id: UUID):
 
 
 
-@slang_router.put("/{id}", response_model=SlangResponse)
-async def update_slang(id: UUID, slang: SlangCreate):
-    updated_slang = await database.update(id, slang)
-    if not updated_slang:
-        raise HTTPException(status_code=404, detail="Slang not found")
-    return SlangResponse(**updated_slang.dict(by_alias=True))
+# @slang_router.put("/{id}", response_model=SlangResponse)
+# async def update_slang(id: UUID, slang: SlangCreate):
+#     updated_slang = await database.update(id, slang)
+#     if not updated_slang:
+#         raise HTTPException(status_code=404, detail="Slang not found")
+#     return SlangResponse(**updated_slang.dict(by_alias=True))
 
-@slang_router.delete("/{id}", response_model=bool)
-async def delete_slang(id: UUID):
-    deleted = await database.delete(id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail="Slang not found")
-    return True
+# @slang_router.delete("/{id}", response_model=bool)
+# async def delete_slang(id: UUID):
+#     deleted = await database.delete(id)
+#     if not deleted:
+#         raise HTTPException(status_code=404, detail="Slang not found")
+#     return True
 
-
-@slang_router.delete("/", response_model=bool)
-async def delete_all_slangs():
-    try:
-        delete_result = await Slang.delete_all()
-        if delete_result.deleted_count == 0:
-            raise HTTPException(status_code=404, detail="No slangs found to delete")
-        return True
-    except Exception as e:
-        logger.error("Error deleting all slangs: %s", e, exc_info=True)
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+ 
