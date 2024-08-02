@@ -3,8 +3,6 @@ from pydantic import BaseModel, EmailStr
 from typing import List
 
 class User(Document):
-    # email: EmailStr
-    # password: str
 
     id: PydanticObjectId = None  # leslie
     email: EmailStr
@@ -22,10 +20,6 @@ class User(Document):
             }
         }
 
-
-# class TokenResponse(BaseModel):
-#     access_token: str
-#     token_type: str
 
 class TokenResponse(BaseModel):
     # access_token: str
