@@ -2,9 +2,15 @@ from beanie import init_beanie, PydanticObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional, Any, List
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from models.user import User
 from models.idiom import Idiom
+from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
+import os
+
+
+load_dotenv(find_dotenv(".env"))
 
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
@@ -19,6 +25,10 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env.prod"
+        model_config = SettingsConfigDict(case_sensitive=True)
+
+
+
 
 class Database:
     def __init__(self, model):
