@@ -154,7 +154,7 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 p-8 w-full h-[90%]">
-                {showChatBot && <ChatBot user={user}/>}
+                {showChatBot && <ChatBot />}
                 {showHistory && <History />}
                 {showFavorite && <Favorites />}
                 {showProfile && <Profile user={user}/>}

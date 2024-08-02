@@ -5,7 +5,7 @@ import Result from "./Result";
 
 import { RiSendPlane2Fill } from "react-icons/ri";
 
-export default function ChatBot( { user }) {
+export default function ChatBot() {
   const [userInput, setUserInput] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [isButtonActive, setIsButtonActive] = useState(false);
