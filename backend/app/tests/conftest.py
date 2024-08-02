@@ -1,7 +1,7 @@
 import asyncio
 import httpx
 import pytest
-import pytest_asyncio
+# import pytest_asyncio
 import os
 
 from main import app

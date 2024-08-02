@@ -66,3 +66,10 @@ class Database:
             return False
         await doc.delete()
         return True
+
+    async def get_by_email(self, email: str) -> Any:
+        # Retrieve a user by email
+        user = await self.model.find_one(self.model.email == email)
+        if user:
+            return user
+        return False

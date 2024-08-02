@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.hash_password import HashPassword
 from auth.jwt_handler import create_access_token, verify_access_token
 from auth.authenticate import authenticate
 from databases.connection import Database
-from models.user import User, TokenResponse
-from typing import Dict
+from models.user import User, TokenResponse, UserResponse
+from typing import List
 # import pytest
 
 user_router = APIRouter(
@@ -16,8 +16,57 @@ user_database = Database(User)
 hash_password = HashPassword()
 
 
-@user_router.post("/signup")
-async def sign_new_user(user: User) -> dict:
+# @user_router.post("/signup")
+# async def sign_new_user(user: User) -> dict:
+#     user_exist = await User.find_one(User.email == user.email)
+#     if user_exist:
+#         raise HTTPException(
+#             status_code=status.HTTP_409_CONFLICT,
+#             detail="User email already exists"
+#         )
+
+#     hashed_password = hash_password.create_hash(user.password)
+#     user.password = hashed_password
+
+#     await user_database.save(user)
+
+#     return {
+#         "message": "User created successfully"
+#     }
+
+
+# @user_router.post("/signin", response_model=TokenResponse)
+# async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
+#     user_exist = await User.find_one(User.email == user.username)
+#     if not user_exist:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="User does not exist"
+#         )
+#     if hash_password.verify_hash(user.password, user_exist.password):
+#         access_token = create_access_token(user_exist.email)
+#         return {
+#             "access_token": access_token,
+#             "token_type": "Bearer"
+#         }
+
+#     raise HTTPException(
+#         status_code=status.HTTP_403_FORBIDDEN,
+#         detail="Invalid details passed"
+#     )
+
+
+
+# @user_router.get("/me")
+# async def get_user(user: str = Depends(authenticate)) -> str:
+#     return user
+
+
+token_blacklist: List[str] = [] #logout for dev only
+
+
+@user_router.post("/signup", response_model=UserResponse)
+async def sign_new_user(user: User, response: Response) -> UserResponse:
     user_exist = await User.find_one(User.email == user.email)
     if user_exist:
         raise HTTPException(
@@ -30,13 +79,28 @@ async def sign_new_user(user: User) -> dict:
 
     await user_database.save(user)
 
-    return {
-        "message": "User created successfully"
-    }
+    db = Database(User)
+    new_user = await db.get_by_email(user.email)
+    access_token = create_access_token(user.email)
+    if new_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True)
+
+    user_response = UserResponse(
+        id=new_user.id,
+        email=new_user.email,
+        favorite=new_user.favorite
+    )
+
+    return user_response
 
 
-@user_router.post("/signin", response_model=TokenResponse)
-async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
+@user_router.post("/signin", response_model=UserResponse)
+async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Depends()) -> UserResponse:
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
         raise HTTPException(
@@ -45,18 +109,14 @@ async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
         )
     if hash_password.verify_hash(user.password, user_exist.password):
         access_token = create_access_token(user_exist.email)
-        return {
-            "access_token": access_token,
-            "token_type": "Bearer"
-        }
+        response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True)
+        user_response = UserResponse(
+            id=user_exist.id,
+            email=user_exist.email,
+            favorite=user_exist.favorite
+        )
+        return user_response
 
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
-        detail="Invalid details passed"
-    )
-
-
-
-@user_router.get("/me")
-async def get_user(user: str = Depends(authenticate)) -> str:
-    return user
+        detail="Invalid password.")
