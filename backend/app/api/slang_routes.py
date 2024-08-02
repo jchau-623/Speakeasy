@@ -57,7 +57,7 @@ async def create_slang(slang: SlangCreate):
             "exampleUse": result["exampleUse"] or "No example use provided",
             "equivalentInLanguage": result["equivalentInLanguage"] or None
         }
-
+       
         # Create a new slang object
         new_slang = Slang(
             term=slang.term,
@@ -79,15 +79,12 @@ async def create_slang(slang: SlangCreate):
 @slang_router.get("/", response_model=List[SlangResponse])
 async def get_slangs():
     try:
-        # slangs = await Slang.find_all().to_list()
-        slangs = await database.get_all()
+        slangs = await Slang.find_all().to_list()
         logger.info(f"Fetched slangs: {slangs}")
         return [SlangResponse(**slang.dict(by_alias=True)) for slang in slangs]
     except Exception as e:
         logger.error("Error fetching slangs: %s", e, exc_info=True)
         raise HTTPException(status_code=500, detail="Internal Server Error")
-   
-    
     
 
 
@@ -121,3 +118,15 @@ async def delete_slang(id: UUID):
     if not deleted:
         raise HTTPException(status_code=404, detail="Slang not found")
     return True
+
+
+@slang_router.delete("/", response_model=bool)
+async def delete_all_slangs():
+    try:
+        delete_result = await Slang.delete_all()
+        if delete_result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="No slangs found to delete")
+        return True
+    except Exception as e:
+        logger.error("Error deleting all slangs: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
