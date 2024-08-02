@@ -28,12 +28,26 @@ async def get_chatgpt_response(prompt: str) -> str:
     )
     return response.choices[0].message["content"].strip()
 
+async def detect_language(term: str) -> str:
+    prompt = f"Detect the language of the following term: '{term}'. Provide the language name."
+    response = await get_chatgpt_response(prompt)
+    return response
+
+
+
 @slang_router.post("/", response_model=SlangResponse)
 async def create_slang(slang: SlangCreate):
     try:
         existing_slang = await Slang.find_one(Slang.term == slang.term)
         if existing_slang:
-          return SlangResponse(**existing_slang.dict(by_alias=True))
+            return SlangResponse(**existing_slang.dict(by_alias=True))
+      
+      
+        # Detect the language of the term
+        detected_language = await detect_language(slang.term)
+        logger.info(f"Detected language: {detected_language}")
+      
+      
         # Prepare prompts for each required field
         prompts = {
             "meaning": f"Define the slang term '{slang.term}' and provide its meaning.",
