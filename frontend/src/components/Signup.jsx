@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 
 import { signupThunk } from "../store/userReducer";
 
-import profileImg from "../assets/user-profile.gif"
+import profileImg from "../assets/user-profile.gif";
+import { PiExclamationMarkFill } from "react-icons/pi";
 
 export default function SignUp() {
   const [userEmail, setUserEmail] = useState("");
@@ -21,12 +22,12 @@ export default function SignUp() {
 
     if (result.success) {
       navigate("/home");
-    } else {  
+    } else {
       const errors = {};
       errors.error = result.error.detail || "Invalid email or password";
-      setError(errors); 
+      setError(errors);
     }
-  }
+  };
 
   useEffect(() => {
     const errors = {};
@@ -36,15 +37,21 @@ export default function SignUp() {
 
     setError(errors);
     setIsButtonActive(Object.values(errors).length === 0);
-    
   }, [userEmail, password]);
 
   return (
     <>
       <div className="flex justify-center items-center bg-primary w-screen h-screen">
         <div className="mx-auto animate__animated animate__fadeInUp w-[50%] relative">
-          <img src={profileImg} alt="animated icon" className="hidden sm:block sm:w-[20%] md:w-[23%] absolute -bottom-16 -right-16 rotate-30"/>
-          <form className="w-full flex flex-col justify-center items-center gap-10" onSubmit={handleSubmit}>
+          <img
+            src={profileImg}
+            alt="animated icon"
+            className="hidden sm:block sm:w-[20%] md:w-[23%] absolute -bottom-16 -right-16 rotate-30"
+          />
+          <form
+            className="w-full flex flex-col justify-center items-center gap-10"
+            onSubmit={handleSubmit}
+          >
             <h1 className="text-xl sm:text-3xl md:text-5xl text-secondary font-bold">
               Create an account
             </h1>
@@ -81,9 +88,10 @@ export default function SignUp() {
               />
             </div>
 
-            <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full">
-                {error.error}
-              </div>
+            <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full flex justify-center items-center gap-2">
+              {error.error && <PiExclamationMarkFill />}
+              {error.error}
+            </div>
 
             <button
               disabled={Object.values(error).length > 0}

@@ -3,6 +3,8 @@ import robot from "../assets/chat-bot.gif";
 import { Link, useNavigate } from "react-router-dom";
 import { signinThunk } from "../store/userReducer";
 import { useDispatch } from "react-redux";
+
+import { PiExclamationMarkFill } from "react-icons/pi";
  
 
 export default function SignIn() {
@@ -73,9 +75,10 @@ export default function SignIn() {
             </div>
 
             
-              <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full">
-                {error.error}
-              </div>
+            <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full flex justify-center items-center gap-2">
+              {error.error && <PiExclamationMarkFill />}
+              {error.error}
+            </div>
           
 
             <button
