@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.hash_password import HashPassword
-from auth.jwt_handler import create_access_token
-from databases.connection import Database
-from models.user import User, TokenResponse, MessageResponse
+from auth.jwt_handler import create_access_token, verify_access_token
 from auth.authenticate import authenticate
+from databases.connection import Database
+from models.user import User, TokenResponse, UserResponse, MessageResponse
 from typing import List
+# import pytest
 
 user_router = APIRouter(
     tags=["User"]
@@ -14,11 +15,12 @@ user_router = APIRouter(
 user_database = Database(User)
 hash_password = HashPassword()
 
+
 token_blacklist: List[str] = [] #logout for dev only
 
 
-@user_router.post("/signup")
-async def sign_new_user(user: User, response: Response) -> User:
+@user_router.post("/signup", response_model=UserResponse)
+async def sign_new_user(user: User, response: Response) -> UserResponse:
     user_exist = await User.find_one(User.email == user.email)
     if user_exist:
         raise HTTPException(
@@ -30,7 +32,7 @@ async def sign_new_user(user: User, response: Response) -> User:
     user.password = hashed_password
 
     await user_database.save(user)
-    
+
     db = Database(User)
     new_user = await db.get_by_email(user.email)
     access_token = create_access_token(user.email)
@@ -39,14 +41,20 @@ async def sign_new_user(user: User, response: Response) -> User:
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-        
+
     response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True)
-    
-    return new_user
+
+    user_response = UserResponse(
+        id=new_user.id,
+        email=new_user.email,
+        favorite=new_user.favorite
+    )
+
+    return user_response
 
 
-@user_router.post("/signin", response_model=TokenResponse)
-async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Depends()) -> dict:
+@user_router.post("/signin", response_model=UserResponse)
+async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Depends()) -> UserResponse:
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
         raise HTTPException(
@@ -56,7 +64,12 @@ async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Dep
     if hash_password.verify_hash(user.password, user_exist.password):
         access_token = create_access_token(user_exist.email)
         response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True)
-        return {"user": user_exist}
+        user_response = UserResponse(
+            id=user_exist.id,
+            email=user_exist.email,
+            favorite=user_exist.favorite
+        )
+        return user_response
 
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
