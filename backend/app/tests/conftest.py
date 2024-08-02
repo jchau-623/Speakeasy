@@ -1,7 +1,7 @@
 import asyncio
 import httpx
 import pytest
-# import pytest_asyncio
+import pytest_asyncio
 import os
 
 from main import app
@@ -12,7 +12,12 @@ from models.user import User
 @pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.get_event_loop()
+    print("Event loop created:", loop)
     yield loop
+    print("Running cleanup...")
+    loop.run_until_complete(User.find_all().delete())
+    print("Cleanup done.")
+    print("Event loop closing:", loop)
     loop.close()
 
 async def init_db():
@@ -26,5 +31,3 @@ async def default_client():
     await init_db()
     async with httpx.AsyncClient(app=app, base_url="http://app") as client:
         yield client
-        #Clean up resources
-        # await User.find_all().delete()
