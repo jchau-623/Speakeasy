@@ -1,10 +1,13 @@
-from beanie import Document
+from beanie import Document, PydanticObjectId
 from pydantic import BaseModel, EmailStr
 from typing import List
 
 class User(Document):
+
+    id: PydanticObjectId = None  # leslie
     email: EmailStr
     password: str
+    favorite: List[str] = []
 
     class Settings:
         name = "users"
@@ -19,5 +22,16 @@ class User(Document):
 
 
 class TokenResponse(BaseModel):
-    access_token: str
-    token_type: str
+    # access_token: str
+    # token_type: str
+    user: User
+
+
+class MessageResponse(BaseModel):
+    message: str
+
+
+class UserResponse(BaseModel):
+    id: PydanticObjectId
+    email: EmailStr
+    favorite: List[str] = []
