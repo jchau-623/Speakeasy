@@ -1,5 +1,7 @@
 from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
+from typing import List
+
 from auth.jwt_handler import verify_access_token
 from typing import List
 
@@ -17,7 +19,6 @@ token_blacklist: List[str] = [] #log out for dev only
 
 #     decoded_token = verify_access_token(token)
 #     return decoded_token["user"]
-
 
 async def authenticate(request: Request) -> str:
     token = request.cookies.get("access_token")
