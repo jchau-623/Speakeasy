@@ -2,10 +2,17 @@ from beanie import init_beanie, PydanticObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional, Any, List
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from models.user import User
 from models.idiom import Idiom
 from models.slang import Slang
+from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
+import os
+
+
+load_dotenv(find_dotenv(".env"))
+
 
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
@@ -21,9 +28,16 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env.prod"
+        document_models=[User, Idiom, Slang]
+        
 
-settings = Settings()
-print(f"Loaded SECRET_KEY: {settings.SECRET_KEY}")  # Проверка загрузки SECRET_KEY
+#     class Config:
+#         model_config = SettingsConfigDict(case_sensitive=True)
+
+# settings = Settings()
+# print(f"Loaded SECRET_KEY: {settings.SECRET_KEY}")  # Проверка загрузки SECRET_KEY
+
+#         env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
@@ -63,3 +77,10 @@ class Database:
             return False
         await doc.delete()
         return True
+
+    async def get_by_email(self, email: str) -> Any:
+        # Retrieve a user by email
+        user = await self.model.find_one(self.model.email == email)
+        if user:
+            return user
+        return False
