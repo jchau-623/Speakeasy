@@ -13,6 +13,7 @@ import os
 
 load_dotenv(find_dotenv(".env"))
 
+
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
@@ -29,7 +30,7 @@ class Settings(BaseSettings):
         model_config = SettingsConfigDict(case_sensitive=True)
 
 
-
+        env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
@@ -52,7 +53,7 @@ class Database:
     async def update(self, id: PydanticObjectId, body: BaseModel) -> Any:
         doc_id = id
         des_body = body.dict()
-        des_body = {k:v for k,v in des_body.items() if v is not None}
+        des_body = {k: v for k, v in des_body.items() if v is not None}
         update_query = {"$set": {
             field: value for field, value in des_body.items()
         }}

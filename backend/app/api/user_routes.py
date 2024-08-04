@@ -23,7 +23,7 @@ token_blacklist: List[str] = [] #logout for dev only
 @user_router.post("/signup", response_model=UserResponse)
 async def sign_new_user(user: User, response: Response) -> UserResponse:
     user_exist = await User.find_one(User.email == user.email)
-    if user_exist:
+    if user_exist: 
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User email already exists"
