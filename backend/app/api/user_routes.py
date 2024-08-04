@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.hash_password import HashPassword
@@ -22,7 +23,7 @@ token_blacklist: List[str] = [] #logout for dev only
 @user_router.post("/signup", response_model=UserResponse)
 async def sign_new_user(user: User, response: Response) -> UserResponse:
     user_exist = await User.find_one(User.email == user.email)
-    if user_exist: 
+    if user_exist:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User email already exists"
