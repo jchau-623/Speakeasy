@@ -31,13 +31,7 @@ class Settings(BaseSettings):
         document_models=[User, Idiom, Slang]
         
 
-#     class Config:
-#         model_config = SettingsConfigDict(case_sensitive=True)
 
-# settings = Settings()
-# print(f"Loaded SECRET_KEY: {settings.SECRET_KEY}")  # Проверка загрузки SECRET_KEY
-
-#         env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
