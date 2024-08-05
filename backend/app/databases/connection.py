@@ -1,4 +1,3 @@
-
 from beanie import init_beanie, PydanticObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional, Any, List
@@ -30,7 +29,7 @@ class Settings(BaseSettings):
         model_config = SettingsConfigDict(case_sensitive=True)
 
 
-        env_file = ".env.prod"
+        # env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
