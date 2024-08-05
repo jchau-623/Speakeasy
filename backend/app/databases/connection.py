@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from models.user import User
 from models.slang import Slang
+from models.idiom import Idiom
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -22,7 +23,7 @@ class Settings(BaseSettings):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
             database=client.get_default_database(),
-            document_models=[User, Slang]
+            document_models=[User, Slang, Idiom]
         )
 
     class Config:
