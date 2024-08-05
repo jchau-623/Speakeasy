@@ -25,7 +25,8 @@ export default function Home() {
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state.users);
-  
+  console.log(user);  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -153,10 +154,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 p-8 w-full h-[90%]">
+              <div className="grid grid-cols-1 p-8 w-full h-[90%] overflow-scroll">
                 {showChatBot && <ChatBot />}
                 {showHistory && <History />}
-                {showFavorite && <Favorites />}
+                {showFavorite && <Favorites user={user} />}
                 {showProfile && <Profile user={user}/>}
               </div>
             </div>

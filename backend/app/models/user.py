@@ -2,6 +2,9 @@ from beanie import Document, PydanticObjectId
 from pydantic import BaseModel, EmailStr
 from typing import List
 
+class FavoriteItem(BaseModel):
+    item: str
+
 class User(Document):
 
     id: PydanticObjectId = None  # leslie
