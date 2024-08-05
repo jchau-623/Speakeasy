@@ -1,32 +1,44 @@
 import { useEffect, useState } from "react";
 import robot from "../assets/chat-bot.gif";
 import { Link, useNavigate } from "react-router-dom";
+import { signinThunk } from "../store/userReducer";
+import { useDispatch } from "react-redux";
+
+import { PiExclamationMarkFill } from "react-icons/pi";
  
 
 export default function SignIn() {
-  const [userEmail, setUserEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [error, setError] = useState({});
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userEmail  + " " + password);
-    navigate("/home");
-  }
+
+    const result = await dispatch(signinThunk({ username, password }));
+    if (result.success) {
+      navigate("/home");
+    } else {
+      const errors = {};
+      errors.error = result.error.detail || "Invalid email or password";
+      setError(errors); 
+    }
+}
 
   useEffect(() => {
     const errors = {};
-    if (!userEmail) errors.email = "Please enter your email";
-    if (!userEmail.includes("@")) errors.email = "Please enter a valid email";
+    if (!username) errors.email = "Please enter your email";
+    if (!username.includes("@")) errors.email = "Please enter a valid email";
     if (!password) errors.password = "Please enter your password";
 
     setError(errors);
     setIsButtonActive(Object.values(errors).length === 0);
     
-  }, [userEmail, password]);
+  }, [username, password]);
   
 
   return (
@@ -47,8 +59,8 @@ export default function SignIn() {
               <input
                 type="email"
                 placeholder="User email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="text-center text-sm sm:text-xl p-2 rounded-full bg-secondary placeholder-white outline-none text-white font-semibold"
               />
             </div>
@@ -61,6 +73,13 @@ export default function SignIn() {
                 className="text-center text-sm sm:text-xl p-2 rounded-full bg-secondary placeholder-white outline-none text-white font-semibold"
               />
             </div>
+
+            
+            <div className="text-center text-red-500 text-sm sm:text-center h-[5px] w-full flex justify-center items-center gap-2">
+              {error.error && <PiExclamationMarkFill />}
+              {error.error}
+            </div>
+          
 
             <button
               disabled={Object.values(error).length > 0}
