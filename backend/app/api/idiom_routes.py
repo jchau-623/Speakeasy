@@ -1,13 +1,10 @@
 import openai
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter, HTTPException, status
 from models.idiom import Idiom, IdiomCreate, IdiomResponse
 from databases.connection import Database, Settings
-from models.user import User
-from typing import List, Dict
+from typing import List
 from uuid import UUID
 import logging
-from auth.jwt_handler import verify_access_token 
 
 settings = Settings()
 openai.api_key = settings.OPENAI_API_KEY
@@ -19,24 +16,6 @@ logger = logging.getLogger(__name__)
 idiom_router = APIRouter(tags=["Idiom"])
 
 database = Database(Idiom)
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="signin")
-
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    data = verify_access_token(token)
-    user_id = data.get("user")
-    if user_id is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials"
-        )
-    user = await User.get(user_id)
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found"
-        )
-    return user
 
 async def get_chatgpt_response(prompt: str) -> str:
     response = openai.ChatCompletion.create(
@@ -54,7 +33,7 @@ async def detect_language(term: str) -> str:
     return response
 
 @idiom_router.post("/", response_model=IdiomResponse)
-async def create_idiom(idiom: IdiomCreate, user: User = Depends(get_current_user)):
+async def create_idiom(idiom: IdiomCreate):
     try:
         existing_idiom = await Idiom.find_one(Idiom.idiom == idiom.idiom)
         if existing_idiom:
@@ -95,7 +74,7 @@ async def create_idiom(idiom: IdiomCreate, user: User = Depends(get_current_user
             origin=result["origin"],
             exampleUse=result["exampleUse"],
             equivalentInLanguage=result["equivalentInLanguage"],
-            user_id=user.id
+            user_id=idiom.user_id
         )
         await new_idiom.insert()
 
@@ -128,14 +107,13 @@ async def get_idiom(id: UUID):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @idiom_router.put("/{id}", response_model=IdiomResponse)
-async def update_idiom(id: UUID, idiom_data: IdiomCreate, user: User = Depends(get_current_user)):
+async def update_idiom(id: UUID, idiom_data: IdiomCreate):
     try:
-        idiom = await Idiom.find_one(Idiom.id == id, Idiom.user_id == user.id)
+        idiom = await Idiom.find_one(Idiom.id == id)
         if not idiom:
             raise HTTPException(status_code=404, detail="Idiom not found")
 
         update_data = idiom_data.dict(exclude_unset=True)
-        update_data['user_id'] = user.id
 
         await idiom.update({"$set": update_data})
         updated_idiom = await Idiom.get(id)
@@ -146,9 +124,9 @@ async def update_idiom(id: UUID, idiom_data: IdiomCreate, user: User = Depends(g
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @idiom_router.delete("/{id}")
-async def delete_idiom(id: UUID, user: User = Depends(get_current_user)):
+async def delete_idiom(id: UUID):
     try:
-        idiom = await Idiom.find_one(Idiom.id == id, Idiom.user_id == user.id)
+        idiom = await Idiom.find_one(Idiom.id == id)
         if not idiom:
             raise HTTPException(status_code=404, detail="Idiom not found")
 

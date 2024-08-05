@@ -7,7 +7,10 @@ from datetime import datetime
 class Idiom(Document):
     id: UUID = Field(default_factory=uuid4, alias="_id")
     idiom: str
-    language: str
+    meaning: Optional[str] = None
+    origin: Optional[str] = None
+    exampleUse: Optional[str] = None
+    equivalentInLanguage: Optional[str] = None
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     user_id: str
 
@@ -21,13 +24,19 @@ class Idiom(Document):
 
 class IdiomCreate(BaseModel):
     idiom: str
-    language: str
-    user_id: str  # Include user_id here
+    meaning: Optional[str] = None
+    origin: Optional[str] = None
+    exampleUse: Optional[str] = None
+    equivalentInLanguage: Optional[str] = None
+    user_id: str
 
 class IdiomResponse(BaseModel):
     id: UUID = Field(default_factory=uuid4, alias="_id")
     idiom: str
-    language: str
+    meaning: str
+    origin: str
+    exampleUse: str
+    equivalentInLanguage: Optional[str]
     createdAt: datetime
     user_id: str
 
