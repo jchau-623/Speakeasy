@@ -1,24 +1,37 @@
-from beanie import Document, PydanticObjectId
-from pydantic import BaseModel
+from beanie import Document
+from pydantic import BaseModel, Field
+from typing import Optional
+from uuid import UUID, uuid4
+from datetime import datetime
 
 class Idiom(Document):
+    id: UUID = Field(default_factory=uuid4, alias="_id")
     idiom: str
     language: str
-    user_id: PydanticObjectId
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    user_id: str
 
     class Settings:
-        name = "idioms"
+        collection = "idioms"
+        arbitrary_types_allowed = True
 
     class Config:
-        schema_extra = {
-            "example": {
-                "idiom": "Break the ice",
-                "language": "en",
-                "user_id": "60f8f5f0a5c0d35a78b38b1d"
-            }
-        }
+        arbitrary_types_allowed = True
+        json_encoders = {UUID: str}
 
-class IdiomResponse(BaseModel):
+class IdiomCreate(BaseModel):
     idiom: str
     language: str
-    user_id: PydanticObjectId
+    user_id: str  # Include user_id here
+
+class IdiomResponse(BaseModel):
+    id: UUID = Field(default_factory=uuid4, alias="_id")
+    idiom: str
+    language: str
+    createdAt: datetime
+    user_id: str
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {UUID: str}

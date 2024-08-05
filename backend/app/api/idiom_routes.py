@@ -1,20 +1,30 @@
+import openai
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from beanie import PydanticObjectId
-from typing import Dict
-from auth.jwt_handler import verify_access_token
-from models.idiom import Idiom, IdiomResponse
+from models.idiom import Idiom, IdiomCreate, IdiomResponse
+from databases.connection import Database, Settings
 from models.user import User
+from typing import List, Dict
+from uuid import UUID
+import logging
+from auth.jwt_handler import verify_access_token 
 
-idiom_router = APIRouter(
-    tags=["Idiom"]
-)
+settings = Settings()
+openai.api_key = settings.OPENAI_API_KEY
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+idiom_router = APIRouter(tags=["Idiom"])
+
+database = Database(Idiom)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="signin")
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    payload = verify_access_token(token)
-    user_id = payload.get("user")
+    data = verify_access_token(token)
+    user_id = data.get("user")
     if user_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -28,53 +38,123 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         )
     return user
 
-@idiom_router.post("/", response_model=Dict[str, str])
-async def create_idiom(idiom: Idiom, user: User = Depends(get_current_user)) -> Dict[str, str]:
-    idiom_exist = await Idiom.find_one(Idiom.idiom == idiom.idiom)
-    if idiom_exist:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Idiom already exists"
+async def get_chatgpt_response(prompt: str) -> str:
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-1106",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message["content"].strip()
+
+async def detect_language(term: str) -> str:
+    prompt = f"Detect the language of the following term: '{term}'. Provide the language name."
+    response = await get_chatgpt_response(prompt)
+    return response
+
+@idiom_router.post("/", response_model=IdiomResponse)
+async def create_idiom(idiom: IdiomCreate, user: User = Depends(get_current_user)):
+    try:
+        existing_idiom = await Idiom.find_one(Idiom.idiom == idiom.idiom)
+        if existing_idiom:
+            return IdiomResponse(**existing_idiom.dict(by_alias=True))
+
+        # Detect the language of the idiom
+        detected_language = await detect_language(idiom.idiom)
+        logger.info(f"Detected language: {detected_language}")
+
+        # Prepare prompts for each required field
+        prompts = {
+            "meaning": f"Define the idiom '{idiom.idiom}' and provide its meaning.",
+            "origin": f"Explain the origin of the idiom '{idiom.idiom}'.",
+            "exampleUse": f"Provide an example use of the idiom '{idiom.idiom}'.",
+            "equivalentInLanguage": f"Is there an equivalent of the idiom '{idiom.idiom}' in other languages? If so, what is it?"
+        }
+
+        # Extract information using the prompts
+        result = {
+            "meaning": await get_chatgpt_response(prompts["meaning"]),
+            "origin": await get_chatgpt_response(prompts["origin"]),
+            "exampleUse": await get_chatgpt_response(prompts["exampleUse"]),
+            "equivalentInLanguage": await get_chatgpt_response(prompts["equivalentInLanguage"])
+        }
+
+        # Default responses in case of missing information
+        result = {
+            "meaning": result["meaning"] or "No meaning provided",
+            "origin": result["origin"] or "No origin provided",
+            "exampleUse": result["exampleUse"] or "No example use provided",
+            "equivalentInLanguage": result["equivalentInLanguage"] or None
+        }
+
+        # Create a new idiom object
+        new_idiom = Idiom(
+            idiom=idiom.idiom,
+            meaning=result["meaning"],
+            origin=result["origin"],
+            exampleUse=result["exampleUse"],
+            equivalentInLanguage=result["equivalentInLanguage"],
+            user_id=user.id
         )
-    
-    idiom.user_id = user.id  # Set user_id from the authenticated user
-    await idiom.insert()
-    return {"id": str(idiom.id), "idiom": idiom.idiom, "language": idiom.language}
+        await new_idiom.insert()
 
-@idiom_router.get("/{idiom_id}", response_model=IdiomResponse)
-async def get_idiom(idiom_id: PydanticObjectId) -> IdiomResponse:
-    idiom = await Idiom.get(idiom_id)
-    if not idiom:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Idiom not found"
-        )
-    return IdiomResponse(**idiom.dict())
+        return IdiomResponse(**new_idiom.dict(by_alias=True))
 
-@idiom_router.put("/{idiom_id}", response_model=IdiomResponse)
-async def update_idiom(idiom_id: PydanticObjectId, idiom_data: Idiom, user: User = Depends(get_current_user)) -> IdiomResponse:
-    idiom = await Idiom.find_one(Idiom.id == idiom_id, Idiom.user_id == user.id)
-    if not idiom:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Idiom not found"
-        )
+    except Exception as e:
+        logger.error("Error creating idiom: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    update_data = idiom_data.dict(exclude_unset=True)
-    update_data['user_id'] = user.id
+@idiom_router.get("/", response_model=List[IdiomResponse])
+async def get_idioms():
+    try:
+        idioms = await Idiom.find_all().to_list()
+        logger.info(f"Fetched idioms: {idioms}")
+        return [IdiomResponse(**idiom.dict(by_alias=True)) for idiom in idioms]
+    except Exception as e:
+        logger.error("Error fetching idioms: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    await idiom.update({"$set": update_data})
-    updated_idiom = await Idiom.get(idiom_id)
-    return IdiomResponse(**updated_idiom.dict())
+@idiom_router.get("/{id}", response_model=IdiomResponse)
+async def get_idiom(id: UUID):
+    try:
+        idiom = await Idiom.get(id)
+        if not idiom:
+            raise HTTPException(status_code=404, detail="Idiom not found")
 
-@idiom_router.delete("/{idiom_id}")
-async def delete_idiom(idiom_id: PydanticObjectId, user: User = Depends(get_current_user)) -> dict:
-    idiom = await Idiom.find_one(Idiom.id == idiom_id, Idiom.user_id == user.id)
-    if not idiom:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Idiom not found"
-        )
+        return IdiomResponse(**idiom.dict(by_alias=True))
+    except Exception as e:
+        logger.error("Error fetching idiom: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    await idiom.delete()
-    return {"message": "Idiom deleted successfully"}
+@idiom_router.put("/{id}", response_model=IdiomResponse)
+async def update_idiom(id: UUID, idiom_data: IdiomCreate, user: User = Depends(get_current_user)):
+    try:
+        idiom = await Idiom.find_one(Idiom.id == id, Idiom.user_id == user.id)
+        if not idiom:
+            raise HTTPException(status_code=404, detail="Idiom not found")
+
+        update_data = idiom_data.dict(exclude_unset=True)
+        update_data['user_id'] = user.id
+
+        await idiom.update({"$set": update_data})
+        updated_idiom = await Idiom.get(id)
+        return IdiomResponse(**updated_idiom.dict(by_alias=True))
+
+    except Exception as e:
+        logger.error("Error updating idiom: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@idiom_router.delete("/{id}")
+async def delete_idiom(id: UUID, user: User = Depends(get_current_user)):
+    try:
+        idiom = await Idiom.find_one(Idiom.id == id, Idiom.user_id == user.id)
+        if not idiom:
+            raise HTTPException(status_code=404, detail="Idiom not found")
+
+        await idiom.delete()
+        return {"message": "Idiom deleted successfully"}
+
+    except Exception as e:
+        logger.error("Error deleting idiom: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
