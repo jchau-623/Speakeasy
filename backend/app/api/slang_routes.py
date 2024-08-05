@@ -93,6 +93,7 @@ async def create_slang(slang: SlangCreate):
 @slang_router.get("/", response_model=List[SlangResponse])
 async def get_slangs():
     try:
+        print(111111111)
         slangs = await Slang.find_all().to_list()
         logger.info(f"Fetched slangs: {slangs}")
         return [SlangResponse(**slang.dict(by_alias=True)) for slang in slangs]

@@ -20,7 +20,7 @@ app.add_middleware(
 )
 app.include_router(user_router, prefix="/api/user", tags=["User"])
 # app.include_router(user_router, prefix="/user")
-app.include_router(user_router, prefix="/api/slangs", tags=["User"])
+app.include_router(slang_router, prefix="/api/slangs", tags=["Slang"])
 app.include_router(search_router, prefix="/api/search", tags=["User"])
 
 @app.on_event("startup")
