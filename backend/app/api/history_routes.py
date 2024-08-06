@@ -3,7 +3,6 @@ from fastapi import APIRouter, HTTPException, status
 from typing import List, Dict, Union
 from models.idiom import Idiom, IdiomResponse
 from models.slang import Slang, SlangResponse
-from models.user import User
 from beanie import PydanticObjectId
 
 history_router = APIRouter(tags=["History"])
@@ -61,7 +60,7 @@ async def delete_user_history(item_id: str, user_id: str):
         )
 
 @history_router.put("/{item_id}", response_model=Union[IdiomResponse, SlangResponse])
-async def update_user_history(item_id: str, item_data: Union[IdiomCreate, SlangCreate], user_id: str):
+async def update_user_history(item_id: str, item_data: Union[Idiom, Slang], user_id: str):
     try:
         idiom = await Idiom.find_one(Idiom.id == PydanticObjectId(item_id), Idiom.user_id == PydanticObjectId(user_id))
         if idiom:
