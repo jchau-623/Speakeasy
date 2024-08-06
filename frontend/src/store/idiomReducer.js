@@ -111,7 +111,7 @@ export const removeIdiom = (idiomId) => async (dispatch) => {
 const initialState = [];
 
 // Reducer
-export default function idiomsReducer(state = initialState, action) {
+export default function idiomReducer(state = initialState, action) {
     switch (action.type) {
         case LOAD_IDIOMS:
             return action.idioms;
