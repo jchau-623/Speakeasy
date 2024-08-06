@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Query
 from typing import List, Dict, Union
 from models.idiom import Idiom, IdiomResponse
 from models.slang import Slang, SlangResponse
@@ -12,19 +12,28 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @history_router.get("/", response_model=Dict[str, List[Union[IdiomResponse, SlangResponse]]])
-async def get_user_history(user_id: str):
+async def get_user_history(user_id: str = Query(..., alias="user_id")):
     try:
         logger.info(f"Fetching idioms and slangs for user_id: {user_id}")
-        idioms = await Idiom.find(Idiom.user_id == PydanticObjectId(user_id)).to_list()
-        slangs = await Slang.find(Slang.user_id == PydanticObjectId(user_id)).to_list()
-        
+
+        # Fetch idioms for the given user_id
+        idioms = await Idiom.find(Idiom.user_id == user_id).to_list()
+        logger.info(f"Fetched idioms: {idioms}")
+        print(f"Idioms: {idioms}")
+
+        # Fetch slangs for the given user_id
+        slangs = await Slang.find(Slang.user_id == user_id).to_list()
+        logger.info(f"Fetched slangs: {slangs}")
+        print(f"Slangs: {slangs}")
+
+        # Combine idioms and slangs
         history = idioms + slangs
-        
+        logger.info(f"Combined history: {history}")
+
         if not history:
             logger.info(f"No idioms or slangs found for user_id: {user_id}")
             return {"history": []}
         
-        logger.info(f"Found idioms and slangs: {history}")
         return {"history": [IdiomResponse(**item.dict()) if isinstance(item, Idiom) else SlangResponse(**item.dict()) for item in history]}
     except Exception as e:
         logger.error(f"Error in get_user_history: {e}")
@@ -32,7 +41,6 @@ async def get_user_history(user_id: str):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal Server Error"
         )
-
 @history_router.delete("/{item_id}", response_model=Dict[str, str])
 async def delete_user_history(item_id: str, user_id: str):
     try:

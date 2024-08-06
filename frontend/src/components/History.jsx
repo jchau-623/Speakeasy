@@ -1,40 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getUserHistory } from "../store/historyReducer";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserHistory } from '../store/historyReducer';
 
-export default function History () {
+const History = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
+  console.log("user", user);  // For debugging purposes
+  const userId = user ? user.id : null;
+  console.log("user id", userId);  // For debugging purposes
   const history = useSelector((state) => state.history);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(getUserHistory()).then(() => setLoading(false));
-  }, [dispatch]);
+    if (userId) {
+      dispatch(getUserHistory(userId));
+    }
+  }, [dispatch, userId]);
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  if (!userId) {
+    return <div>Please sign in to view history.</div>;
+  }
+
+  if (history.length === 0) {
+    return <div>No history found.</div>;
   }
 
   return (
-    <div className="p-4 bg-container rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-secondary mb-4">History</h2>
-      {history.length === 0 ? (
-        <p className="text-gray-600">No history found. Ask me anything!</p>
-      ) : (
-        <ul className="list-none p-0 m-0">
-          {history.map((item) => (
-            <li key={item.id} className="border-b border-gray-300 py-4">
-              <h3 className="text-xl font-semibold text-primary">{item.idiom || item.term}</h3>
-              <p className="text-gray-700">{item.meaning}</p>
-              <p className="text-gray-600"><strong>Origin:</strong> {item.origin}</p>
-              <p className="text-gray-600"><strong>Example:</strong> {item.exampleUse}</p>
-              {item.equivalentInLanguage && (
-                <p className="text-gray-600"><strong>Equivalent in Language:</strong> {item.equivalentInLanguage}</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="container mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">History</h2>
+      <ul className="list-disc pl-5">
+        {history.map((item) => (
+          <li key={item._id} className="mb-2">
+            <h3 className="font-semibold">{item.idiom || item.term}</h3>
+            <p>{item.meaning}</p>
+            <p><strong>Example:</strong> {item.exampleUse}</p>
+            <p><strong>Origin:</strong> {item.origin}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
+
+export default History;
