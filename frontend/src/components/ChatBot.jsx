@@ -10,7 +10,7 @@ export default function ChatBot({ user }) {
   const [showResult, setShowResult] = useState(false);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [error, setError] = useState(false);
-  console.log("user in chatbot", user);
+  // console.log("user in chatbot", user);
   
 
   function handlesubmit(e) {

@@ -102,12 +102,18 @@ export default function Home() {
             showMainContent ? "animate__animated animate__fadeIn" : "hidden"
           }`}
         >
-          <img
+          <div className="group">
+            <img
             src={signout}
             alt="log out button"
-            className="w-[40px] h-[40px] absolute top-[30px] right-[50px]"
+            className="w-[40px] h-[40px] absolute top-[30px] right-[50px] cursor-pointer hover:scale-90 transition-all duration-200"
             onClick={handleLogOut}
           />
+          <span className="absolute top-[70px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                Log Out
+            </span>
+          </div>
+          
 
           <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
             <div className="container w-[100%] h-full">
@@ -120,7 +126,7 @@ export default function Home() {
                   }`}
                   onClick={handleHomeRender}
                 >
-                  {showChatBot ?  "EasyChat" : <img src={chatBotImg} alt="chat bot image" className="w-[40px] h-[40px]" />}
+                  {showChatBot ?  "EasyChat" : <img src={chatBotImg} alt="chat bot image" className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200" />}
                 </div>
                 <div
                   className={` ${
@@ -130,7 +136,7 @@ export default function Home() {
                   }`}
                   onClick={handleHistoryRender}
                 >
-                  {showHistory ? "History" : <img src={historyImg} alt="history image" className="w-[40px] h-[40px]" />}
+                  {showHistory ? "History" : <img src={historyImg} alt="history image" className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200" />}
                 </div>
                 <div
                   className={` ${
@@ -140,7 +146,7 @@ export default function Home() {
                   }`}
                   onClick={handleFavoriteRender}
                 >
-                  {showFavorite ? "Favorites" : <img src={bookmarkImg} alt="favorite image" className="w-[40px] h-[40px]" />}
+                  {showFavorite ? "Favorites" : <img src={bookmarkImg} alt="favorite image" className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200" />}
                 </div>
                 <div
                   className={` ${
@@ -150,7 +156,7 @@ export default function Home() {
                   }`}
                   onClick={handleProfileRender}
                 >
-                  {showProfile ? "Profile" : <img src={profileImg} alt="profile image" className="w-[40px] h-[40px]" />}
+                  {showProfile ? "Profile" : <img src={profileImg} alt="profile image" className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200" />}
                 </div>
               </div>
 
@@ -158,7 +164,7 @@ export default function Home() {
                 {showChatBot && <ChatBot user={user}/>}
                 {showHistory && <History />}
                 {showFavorite && <Favorites user={user} />}
-                {showProfile && <Profile user={user}/>}
+                {showProfile && <Profile user={user} handleFavoriteRender={handleFavoriteRender} handleHistoryRender={handleHistoryRender}/>}
               </div>
             </div>
           </div>

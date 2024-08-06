@@ -4,12 +4,14 @@ import FavoriteImg from "../assets/favorites.gif";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import userReducer, { addUserFavoriteThunk, deleteUserFavoriteThunk } from "../store/userReducer";
+import userReducer, {
+  addUserFavoriteThunk,
+  deleteUserFavoriteThunk,
+} from "../store/userReducer";
 
 export default function Result({ handleShowResult, user }) {
-  const [favorite, setFavorite] = useState(false);
-  console.log("user in result", user);
-  
+  // const [favorite, setFavorite] = useState(false);
+  // console.log("user in result", user);
 
   const dispatch = useDispatch();
 
@@ -17,7 +19,7 @@ export default function Result({ handleShowResult, user }) {
     await dispatch(addUserFavoriteThunk({ item }));
   }
 
-  async function removeFromFavorite(item) {   
+  async function removeFromFavorite(item) {
     await dispatch(deleteUserFavoriteThunk({ item }));
   }
 
@@ -33,26 +35,26 @@ export default function Result({ handleShowResult, user }) {
           <div className="flex justify-between w-full">
             <h1>Result</h1>
             <div className="relative group">
-              {user.favorite.includes("result2") ? (
+              {user.favorite.includes("result3") ? (
                 <img
                   src={FavoriteImg}
                   alt="favorite icon"
                   className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={() => removeFromFavorite("result2")}
+                  onClick={() => removeFromFavorite("result3")}
                 />
               ) : (
                 <img
                   src={bookMarkImg}
                   alt="add to favorite icon"
                   className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={() => addToFavoriteFunction("result2")}
+                  onClick={() => addToFavoriteFunction("result3")}
                 />
-
-                
               )}
 
               <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
-                {favorite ?  "Remove from Favorite" : "Add to Favorite"}
+                {user.favorite.includes("result3")
+                  ? "Remove from Favorite"
+                  : "Add to Favorite"}
               </span>
             </div>
           </div>

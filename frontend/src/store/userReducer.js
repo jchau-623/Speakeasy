@@ -127,7 +127,7 @@ export const getUserThunk = () => async (dispatch) => {
 };
 
 export const logoutThunk = () => async (dispatch) => {
-  console.log("in the logoutThunk");
+  // console.log("in the logoutThunk");
   try {
     const response = await fetch("/api/user/logout", {
       method: "POST",
@@ -154,6 +154,7 @@ export const deleteUserThunk = () => async (dispatch) => {
     });
     if (response.ok) {
       dispatch(deleteUser());
+      return { success: true };
     }
   } catch (err) {
     const error = await error.json();
@@ -185,7 +186,7 @@ export const addUserFavoriteThunk = (favorite) => async (dispatch) => {
   };
   
   export const deleteUserFavoriteThunk = (favorite) => async (dispatch) => {
-    console.log("In the delete user favorite thunk")
+    // console.log("In the delete user favorite thunk")
     try {
       const response = await fetch("/api/user/delete_favorite", {
         method: "DELETE",
