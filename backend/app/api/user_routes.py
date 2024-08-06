@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.hash_password import HashPassword
 from auth.jwt_handler import create_access_token, verify_access_token
 from auth.authenticate import authenticate
 from databases.connection import Database
-from models.user import User, TokenResponse, UserResponse
+from models.user import User, TokenResponse, UserResponse, MessageResponse
 from typing import List
 # import pytest
 
@@ -17,14 +17,13 @@ hash_password = HashPassword()
 
 token_blacklist: List[str] = [] #logout for dev only
 
-
 token_blacklist: List[str] = [] #logout for dev only
 
 
 @user_router.post("/signup", response_model=UserResponse)
 async def sign_new_user(user: User, response: Response) -> UserResponse:
     user_exist = await User.find_one(User.email == user.email)
-    if user_exist: 
+    if user_exist:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User email already exists"
@@ -34,6 +33,15 @@ async def sign_new_user(user: User, response: Response) -> UserResponse:
     user.password = hashed_password
 
     await user_database.save(user)
+    db = Database(User)
+    new_user = await db.get_by_email(user.email)
+    access_token = create_access_token(user.email)
+    if new_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
     db = Database(User)
     new_user = await db.get_by_email(user.email)
     access_token = create_access_token(user.email)
@@ -75,3 +83,39 @@ async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Dep
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Invalid password.")
+    
+
+@user_router.get("/", response_model=User)
+async def get_user(request: Request, current_user_email: str = Depends(authenticate)) -> User:
+    """Get current user"""
+    db = Database(User)
+    user = await db.get_by_email(current_user_email)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    return user
+
+@user_router.delete("/", response_model=MessageResponse)
+async def delete_user(current_user_email: str = Depends(authenticate)) -> MessageResponse:
+    """Delete current user"""
+    db = Database(User)
+    user = await db.get_by_email(current_user_email)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    await user.delete()
+    return MessageResponse(message="User deleted successfully.")
+
+
+@user_router.post("/logout")
+async def logout_user(request: Request, response: Response, current_user_email: str = Depends(authenticate)) -> dict:
+    """Logout current user"""
+    token = request.cookies.get("access_token")
+    if token:
+        token_blacklist.append(token)
+        response.delete_cookie(key="access_token")
+    return {"message": "User logged out successfully"}

@@ -4,7 +4,7 @@ from typing import Optional, Any, List
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from models.user import User
-from models.idiom import Idiom
+from models.slang import Slang
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -16,20 +16,20 @@ load_dotenv(find_dotenv(".env"))
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
-
+    OPENAI_API_KEY: Optional[str] = None
+    
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
-            database=client.speakeasy,
-            document_models=[User, Idiom]
+            database=client.get_default_database(),
+            document_models=[User, Slang]
         )
 
     class Config:
-        env_file = ".env.prod"
         model_config = SettingsConfigDict(case_sensitive=True)
 
 
-        env_file = ".env.prod"
+        # env_file = ".env.prod"
 
 class Database:
     def __init__(self, model):
@@ -70,11 +70,9 @@ class Database:
         await doc.delete()
         return True
 
-
     async def get_by_email(self, email: str) -> Any:
         # Retrieve a user by email
         user = await self.model.find_one(self.model.email == email)
         if user:
             return user
         return False
-    
