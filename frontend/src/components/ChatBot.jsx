@@ -5,11 +5,13 @@ import Result from "./Result";
 
 import { RiSendPlane2Fill } from "react-icons/ri";
 
-export default function ChatBot() {
+export default function ChatBot({ user }) {
   const [userInput, setUserInput] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [error, setError] = useState(false);
+  console.log("user in chatbot", user);
+  
 
   function handlesubmit(e) {
     e.preventDefault();
@@ -55,7 +57,7 @@ export default function ChatBot() {
     <>
       {showResult ? (
         <div className="w-full h-full overflow-hidden">
-          <Result handleShowResult={setShowResult} />
+          <Result handleShowResult={setShowResult} user={user} />
         </div>
       ) : (
         <div className="chatBot w-full h-full flex flex-col justify-around">

@@ -2,16 +2,23 @@ import chatBotImg from "../assets/chat-bot.gif";
 import bookMarkImg from "../assets/bookmark.gif";
 import FavoriteImg from "../assets/favorites.gif";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
-export default function Result({ handleShowResult }) {
+import userReducer, { addUserFavoriteThunk, deleteUserFavoriteThunk } from "../store/userReducer";
+
+export default function Result({ handleShowResult, user }) {
   const [favorite, setFavorite] = useState(false);
+  console.log("user in result", user);
+  
 
-  function addToFavorite() {
-    setFavorite(true);
+  const dispatch = useDispatch();
+
+  async function addToFavoriteFunction(item) {
+    await dispatch(addUserFavoriteThunk({ item }));
   }
 
-  function removeFromFavorite() {   
-    setFavorite(false);
+  async function removeFromFavorite(item) {   
+    await dispatch(deleteUserFavoriteThunk({ item }));
   }
 
   return (
@@ -26,19 +33,19 @@ export default function Result({ handleShowResult }) {
           <div className="flex justify-between w-full">
             <h1>Result</h1>
             <div className="relative group">
-              {favorite ? (
+              {user.favorite.includes("result2") ? (
                 <img
                   src={FavoriteImg}
                   alt="favorite icon"
                   className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={removeFromFavorite}
+                  onClick={() => removeFromFavorite("result2")}
                 />
               ) : (
                 <img
                   src={bookMarkImg}
                   alt="add to favorite icon"
                   className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={addToFavorite}
+                  onClick={() => addToFavoriteFunction("result2")}
                 />
 
                 

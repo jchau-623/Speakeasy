@@ -10,7 +10,7 @@ import Profile from "./Profile";
 import loadingImg from "../assets/loading.gif";
 import chatBotImg from "../assets/chat-bot.gif";
 import historyImg from "../assets/history.gif";
-import favoriteImg from "../assets/favorites.gif";
+import bookmarkImg from "../assets/bookmark.gif";
 import profileImg from "../assets/user-profile.gif";
 import signout from "../assets/signout.png";
 
@@ -25,7 +25,7 @@ export default function Home() {
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state.users);
-  console.log(user);  
+  // console.log(user);  
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -140,7 +140,7 @@ export default function Home() {
                   }`}
                   onClick={handleFavoriteRender}
                 >
-                  {showFavorite ? "Favorites" : <img src={favoriteImg} alt="favorite image" className="w-[40px] h-[40px]" />}
+                  {showFavorite ? "Favorites" : <img src={bookmarkImg} alt="favorite image" className="w-[40px] h-[40px]" />}
                 </div>
                 <div
                   className={` ${
@@ -154,8 +154,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 p-8 w-full h-[90%] overflow-scroll">
-                {showChatBot && <ChatBot />}
+              <div className="grid grid-cols-1 p-8 w-full h-[90%] overflow-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {showChatBot && <ChatBot user={user}/>}
                 {showHistory && <History />}
                 {showFavorite && <Favorites user={user} />}
                 {showProfile && <Profile user={user}/>}
