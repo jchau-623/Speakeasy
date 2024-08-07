@@ -9,8 +9,8 @@ services:
       - "8080:8080"
     env_file:
       - .env.prod
-    environment:
-      - PYTHONPATH=/app
+    # environment:
+    #   - PYTHONPATH=/app
     depends_on:
       - database
 
@@ -19,10 +19,13 @@ services:
     container_name: backend_database
     ports:
       - "27017:27017"
-#     volumes:
- #      - data:/data/db
-    healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # volumes:
+    #   - data:/data/db
+    # healthcheck:
+    #   test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+
+# volumes:
+#   data:

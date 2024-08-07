@@ -2,22 +2,34 @@ from beanie import init_beanie, PydanticObjectId, Document
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional, Type, List
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
-from models.idiom import Idiom
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from models.user import User
+from models.slang import Slang
+from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
+import os
+
+
+load_dotenv(find_dotenv(".env"))
+
 
 class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
-
+    OPENAI_API_KEY: Optional[str] = None
+    
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
-            database=client.speakeasy,
-            document_models=[Idiom]
+            database=client.get_default_database(),
+            document_models=[User, Slang]
         )
 
     class Config:
-        env_file = ".env.prod"
+        model_config = SettingsConfigDict(case_sensitive=True)
+
+
+        # env_file = ".env.prod"
 
 class Database:
     def __init__(self, model: Type[Document]):
@@ -32,11 +44,15 @@ class Database:
     async def get_all(self) -> List[Document]:
         return await self.model.find_all().to_list()
 
-    async def update(self, id: PydanticObjectId, body: BaseModel) -> Optional[Document]:
-        des_body = {k: v for k, v in body.dict().items() if v is not None}
-        update_query = {"$set": des_body}
-        
-        doc = await self.get(id)
+    async def update(self, id: PydanticObjectId, body: BaseModel) -> Any:
+        doc_id = id
+        des_body = body.dict()
+        des_body = {k: v for k, v in des_body.items() if v is not None}
+        update_query = {"$set": {
+            field: value for field, value in des_body.items()
+        }}
+
+        doc = await self.get(doc_id)
         if not doc:
             return None
         await doc.update(update_query)
@@ -49,5 +65,9 @@ class Database:
         await doc.delete()
         return True
 
-def get_database() -> Database:
-    return Database(Idiom)
+    async def get_by_email(self, email: str) -> Any:
+        # Retrieve a user by email
+        user = await self.model.find_one(self.model.email == email)
+        if user:
+            return user
+        return False
