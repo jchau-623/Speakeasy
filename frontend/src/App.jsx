@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import SignUp from "./components/Signup";
 import SignIn from "./components/Signin";
 import History from "./components/History";
+import About from "./components/About";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" exact={true} element={<SignUp />} />
         <Route path="/signin" exact={true} element={<SignIn />} />
         <Route path="/history" exact={true} element={<History />} />
+        <Route path="/about" exact={true} element={<About />} />
       </Routes>
     </>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ChatBot from "./ChatBot";
@@ -162,6 +162,13 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="absolute bottom-4 right-4">
+        <Link to="/about">
+          <button className="bg-secondary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200">
+            About Us
+          </button>
+        </Link>
       </div>
     </>
   );
