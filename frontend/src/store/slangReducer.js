@@ -2,6 +2,7 @@
 const GET_ALL_SLANGS = "GET_ALL_SLANGS";
 const GET_ONE_SLANG = "GET_ONE_SLANG";
 const CREATE_SLANG = "CREATE_SLANG";
+const SEARCH_SLANG ="SEARCH_SLANG;"
 
 
 //actions
@@ -24,6 +25,13 @@ const getOneSlangAction = (slang) => {
 const createSlangAction = (slang) => {
     return {
         type: CREATE_SLANG,
+        payload:slang
+    }
+}
+
+const searchSlangAction = (slang) => {
+    return {
+        type: SEARCH_SLANG,
         payload:slang
     }
 }
@@ -104,38 +112,78 @@ export const createSlang = (slang) => async (dispatch) => {
     }
 }
 
+export const search = (data) => async (dispatch) => {
+   
+    try {
+        console.log(data,222222222)
+        const response = await fetch(`/api/search/?term=${data.term}&user_id=${data.user_id}`, {
+            method: 'GET',
+            headers: {
+                'accept': 'application/json'
+            }
+           
+        });
+
+        if (response.ok) {
+            const slangs = await response.json();
+            console.log(slangs, 77777)
+            dispatch(searchSlangAction(slangs));
+            return { success: true, slangs };
+        } else {
+            const error = await response.json();
+            return { success: false, error };
+        }
+    } catch (err) {
+        return { success: false, error: { message: 'Failed to fetch slangs' } };
+    }
+}
 
 
+
+
+//initial states
+
+const initialState =
+
+{ 
+    slangs: {},
+    slang:{}
+  
+ };
 
 //reducer
 
-// const initialState = { user: null };
-// const userReducer = (state = initialState, action) => {
-//     let newState;
-//     switch (action.type) {
-//         case USER_SIGNIN:
-//             newState = Object.assign({}, state);
-//             newState.user = action.payload;
-//             return newState;
-//         case USER_SIGNUP:
-//             newState = Object.assign({}, state);
-//             newState.user = action.payload;
-//             return newState;
-//         case GET_USER:
-//             newState = Object.assign({}, state);
-//             newState.user = action.payload;
-//             return newState;
-//         case USER_LOGOUT:
-//             newState = Object.assign({}, state);
-//             newState.user = null;
-//             return newState;
-//         case DELETE_USER:
-//             newState = Object.assign({}, state);
-//             newState.user = null;
-//             return newState;
-//         default:
-//             return state;
-//     }
-// }   
 
-// export default userReducer;
+const slangReducer = (state = initialState, action) => {
+    let newState;
+    switch (action.type) {
+        // case GET_ALL_SLANGS:
+        //     newState = Object.assign({}, state);
+        //     newState.user = action.payload;
+        //     return newState;
+        // case GET_ONE_SLANG:
+        //     newState = Object.assign({}, state);
+        //     newState.user = action.payload;
+        //     return newState;
+        // case CREATE_SLANG:
+        //     newState = Object.assign({}, state);
+        //     newState.user = action.payload;
+        //     return newState;
+        case SEARCH_SLANG:
+            newState = {...state}
+            newState.slangs=action.payload.reduce((acc, curr)=>{
+                acc[curr.id]=curr
+                return acc
+            },{})
+            newState.slang=action.payload[0]
+            return newState;
+       
+        default:
+            return state;
+    }
+}   
+
+export default slangReducer;
+
+
+

@@ -2,9 +2,11 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { thunk } from 'redux-thunk';
 import logger from 'redux-logger';
 import userReducer from './userReducer';
+import slangReducer from './slangReducer';
 
 const rootReducer = combineReducers({
   users: userReducer,
+  slangs:slangReducer
 });
 
 let enhancer;
