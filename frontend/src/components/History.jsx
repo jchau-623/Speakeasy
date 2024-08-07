@@ -5,9 +5,9 @@ import { getUserHistory } from '../store/historyReducer';
 const History = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
-  console.log("user", user);  // For debugging purposes
+  console.log("user", user); 
   const userId = user ? user.id : null;
-  console.log("user id", userId);  // For debugging purposes
+  console.log("user id", userId);  
   const history = useSelector((state) => state.history);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const History = () => {
   }
 
   if (history.length === 0) {
-    return <div>No history found.</div>;
+    return <div>No history found. Ask me anything!</div>;
   }
 
   return (
