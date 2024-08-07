@@ -38,6 +38,7 @@ async def detect_language(term: str) -> str:
 @slang_router.post("/", response_model=SlangResponse)
 async def create_slang(slang: SlangCreate):
     try:
+        
         existing_slang = await Slang.find_one(Slang.term == slang.term)
         if existing_slang:
             return SlangResponse(**existing_slang.dict(by_alias=True))

@@ -20,7 +20,7 @@ async def search(term: str = Query(..., min_length=1)):
         words = term.split()
         if len(words) == 1:
             # It's a slang
-            slangs = await slang_database.model.find(Slang.term == term).to_list()
+            slangs = await slang_database.model.find(Slang.term.lower() == term).to_list()
             if not slangs:
                 return []
             return [SlangResponse(**slang.dict(by_alias=True)) for slang in slangs]
