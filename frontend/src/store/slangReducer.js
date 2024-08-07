@@ -91,10 +91,10 @@ export const getOneSlang = (id) => async (dispatch) => {
 export const createSlang = (slang) => async (dispatch) => {
     
     try {
-        const response = await fetch('/api/user/signin', {
+        const response = await fetch('/api/slangs/', {
             method: 'POST',
             headers: {
-                'accept': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(slang)
         });
@@ -115,7 +115,7 @@ export const createSlang = (slang) => async (dispatch) => {
 export const search = (data) => async (dispatch) => {
    
     try {
-        console.log(data,222222222)
+        
         const response = await fetch(`/api/search/?term=${data.term}&user_id=${data.user_id}`, {
             method: 'GET',
             headers: {
@@ -126,7 +126,6 @@ export const search = (data) => async (dispatch) => {
 
         if (response.ok) {
             const slangs = await response.json();
-            console.log(slangs, 77777)
             dispatch(searchSlangAction(slangs));
             return { success: true, slangs };
         } else {
@@ -157,22 +156,26 @@ const initialState =
 const slangReducer = (state = initialState, action) => {
     let newState;
     switch (action.type) {
-        // case GET_ALL_SLANGS:
-        //     newState = Object.assign({}, state);
-        //     newState.user = action.payload;
-        //     return newState;
-        // case GET_ONE_SLANG:
-        //     newState = Object.assign({}, state);
-        //     newState.user = action.payload;
-        //     return newState;
-        // case CREATE_SLANG:
-        //     newState = Object.assign({}, state);
-        //     newState.user = action.payload;
-        //     return newState;
+        case GET_ALL_SLANGS:
+            newState = {...state}
+            newState.slangs = action.payload.reduce((acc, curr)=>{
+                acc[curr._id]=curr
+                return acc;
+            }, {})
+            return newState;
+        case GET_ONE_SLANG:
+            newState = {...state}
+            newState.slang = action.payload;
+            return newState;
+        case CREATE_SLANG:
+            newState = {...state}
+            newState.slang = action.payload
+            newState.slangs[action.payload._id]=action.payload
+            return newState;
         case SEARCH_SLANG:
             newState = {...state}
             newState.slangs=action.payload.reduce((acc, curr)=>{
-                acc[curr.id]=curr
+                acc[curr._id]=curr
                 return acc
             },{})
             newState.slang=action.payload[0]
