@@ -72,4 +72,4 @@ class Database:
         user = await self.model.find_one(self.model.email == email)
         if user:
             return user
-        return False
+        return None
