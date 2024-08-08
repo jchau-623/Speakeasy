@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ChatBot from "./ChatBot";
@@ -25,7 +25,7 @@ export default function Home() {
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state.users);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export default function Home() {
       alert(result.error.message);
     }
   }
-  
+
   function handleHomeRender() {
     setShowChatBot(true);
     setShowHistory(false);
@@ -67,18 +67,18 @@ export default function Home() {
   }
 
   useEffect(() => {
-      const fadeOutTimer = setTimeout(() => {
-        setFadeOut(true);
-        setTimeout(() => {
-          setShowLoading(false);
-          setShowContainer(true);
-        }, 2000);
-      }, 3000);
+    const fadeOutTimer = setTimeout(() => {
+      setFadeOut(true);
+      setTimeout(() => {
+        setShowLoading(false);
+        setShowContainer(true);
+      }, 2000);
+    }, 3000);
 
-      return () => {
-        clearTimeout(fadeOutTimer);
-      };
-    }, []);
+    return () => {
+      clearTimeout(fadeOutTimer);
+    };
+  }, []);
 
 
   return (
@@ -89,17 +89,15 @@ export default function Home() {
             <img
               src={loadingImg}
               alt="loading image"
-              className={`w-[100px] h-[100px] ${
-                fadeOut ? "animate__animated animate__fadeOut" : ""
-              }`}
+              className={`w-[100px] h-[100px] ${fadeOut ? "animate__animated animate__fadeOut" : ""
+                }`}
             />
           </div>
         )}
 
         <div
-          className={`flex justify-center items-center w-full h-full ${
-            showMainContent ? "animate__animated animate__fadeIn" : "hidden"
-          }`}
+          className={`flex justify-center items-center w-full h-full ${showMainContent ? "animate__animated animate__fadeIn" : "hidden"
+            }`}
         >
           <img
             src={signout}
@@ -112,41 +110,37 @@ export default function Home() {
             <div className="container w-[100%] h-full">
               <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
                 <div
-                  className={` ${
-                    showChatBot
+                  className={` ${showChatBot
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleHomeRender}
                 >
-                  {showChatBot ?  "EasyChat" : <img src={chatBotImg} alt="chat bot image" className="w-[40px] h-[40px]" />}
+                  {showChatBot ? "EasyChat" : <img src={chatBotImg} alt="chat bot image" className="w-[40px] h-[40px]" />}
                 </div>
                 <div
-                  className={` ${
-                    showHistory
+                  className={` ${showHistory
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleHistoryRender}
                 >
                   {showHistory ? "History" : <img src={historyImg} alt="history image" className="w-[40px] h-[40px]" />}
                 </div>
                 <div
-                  className={` ${
-                    showFavorite
+                  className={` ${showFavorite
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleFavoriteRender}
                 >
                   {showFavorite ? "Favorites" : <img src={favoriteImg} alt="favorite image" className="w-[40px] h-[40px]" />}
                 </div>
                 <div
-                  className={` ${
-                    showProfile
+                  className={` ${showProfile
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleProfileRender}
                 >
                   {showProfile ? "Profile" : <img src={profileImg} alt="profile image" className="w-[40px] h-[40px]" />}
@@ -157,19 +151,22 @@ export default function Home() {
                 {showChatBot && <ChatBot />}
                 {showHistory && <History />}
                 {showFavorite && <Favorites />}
-                {showProfile && <Profile user={user}/>}
+                {showProfile && <Profile user={user} />}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-4 right-4">
-        <Link to="/about">
-          <button className="bg-secondary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200">
+      <footer className="absolute bottom-0 w-full bg-secondary text-white py-4">
+        <div className="container mx-auto text-center">
+          <a
+            href="/about"
+            className="bg-primary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
+          >
             About Us
-          </button>
-        </Link>
-      </div>
+          </a>
+        </div>
+      </footer>
     </>
   );
 }
