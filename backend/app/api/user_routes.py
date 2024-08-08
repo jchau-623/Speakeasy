@@ -15,6 +15,7 @@ user_router = APIRouter(
 user_database = Database(User)
 hash_password = HashPassword()
 
+token_blacklist: List[str] = [] #logout for dev only
 
 # token_blacklist: List[str] = [] #logout for dev only
 
@@ -32,6 +33,14 @@ async def sign_new_user(user: User, response: Response) -> UserResponse:
     user.password = hashed_password
 
     await user_database.save(user)
+    db = Database(User)
+    new_user = await db.get_by_email(user.email)
+    access_token = create_access_token(user.email)
+    if new_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
 
     db = Database(User)
     new_user = await db.get_by_email(user.email)

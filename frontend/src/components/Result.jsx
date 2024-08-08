@@ -2,10 +2,11 @@ import chatBotImg from "../assets/chat-bot.gif";
 import bookMarkImg from "../assets/bookmark.gif";
 import FavoriteImg from "../assets/favorites.gif";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Result({ handleShowResult }) {
   const [favorite, setFavorite] = useState(false);
-
+  const slang = useSelector(state=>state.slangs.slang)
   function addToFavorite() {
     setFavorite(true);
   }
@@ -50,12 +51,14 @@ export default function Result({ handleShowResult }) {
             </div>
           </div>
           <p>
-            Definition: A result is the outcome of an event or situation,
-            especially when it is considered to be the most important aspect.
+            {/* Definition: A result is the outcome of an event or situation,
+            especially when it is considered to be the most important aspect. */}
+            Definition:{slang?.meaning}
           </p>
           <p>
-            Example: The result of the test was positive, so I am going to the
-            hospital for a check-up.
+            {/* Example: The result of the test was positive, so I am going to the
+            hospital for a check-up. */}
+            Example:{slang?.exampleUse}
           </p>
         </div>
       </div>
