@@ -15,7 +15,6 @@ user_router = APIRouter(
 user_database = Database(User)
 hash_password = HashPassword()
 
-token_blacklist: List[str] = [] #logout for dev only
 
 # token_blacklist: List[str] = [] #logout for dev only
 
