@@ -8,10 +8,11 @@ import userReducer, {
   addUserFavoriteThunk,
   deleteUserFavoriteThunk,
 } from "../store/userReducer";
+import { useSelector } from "react-redux";
 
 export default function Result({ handleShowResult, user }) {
   // const [favorite, setFavorite] = useState(false);
-  console.log("user in result", user);
+  const slang = useSelector(state=>state.slangs.slang)  console.log("user in result", user);
 
   const dispatch = useDispatch();
 
@@ -90,12 +91,14 @@ export default function Result({ handleShowResult, user }) {
             </div>
           </div>
           <p>
-            Definition: A result is the outcome of an event or situation,
-            especially when it is considered to be the most important aspect.
+            {/* Definition: A result is the outcome of an event or situation,
+            especially when it is considered to be the most important aspect. */}
+            Definition:{slang?.meaning}
           </p>
           <p>
-            Example: The result of the test was positive, so I am going to the
-            hospital for a check-up.
+            {/* Example: The result of the test was positive, so I am going to the
+            hospital for a check-up. */}
+            Example:{slang?.exampleUse}
           </p>
         </div>
       </div>

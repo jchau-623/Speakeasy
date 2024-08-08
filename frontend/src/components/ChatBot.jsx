@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Result from "./Result";
 
 import { RiSendPlane2Fill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { search } from "../store/slangReducer";
+import { useNavigate } from "react-router-dom";
 
 export default function ChatBot({ user }) {
   const [userInput, setUserInput] = useState("");
@@ -13,9 +16,15 @@ export default function ChatBot({ user }) {
   // console.log("user in chatbot", user);
   
 
+  const user = useSelector(state=>state.users.user)
+  const dispatch = useDispatch()
+
+  const navigate = useNavigate();
+
   function handlesubmit(e) {
     e.preventDefault();
     setShowResult(true);
+    dispatch(search({term:userInput, user_id:user.id}))
     setUserInput("");
   }
 
@@ -52,6 +61,9 @@ export default function ChatBot({ user }) {
     }
   }, [showResult]);
 
+  if(!user){
+    navigate("/")
+  }
 
   return (
     <>
