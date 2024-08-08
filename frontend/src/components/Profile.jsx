@@ -25,7 +25,7 @@ export default function Profile({
   if(!user) {
     return (
       <div className="flex justify-center items-center h-[100%]">
-        <p className="text-2xl font-semibold text-secondary">Please sign in or create an account.</p>
+        <p className="text-2xl font-semibold text-red-300">Please sign in or create an account.</p>
       </div>
     );
   }
@@ -70,7 +70,7 @@ export default function Profile({
             </div>
 
             <button
-              className="px-5 py-3 bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white transition-all duration-150"
+              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white transition-all duration-150"
               onClick={() => handleDeleteAccount()}
             >
               Delete Account

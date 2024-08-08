@@ -7,6 +7,8 @@ import { useState } from "react";
 import SingleCard from "./SingleCard";
 
 export default function Favorites({ user }) {
+  // console.log("user in favorites", user);
+  
   const [selectedFavorite, setSelectedFavorite] = useState(null);
   const dispatch = useDispatch();
 
@@ -15,13 +17,13 @@ export default function Favorites({ user }) {
   };
 
   const deleteFavoriteFunction = async (item) => {
-    await dispatch(deleteUserFavoriteThunk({ item }));
+    await dispatch(deleteUserFavoriteThunk(item ));
   };
 
   if(!user) {
     return (
       <div className="flex justify-center items-center h-[100%]">
-        <p className="text-2xl font-semibold text-secondary">Please sign in or create an account.</p>
+        <p className="text-2xl font-semibold text-red-300">Please sign in or create an account.</p>
       </div>
     );
   }
@@ -29,13 +31,13 @@ export default function Favorites({ user }) {
   if(user.favorite.length === 0) {
     return (
       <div className="flex justify-center items-center h-[100%]">
-        <p className="text-2xl font-semibold text-secondary">No favorite items yet</p>
+        <p className="text-2xl font-semibold text-red-300">No favorite items yet</p>
       </div>
     );
   }
 
   return (
-    <div className="flex justify-between h-[100%] relative m-4">
+    <div className="flex justify-between h-[100%] relative m-4 overflow-hidden">
       <img
         src={favoriteImg}
         alt="favorite icon"
@@ -49,22 +51,22 @@ export default function Favorites({ user }) {
           setSelectedFavorite={setSelectedFavorite}
         />
       ) : (
-        <ul className="w-[100%] sm:w-[70%] flex flex-col items-center gap-6 mt-6 overflow-hidden">
+        <ul className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {user &&
-            user.favorite.map((favorite) => (
-              <li key={favorite} className="w-[100%] flex items-center gap-3">
+            user.favorite.map((item) => (
+              <li key={item.id} className="w-[100%] flex items-center gap-3">
                 <p
                   className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate"
-                  onClick={() => showSingleFavoriteFunction(favorite)}
+                  onClick={() => showSingleFavoriteFunction(item)}
                 >
-                  {favorite}
+                  {item.id}
                 </p>
                 <div className="group">
                   <img
                     src={deleteImg}
                     alt="delete icon"
                     className="w-[30px] h-[30px] cursor-pointer"
-                    onClick={() => deleteFavoriteFunction(favorite)}
+                    onClick={() => deleteFavoriteFunction(item)}
                   />
                   <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
                     Remove from Favorite

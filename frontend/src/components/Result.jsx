@@ -11,16 +11,26 @@ import userReducer, {
 
 export default function Result({ handleShowResult, user }) {
   // const [favorite, setFavorite] = useState(false);
-  // console.log("user in result", user);
+  console.log("user in result", user);
 
   const dispatch = useDispatch();
 
+  const favoriteItem = {
+    id: "8",
+    term: "string",
+    meaning: "string",
+    origin: "string",
+    exampleUse: "string",
+    equivalentInLanguage: "string",
+    createdAt: "string",
+  };
+
   async function addToFavoriteFunction(item) {
-    await dispatch(addUserFavoriteThunk({ item }));
+    await dispatch(addUserFavoriteThunk(item));
   }
 
   async function removeFromFavorite(item) {
-    await dispatch(deleteUserFavoriteThunk({ item }));
+    await dispatch(deleteUserFavoriteThunk(item));
   }
 
   return (
@@ -35,27 +45,48 @@ export default function Result({ handleShowResult, user }) {
           <div className="flex justify-between w-full">
             <h1>Result</h1>
             <div className="relative group">
-              {user.favorite.includes("result3") ? (
-                <img
-                  src={FavoriteImg}
-                  alt="favorite icon"
-                  className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={() => removeFromFavorite("result3")}
-                />
-              ) : (
-                <img
-                  src={bookMarkImg}
-                  alt="add to favorite icon"
-                  className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={() => addToFavoriteFunction("result3")}
-                />
+              {user.favorite.length === 0 && (
+                <div className="relative group">
+                  <img
+                    key={favoriteItem.id}
+                    src={bookMarkImg}
+                    alt="add to favorite icon"
+                    className="w-[30px] h-[30px] cursor-pointer rotate-30"
+                    onClick={() => addToFavoriteFunction(favoriteItem)}
+                  />
+                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                    Add to Favorite
+                  </span>
+                </div>
               )}
 
-              <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
-                {user.favorite.includes("result3")
-                  ? "Remove from Favorite"
-                  : "Add to Favorite"}
-              </span>
+              {user.favorite.find(
+                (favorite) => favorite.id === favoriteItem.id
+              ) ? (
+                <div className="relative group">
+                  <img
+                    src={FavoriteImg}
+                    alt="favorite icon"
+                    className="w-[30px] h-[30px] cursor-pointer rotate-30"
+                    onClick={() => removeFromFavorite(favoriteItem)}
+                  />
+                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                    Remove from favorite
+                  </span>
+                </div>
+              ) : (
+                <div className="relative group">
+                  <img
+                    src={bookMarkImg}
+                    alt="add to favorite icon"
+                    className="w-[30px] h-[30px] cursor-pointer rotate-30"
+                    onClick={() => addToFavoriteFunction(favoriteItem)}
+                  />
+                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                    Add to favorite
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <p>
@@ -70,7 +101,7 @@ export default function Result({ handleShowResult, user }) {
       </div>
       <button
         onClick={() => handleShowResult(false)}
-        className="flex justify-center self-end p-2 sm:p-3 text-xs sm:text-base bg-secondary w-fit sm:w-[10%] rounded-full z-10 text-white font-medium"
+        className="flex justify-center self-end p-2 sm:p-3 text-xs sm:text-base bg-secondary w-fit sm:w-[10%] rounded-full z-10 text-white font-medium hover:scale-90 hover:bg-red-200 transition-all duration-200"
       >
         Got it
       </button>

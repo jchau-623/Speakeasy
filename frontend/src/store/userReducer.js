@@ -41,17 +41,17 @@ const deleteUser = () => {
   };
 };
 
-const addUserFavorite = (favorite) => {
+const addUserFavorite = (user) => {
     return {
       type: ADD_USER_FAVORITE,
-      payload: favorite,
+      payload: user,
     };
   };
   
-  const deleteUserFavorite = (favorite) => {
+  const deleteUserFavorite = (user) => {
     return {
       type: DELETE_USER_FAVORITE,
-      payload: favorite,
+      payload: user,
     };
   };
 
@@ -109,7 +109,7 @@ export const getUserThunk = () => async (dispatch) => {
   try {
     const response = await fetch("/api/user/", {
       method: "GET",
-      credentials: "include", // Ensure cookies are sent with the request
+      credentials: "include",
     });
     if (response.ok) {
       const user = await response.json();
@@ -131,7 +131,7 @@ export const logoutThunk = () => async (dispatch) => {
   try {
     const response = await fetch("/api/user/logout", {
       method: "POST",
-      credentials: "include", // This ensures cookies are sent with the request
+      credentials: "include",
     });
     if (response.ok) {
       dispatch(userLogout());
@@ -163,91 +163,76 @@ export const deleteUserThunk = () => async (dispatch) => {
 };
 
 export const addUserFavoriteThunk = (favorite) => async (dispatch) => {
-    try {
-      const response = await fetch("/api/user/add_favorite", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(favorite),
-      });
-  
-      if (response.ok) {
-        const user = await response.json();
-        dispatch(addUserFavorite(user.favorite));
-        return { success: true, user };
-      } else {
-        const error = await response.json();
-        return { success: false, error };
-      }
-    } catch (err) {
-      return { success: false, error: { message: "Network error" } };
+  try {
+    const response = await fetch("/api/user/add_favorite", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(favorite),
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      dispatch(addUserFavorite(user));
+      return { success: true, user };
+    } else {
+      const error = await response.json();
+      return { success: false, error };
     }
-  };
-  
-  export const deleteUserFavoriteThunk = (favorite) => async (dispatch) => {
-    // console.log("In the delete user favorite thunk")
-    try {
-      const response = await fetch("/api/user/delete_favorite", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(favorite),
-      });
-  
-      if (response.ok) {
-        const user = await response.json();
-        dispatch(deleteUserFavorite(user.favorite));
-        return { success: true, user };
-      } else {
-        const error = await response.json();
-        return { success: false, error };
-      }
-    } catch (err) {
-      return { success: false, error: { message: "Network error" } };
+  } catch (err) {
+    return { success: false, error: { message: "Network error" } };
+  }
+};
+
+export const deleteUserFavoriteThunk = (favorite) => async (dispatch) => {
+  try {
+    const response = await fetch("/api/user/delete_favorite", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(favorite),
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      dispatch(deleteUserFavorite(user));
+      return { success: true, user };
+    } else {
+      const error = await response.json();
+      return { success: false, error };
     }
-  };
-  
+  } catch (err) {
+    return { success: false, error: { message: "Network error" } };
+  }
+};
 
 
 //reducer
 
 const initialState = { user: null };
+
 const userReducer = (state = initialState, action) => {
   let newState;
   switch (action.type) {
     case USER_SIGNIN:
-      newState = Object.assign({}, state);
-      newState.user = action.payload;
-      return newState;
     case USER_SIGNUP:
-      newState = Object.assign({}, state);
-      newState.user = action.payload;
-      return newState;
     case GET_USER:
+    case ADD_USER_FAVORITE:
+    case DELETE_USER_FAVORITE:
       newState = Object.assign({}, state);
       newState.user = action.payload;
       return newState;
+
     case USER_LOGOUT:
-      newState = Object.assign({}, state);
-      newState.user = null;
-      return newState;
     case DELETE_USER:
       newState = Object.assign({}, state);
       newState.user = null;
       return newState;
-    case ADD_USER_FAVORITE:
-      newState = Object.assign({}, state);
-      newState.user.favorite = action.payload;
-      return newState;
-    case DELETE_USER_FAVORITE:
-      newState = Object.assign({}, state);
-      newState.user.favorite = action.payload;
-      return newState;
+
     default:
       return state;
   }
 };
-
 export default userReducer;

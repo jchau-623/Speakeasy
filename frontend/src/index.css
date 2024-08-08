@@ -20,7 +20,3 @@
       typing 4s steps(40, end) 1s 1 normal both,
       blinkCursor 0.75s step-end infinite; 
   }
-
-  .grid::-webkit-scrollbar {
-    display: none;
-  }

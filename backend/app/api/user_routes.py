@@ -142,8 +142,8 @@ async def add_favorite_item(favorite_item: FavoriteItem, current_user_email: str
             detail="User not found"
         )
     
-    if favorite_item.item not in user.favorite:
-        user.favorite.append(favorite_item.item)
+    if favorite_item not in user.favorite:
+        user.favorite.append(favorite_item)
         await user.save()
     else:
         raise HTTPException(
@@ -171,8 +171,8 @@ async def delete_favorite_item(favorite_item: FavoriteItem, current_user_email: 
             detail="User not found"
         )
     
-    if favorite_item.item in user.favorite:
-        user.favorite.remove(favorite_item.item)
+    if favorite_item in user.favorite:
+        user.favorite.remove(favorite_item)
         await user.save()
     else:
         raise HTTPException(
