@@ -38,17 +38,12 @@ class Database:
 
     async def save(self, document) -> None:
         await document.create()
-        return
 
-    async def get(self, id: PydanticObjectId) -> Any:
-        doc = await self.model.get(id)
-        if doc:
-            return doc
-        return False
+    async def get(self, id: PydanticObjectId) -> Optional[Document]:
+        return await self.model.get(id)
 
-    async def get_all(self) -> List[Any]:
-        docs = await self.model.find_all().to_list()
-        return docs
+    async def get_all(self) -> List[Document]:
+        return await self.model.find_all().to_list()
 
     async def update(self, id: PydanticObjectId, body: BaseModel) -> Any:
         doc_id = id
