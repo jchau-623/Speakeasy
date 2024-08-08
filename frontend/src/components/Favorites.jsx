@@ -54,12 +54,12 @@ export default function Favorites({ user }) {
         <ul className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {user &&
             user.favorite.map((item) => (
-              <li key={item.id} className="w-[100%] flex items-center gap-3">
+              <li key={item.term} className="w-[100%] flex items-center gap-5">
                 <p
-                  className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate"
+                  className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-red-200 hover:text-secondary transition-all duration-200"
                   onClick={() => showSingleFavoriteFunction(item)}
                 >
-                  {item.id}
+                  {item.term}
                 </p>
                 <div className="group">
                   <img
@@ -68,7 +68,7 @@ export default function Favorites({ user }) {
                     className="w-[30px] h-[30px] cursor-pointer"
                     onClick={() => deleteFavoriteFunction(item)}
                   />
-                  <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                  <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
                     Remove from Favorite
                   </span>
                 </div>

@@ -83,14 +83,18 @@ export default function Home() {
     };
   }, []);
 
-  if(!user) {
+  if (!user) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
-        <Link to="/" className="text-3xl font-semibold text-red-300 animate__animated animate__swing hover:text-secondary transition-all duration-200">Please sign in or create an account.</Link>
+        <Link
+          to="/"
+          className="text-3xl font-semibold text-red-300 animate__animated animate__swing hover:text-secondary transition-all duration-200"
+        >
+          Please sign in or create an account.
+        </Link>
       </div>
     );
   }
-  
 
   return (
     <>
@@ -113,23 +117,26 @@ export default function Home() {
           }`}
         >
           {/* <HomeBG /> */}
-          
-            <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3">
-              <img src={friendshipImg} alt="friendship icon" className="w-[100px] h-[100px]" />
-              <h1 className="font-extrabold text-white text-3xl ">SpeakEasy</h1>
-            </div>
-            <div className="group ">
-              <img
-                src={signout}
-                alt="log out button"
-                className="w-[40px] h-[40px] absolute top-[50px] right-[50px] cursor-pointer hover:scale-90 transition-all duration-200"
-                onClick={handleLogOut}
-              />
-              <span className="absolute top-[90px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
-                Log Out
-              </span>
-            </div>
-    
+
+          <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3">
+            <img
+              src={friendshipImg}
+              alt="friendship icon"
+              className="w-[100px] h-[100px]"
+            />
+            <h1 className="font-extrabold text-white text-3xl ">SpeakEasy</h1>
+          </div>
+          <div className="group ">
+            <img
+              src={signout}
+              alt="log out button"
+              className="w-[40px] h-[40px] absolute top-[50px] right-[50px] cursor-pointer hover:scale-90 transition-all duration-200"
+              onClick={handleLogOut}
+            />
+            <span className="absolute top-[90px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-sm font-medium text-white bg-red-300 rounded animate__animated animate__swing">
+              Log Out
+            </span>
+          </div>
 
           <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
             <div className="container w-[100%] h-full">

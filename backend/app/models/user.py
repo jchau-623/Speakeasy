@@ -1,18 +1,20 @@
 from beanie import Document, PydanticObjectId
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
+from datetime import datetime
 
 # class FavoriteItem(BaseModel):
 #     item: str
 
 class FavoriteItem(BaseModel):
-    id: str
+    id: str = Field(alias="_id")
     term: str
     meaning: str
     origin: str
     exampleUse: str
     equivalentInLanguage: Optional[str] = None
-    createdAt: str
+    createdAt: datetime
+    user_id: str
     
 
 class User(Document):

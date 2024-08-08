@@ -1,30 +1,18 @@
 import chatBotImg from "../assets/chat-bot.gif";
 import bookMarkImg from "../assets/bookmark.gif";
 import FavoriteImg from "../assets/favorites.gif";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import userReducer, {
+import {
   addUserFavoriteThunk,
   deleteUserFavoriteThunk,
 } from "../store/userReducer";
 import { useSelector } from "react-redux";
 
 export default function Result({ handleShowResult, user }) {
-  // const [favorite, setFavorite] = useState(false);
-  const slang = useSelector(state=>state.slangs.slang)  console.log("user in result", user);
+  const slang = useSelector(state=>state.slangs.slang)  
 
   const dispatch = useDispatch();
-
-  const favoriteItem = {
-    id: "8",
-    term: "string",
-    meaning: "string",
-    origin: "string",
-    exampleUse: "string",
-    equivalentInLanguage: "string",
-    createdAt: "string",
-  };
 
   async function addToFavoriteFunction(item) {
     await dispatch(addUserFavoriteThunk(item));
@@ -46,32 +34,17 @@ export default function Result({ handleShowResult, user }) {
           <div className="flex justify-between w-full">
             <h1>Result</h1>
             <div className="relative group">
-              {user.favorite.length === 0 && (
-                <div className="relative group">
-                  <img
-                    key={favoriteItem.id}
-                    src={bookMarkImg}
-                    alt="add to favorite icon"
-                    className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                    onClick={() => addToFavoriteFunction(favoriteItem)}
-                  />
-                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
-                    Add to Favorite
-                  </span>
-                </div>
-              )}
-
               {user.favorite.find(
-                (favorite) => favorite.id === favoriteItem.id
+                (favorite) => favorite.term === slang.term
               ) ? (
                 <div className="relative group">
                   <img
                     src={FavoriteImg}
                     alt="favorite icon"
-                    className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                    onClick={() => removeFromFavorite(favoriteItem)}
+                    className="w-[40px] h-[40px] cursor-pointer rotate-30"
+                    onClick={() => removeFromFavorite(slang)}
                   />
-                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
                     Remove from favorite
                   </span>
                 </div>
@@ -80,8 +53,8 @@ export default function Result({ handleShowResult, user }) {
                   <img
                     src={bookMarkImg}
                     alt="add to favorite icon"
-                    className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                    onClick={() => addToFavoriteFunction(favoriteItem)}
+                    className="w-[40px] h-[40px] cursor-pointer rotate-30"
+                    onClick={() => addToFavoriteFunction(slang)}
                   />
                   <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
                     Add to favorite

@@ -16,15 +16,17 @@ export default function ChatBot({ user }) {
   // console.log("user in chatbot", user);
   
 
-  const user = useSelector(state=>state.users.user)
+  // const user = useSelector(state=>state.users.user);
   const dispatch = useDispatch()
-
   const navigate = useNavigate();
 
-  function handlesubmit(e) {
+  async function handlesubmit(e) {
     e.preventDefault();
     setShowResult(true);
-    dispatch(search({term:userInput, user_id:user.id}))
+    const reponse = dispatch(search({term:userInput, user_id:user.id}))
+    if (reponse) {
+      console.log("response", reponse)
+    }
     setUserInput("");
   }
 
