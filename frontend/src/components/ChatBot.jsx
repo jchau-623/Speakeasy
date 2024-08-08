@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Result from "./Result";
 
 import { RiSendPlane2Fill } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { search } from "../store/slangReducer";
 import { useNavigate } from "react-router-dom";
 
@@ -13,19 +13,16 @@ export default function ChatBot({ user }) {
   const [showResult, setShowResult] = useState(false);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [error, setError] = useState(false);
-  // console.log("user in chatbot", user);
-  
 
-  // const user = useSelector(state=>state.users.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function handlesubmit(e) {
     e.preventDefault();
     setShowResult(true);
-    const reponse = dispatch(search({term:userInput, user_id:user.id}))
+    const reponse = dispatch(search({ term: userInput, user_id: user.id }));
     if (reponse) {
-      console.log("response", reponse)
+      console.log("response", reponse);
     }
     setUserInput("");
   }
@@ -63,8 +60,8 @@ export default function ChatBot({ user }) {
     }
   }, [showResult]);
 
-  if(!user){
-    navigate("/")
+  if (!user) {
+    navigate("/");
   }
 
   return (

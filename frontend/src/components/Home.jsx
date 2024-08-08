@@ -7,6 +7,7 @@ import History from "./History";
 import Favorites from "./Favorites";
 import Profile from "./Profile";
 import HomeBG from "./HomeBG";
+import NoUser from "./NoUser";
 
 import loadingImg from "../assets/loading.gif";
 import chatBotImg from "../assets/chat-bot.gif";
@@ -85,14 +86,7 @@ export default function Home() {
 
   if (!user) {
     return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <Link
-          to="/"
-          className="text-3xl font-semibold text-red-300 animate__animated animate__swing hover:text-secondary transition-all duration-200"
-        >
-          Please sign in or create an account.
-        </Link>
-      </div>
+      <NoUser />
     );
   }
 

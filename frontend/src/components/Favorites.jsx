@@ -5,10 +5,9 @@ import favoriteImg from "../assets/favorites.gif";
 import deleteImg from "../assets/delete.png";
 import { useState } from "react";
 import SingleCard from "./SingleCard";
+import NoUser from "./NoUser";
 
 export default function Favorites({ user }) {
-  // console.log("user in favorites", user);
-  
   const [selectedFavorite, setSelectedFavorite] = useState(null);
   const dispatch = useDispatch();
 
@@ -22,16 +21,14 @@ export default function Favorites({ user }) {
 
   if(!user) {
     return (
-      <div className="flex justify-center items-center h-[100%]">
-        <p className="text-2xl font-semibold text-red-300">Please sign in or create an account.</p>
-      </div>
+      <NoUser />
     );
   }
 
   if(user.favorite.length === 0) {
     return (
       <div className="flex justify-center items-center h-[100%]">
-        <p className="text-2xl font-semibold text-red-300">No favorite items yet</p>
+        <p className="text-2xl font-semibold text-red-300 animate__animated animate__swing">No favorite items yet</p>
       </div>
     );
   }
@@ -56,7 +53,7 @@ export default function Favorites({ user }) {
             user.favorite.map((item) => (
               <li key={item.term} className="w-[100%] flex items-center gap-5">
                 <p
-                  className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-red-200 hover:text-secondary transition-all duration-200"
+                  className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-primary transition-all duration-200 cursor-pointer"
                   onClick={() => showSingleFavoriteFunction(item)}
                 >
                   {item.term}

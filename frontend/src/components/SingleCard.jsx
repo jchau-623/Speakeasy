@@ -5,7 +5,6 @@ export default function SingleCard({
   deleteFavoriteFunction,
   setSelectedFavorite,
 }) {
-  // console.log("favorite in single card", favorite);
 
   return (
     <>

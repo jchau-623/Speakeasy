@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 
 export default function Result({ handleShowResult, user }) {
-  const slang = useSelector(state=>state.slangs.slang)  
+  const slang = useSelector((state) => state.slangs.slang);
 
   const dispatch = useDispatch();
 
