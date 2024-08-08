@@ -16,6 +16,15 @@ module.exports = {
       rotate: {
         '30': '30deg',
       },
+      utilities: {
+        '.no-scrollbar': {
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          '-ms-overflow-style': 'none', 
+          'scrollbar-width': 'none', 
+        },
+      },
     },
   },
   plugins: [],
