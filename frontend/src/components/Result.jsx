@@ -1,17 +1,25 @@
 import chatBotImg from "../assets/chat-bot.gif";
 import bookMarkImg from "../assets/bookmark.gif";
 import FavoriteImg from "../assets/favorites.gif";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
 
-export default function Result({ handleShowResult }) {
-  const [favorite, setFavorite] = useState(false);
+import {
+  addUserFavoriteThunk,
+  deleteUserFavoriteThunk,
+} from "../store/userReducer";
+import { useSelector } from "react-redux";
 
-  function addToFavorite() {
-    setFavorite(true);
+export default function Result({ handleShowResult, user }) {
+  const slang = useSelector((state) => state.slangs.slang);
+
+  const dispatch = useDispatch();
+
+  async function addToFavoriteFunction(item) {
+    await dispatch(addUserFavoriteThunk(item));
   }
 
-  function removeFromFavorite() {   
-    setFavorite(false);
+  async function removeFromFavorite(item) {
+    await dispatch(deleteUserFavoriteThunk(item));
   }
 
   return (
@@ -26,42 +34,50 @@ export default function Result({ handleShowResult }) {
           <div className="flex justify-between w-full">
             <h1>Result</h1>
             <div className="relative group">
-              {favorite ? (
-                <img
-                  src={FavoriteImg}
-                  alt="favorite icon"
-                  className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={removeFromFavorite}
-                />
+              {user.favorite.find(
+                (favorite) => favorite.term === slang.term
+              ) ? (
+                <div className="relative group">
+                  <img
+                    src={FavoriteImg}
+                    alt="favorite icon"
+                    className="w-[40px] h-[40px] cursor-pointer rotate-30"
+                    onClick={() => removeFromFavorite(slang)}
+                  />
+                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
+                    Remove from favorite
+                  </span>
+                </div>
               ) : (
-                <img
-                  src={bookMarkImg}
-                  alt="add to favorite icon"
-                  className="w-[30px] h-[30px] cursor-pointer rotate-30"
-                  onClick={addToFavorite}
-                />
-
-                
+                <div className="relative group">
+                  <img
+                    src={bookMarkImg}
+                    alt="add to favorite icon"
+                    className="w-[40px] h-[40px] cursor-pointer rotate-30"
+                    onClick={() => addToFavoriteFunction(slang)}
+                  />
+                  <span className="absolute hidden mb-1 group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
+                    Add to favorite
+                  </span>
+                </div>
               )}
-
-              <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-secondary rounded animate__animated animate__swing">
-                {favorite ?  "Remove from Favorite" : "Add to Favorite"}
-              </span>
             </div>
           </div>
           <p>
-            Definition: A result is the outcome of an event or situation,
-            especially when it is considered to be the most important aspect.
+            {/* Definition: A result is the outcome of an event or situation,
+            especially when it is considered to be the most important aspect. */}
+            Definition:{slang?.meaning}
           </p>
           <p>
-            Example: The result of the test was positive, so I am going to the
-            hospital for a check-up.
+            {/* Example: The result of the test was positive, so I am going to the
+            hospital for a check-up. */}
+            Example:{slang?.exampleUse}
           </p>
         </div>
       </div>
       <button
         onClick={() => handleShowResult(false)}
-        className="flex justify-center self-end p-2 sm:p-3 text-xs sm:text-base bg-secondary w-fit sm:w-[10%] rounded-full z-10 text-white font-medium"
+        className="flex justify-center self-end p-2 sm:p-3 text-xs sm:text-base bg-secondary w-fit sm:w-[10%] rounded-full z-10 text-white font-medium hover:scale-90 hover:bg-red-200 transition-all duration-200"
       >
         Got it
       </button>
