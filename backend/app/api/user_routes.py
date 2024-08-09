@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.hash_password import HashPassword
 from auth.jwt_handler import create_access_token, verify_access_token
-from auth.authenticate import authenticate
+from auth.authenticate import authenticate, token_blacklist
 from databases.connection import Database
 from models.user import User, TokenResponse, UserResponse, MessageResponse, FavoriteItem
 from typing import List
@@ -15,9 +15,8 @@ user_router = APIRouter(
 user_database = Database(User)
 hash_password = HashPassword()
 
-token_blacklist: List[str] = [] #logout for dev only
 
-token_blacklist: List[str] = [] #logout for dev only
+# token_blacklist: List[str] = [] #logout for dev only
 
 @user_router.post("/signup", response_model=UserResponse)
 async def sign_new_user(user: User, response: Response) -> UserResponse:
@@ -82,10 +81,10 @@ async def sign_user_in(response: Response, user: OAuth2PasswordRequestForm = Dep
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Invalid password.")
-    
 
-@user_router.get("/", response_model=User)
-async def get_user(request: Request, current_user_email: str = Depends(authenticate)) -> User:
+
+@user_router.get("/", response_model=UserResponse)
+async def get_user(request: Request, current_user_email: str = Depends(authenticate)) -> UserResponse:
     """Get current user"""
     db = Database(User)
     user = await db.get_by_email(current_user_email)
@@ -94,7 +93,15 @@ async def get_user(request: Request, current_user_email: str = Depends(authentic
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    return user
+
+    user_response = UserResponse(
+            id=user.id,
+            email=user.email,
+            favorite=user.favorite
+        )
+
+    return user_response
+
 
 @user_router.delete("/", response_model=MessageResponse)
 async def delete_user(current_user_email: str = Depends(authenticate)) -> MessageResponse:

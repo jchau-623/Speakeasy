@@ -6,7 +6,7 @@ from auth.jwt_handler import verify_access_token
 
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/signin")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/signin")
 
 token_blacklist: List[str] = [] #log out for dev only
 

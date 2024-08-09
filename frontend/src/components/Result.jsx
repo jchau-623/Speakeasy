@@ -2,17 +2,21 @@ import chatBotImg from "../assets/chat-bot.gif";
 import bookMarkImg from "../assets/bookmark.gif";
 import FavoriteImg from "../assets/favorites.gif";
 import { useDispatch } from "react-redux";
+import search from "../assets/search-2.gif"
 
 import {
   addUserFavoriteThunk,
   deleteUserFavoriteThunk,
 } from "../store/userReducer";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function Result({ handleShowResult, user }) {
   const slang = useSelector((state) => state.slangs.slang);
-
+  const loading = useSelector(state=>state.slangs.loading)
   const dispatch = useDispatch();
+
+  // const [isIdiom, setIsIdiom] =useState(false)  ;
 
   async function addToFavoriteFunction(item) {
     await dispatch(addUserFavoriteThunk(item));
@@ -22,7 +26,13 @@ export default function Result({ handleShowResult, user }) {
     await dispatch(deleteUserFavoriteThunk(item));
   }
 
+//   useEffect(()=>{
+// if(slang){
+//   setIsIdiom(slang.term.split(" ").length > 1)
+// }
+//   },[slang])
   return (
+    
     <div className="flex flex-col w-full h-full animate__animated animate__fadeInRight">
       <div className="flex gap-5 h-[80%] w-full">
         <img
@@ -30,10 +40,13 @@ export default function Result({ handleShowResult, user }) {
           alt="chat bot icon"
           className="hidden sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]"
         />
-        <div className="sm:relative top-10 -left-6 p-5 w-full sm:w-[90%] h-[90%] md:h-[80%] rounded-xl border-4 border-secondary overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          <div className="flex justify-between w-full">
-            <h1 className="text-center font-semibold text-3xl text-wrap">{slang.term}</h1>
-            <div className="relative flex flex-col group">
+        <div className="sm:relative top-10 -left-6 p-5 w-full sm:w-[90%] h-[90%] md:h-[80%] rounded-xl border-4 border-secondary">
+          {loading && <><img src={search}  className=" sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]" alt="sesrch icon" /></>}
+          {!loading && 
+          <>
+            <div className="flex justify-between w-full">
+            {/* <h1>{slang?.term}{slang?.idiom}</h1> */}
+            <div className="relative group">
               {user.favorite.find(
                 (favorite) => favorite.term === slang.term
               ) ? (
@@ -79,9 +92,9 @@ export default function Result({ handleShowResult, user }) {
             <p className="text-xl font-medium">
               Equivalent: <span className="text-lg font-normal leading-normal">{slang.equivalentInLanguage}</span>
             </p>
-          
           </div>
           
+          </>}
         </div>
       </div>
       <button
