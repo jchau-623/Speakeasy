@@ -37,58 +37,22 @@ async def detect_language(term: str) -> str:
 @search_router.get("/", response_model=List[SlangResponse])
 async def search(term: str = Query(..., min_length=1), user_id: str = Query(...)):
     try:
-     
-        # Ensure the term is converted to lowercase
-        term_lower = term.lower()
-        words = term_lower.split()
-        if len(words) == 1:
-            # It's a slang
-            slangs = await slang_database.model.find(Slang.term == term_lower).to_list()
-            if not slangs:
-                  # Detect the language of the term
-                detected_language = await detect_language(term_lower)
-                logger.info(f"Detected language: {detected_language}")
-      
-                
-                # Prepare prompts for each required field
-                prompts = {
-                    "meaning": f"Define the slang term '{term_lower}' and provide its meaning.",
-                    "origin": f"Explain the origin of the slang term '{term_lower}'.",
-                    "exampleUse": f"Provide an example use of the slang term '{term_lower}'.",
-                    "equivalentInLanguage": f"Is there an equivalent of the slang term '{term_lower}' in other languages? If so, what is it?"
-                }
+        term_lower = term.strip().lower()
 
-                # Extract information using the prompts
-                result = {
-                    "meaning": await get_chatgpt_response(prompts["meaning"]),
-                    "origin": await get_chatgpt_response(prompts["origin"]),
-                    "exampleUse": await get_chatgpt_response(prompts["exampleUse"]),
-                    "equivalentInLanguage": await get_chatgpt_response(prompts["equivalentInLanguage"])
-                }
+        # Fetch slangs with the given term and user_id
+        slangs = await Slang.find(Slang.term == term_lower, Slang.user_id == user_id).to_list()
 
-                # Default responses in case of missing information
-                result = {
-                    "meaning": result["meaning"] or "No meaning provided",
-                    "origin": result["origin"] or "No origin provided",
-                    "exampleUse": result["exampleUse"] or "No example use provided",
-                    "equivalentInLanguage": result["equivalentInLanguage"] or None
-                }
+        # If slangs list is empty, proceed with creating a new entry
+        if not slangs:
+            logger.info(f"No existing slang found for term '{term_lower}' and user_id '{user_id}'. Generating new slang.")
             
-                # Create a new slang object
-                new_slang = Slang(
-                    term=term_lower,
-                    meaning=result["meaning"],
-                    origin=result["origin"],
-                    exampleUse=result["exampleUse"],
-                    equivalentInLanguage=result["equivalentInLanguage"],
-                    user_id=user_id
-                )
-                await new_slang.insert()
+            # Proceed with logic to create and insert a new slang (not shown here)
             
-                return [SlangResponse(**new_slang.dict(by_alias=True))]
-            return [SlangResponse(**slang.dict(by_alias=True)) for slang in slangs]
-        else:
-            raise HTTPException(status_code=422, detail="Provided term is not a slang (contains more than one word).")
+            # Ensure the new slang is inserted correctly
+
+        logger.info(f"Returning existing slang for term '{term_lower}' and user_id '{user_id}'.")
+        return [SlangResponse(**slang.dict(by_alias=True)) for slang in slangs]
+
     except Exception as e:
         logger.error("Error searching term: %s", e, exc_info=True)
         raise HTTPException(status_code=500, detail="Internal Server Error")

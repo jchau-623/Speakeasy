@@ -5,9 +5,12 @@ const EDIT_HISTORY_ITEM = 'history/EDIT_HISTORY_ITEM';
 const DELETE_HISTORY_ITEM = 'history/DELETE_HISTORY_ITEM';
 
 // Action Creators
-const loadHistory = (history) => ({
+export const loadHistory = (history) => ({
     type: LOAD_HISTORY,
-    history,
+    history: history.map(item => ({
+        ...item,
+        id: item._id  // Normalize _id to id
+    })),
 });
 
 const addHistoryItem = (item) => ({
@@ -20,10 +23,11 @@ const editHistoryItem = (item) => ({
     item,
 });
 
-const deleteHistoryItem = (itemId) => ({
+const deleteHistoryItem = (id) => ({
     type: DELETE_HISTORY_ITEM,
-    itemId,
+    id,
 });
+
 
 // Thunks for Async Actions
 export const getUserHistory = (userId) => async (dispatch) => {
@@ -31,6 +35,7 @@ export const getUserHistory = (userId) => async (dispatch) => {
         const response = await fetch(`/api/history/?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
+            console.log('Fetched history data:', data.history); // Log to verify data structure
             dispatch(loadHistory(data.history));
         } else {
             const errorData = await response.json();
@@ -89,16 +94,20 @@ export const updateHistoryItem = (itemData) => async (dispatch) => {
     }
 };
 
-export const removeHistoryItem = (itemId) => async (dispatch) => {
+export const removeHistoryItem = (id, userId) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/history/${itemId}`, {
+        console.log(`Deleting history item: ${id} for user: ${userId}`);
+
+        const response = await fetch(`/api/history/${id}?user_id=${userId}`, {
             method: 'DELETE',
         });
 
         if (response.ok) {
-            dispatch(deleteHistoryItem(itemId));
+            dispatch(deleteHistoryItem(id));
+            console.log('History item successfully deleted');
         } else {
             const errorData = await response.json();
+            console.error('Failed to delete history item:', errorData);
             throw new Error(errorData.message || 'Failed to delete history item');
         }
     } catch (error) {
@@ -119,10 +128,10 @@ export default function historyReducer(state = initialState, action) {
             return [...state, action.item];
         case EDIT_HISTORY_ITEM:
             return state.map(item =>
-                item.id === action.item.id ? action.item : item
+                item._id === action.item._id ? action.item : item
             );
         case DELETE_HISTORY_ITEM:
-            return state.filter(item => item.id !== action.itemId);
+            return state.filter(item => item._id !== action.itemId);
         default:
             return state;
     }

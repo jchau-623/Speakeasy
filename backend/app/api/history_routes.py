@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, status, Query
 from typing import List, Dict, Union
 from models.idiom import Idiom, IdiomResponse
 from models.slang import Slang, SlangResponse
+from uuid import UUID
 from beanie import PydanticObjectId
 
 history_router = APIRouter(tags=["History"])
@@ -19,21 +20,16 @@ async def get_user_history(user_id: str = Query(..., alias="user_id")):
         # Fetch idioms for the given user_id
         idioms = await Idiom.find(Idiom.user_id == user_id).to_list()
         logger.info(f"Fetched idioms: {idioms}")
-        print(f"Idioms: {idioms}")
 
         # Fetch slangs for the given user_id
         slangs = await Slang.find(Slang.user_id == user_id).to_list()
         logger.info(f"Fetched slangs: {slangs}")
-        print(f"Slangs: {slangs}")
 
         # Combine idioms and slangs
         history = idioms + slangs
         logger.info(f"Combined history: {history}")
 
-        if not history:
-            logger.info(f"No idioms or slangs found for user_id: {user_id}")
-            return {"history": []}
-        
+        # Return the fetched history as is, without modifying the _id
         return {"history": [IdiomResponse(**item.dict()) if isinstance(item, Idiom) else SlangResponse(**item.dict()) for item in history]}
     except Exception as e:
         logger.error(f"Error in get_user_history: {e}")
@@ -41,30 +37,34 @@ async def get_user_history(user_id: str = Query(..., alias="user_id")):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal Server Error"
         )
+
+
 @history_router.delete("/{item_id}", response_model=Dict[str, str])
-async def delete_user_history(item_id: str, user_id: str):
+async def delete_user_history(item_id: UUID, user_id: str = Query(...)):
     try:
-        idiom = await Idiom.find_one(Idiom.id == PydanticObjectId(item_id), Idiom.user_id == PydanticObjectId(user_id))
-        if idiom:
-            await idiom.delete()
-            logger.info(f"Deleted idiom: {item_id} from user_id: {user_id}")
-            return {"message": "Idiom deleted from user history"}
+        item_id_str = str(item_id)
+        print(f"Deleting item with ID: {item_id_str} for user: {user_id}")
 
-        slang = await Slang.find_one(Slang.id == PydanticObjectId(item_id), Slang.user_id == PydanticObjectId(user_id))
-        if slang:
-            await slang.delete()
-            logger.info(f"Deleted slang: {item_id} from user_id: {user_id}")
-            return {"message": "Slang deleted from user history"}
+        # Attempt to find and delete an idiom or slang by its UUID and user_id
+        item = await Idiom.find_one(Idiom.id == item_id_str, Idiom.user_id == user_id) or \
+               await Slang.find_one(Slang.id == item_id_str, Slang.user_id == user_id)
 
+        if item:
+            await item.delete()
+            print(f"Successfully deleted item with ID: {item_id_str}")
+            return {"message": "Item deleted from user history"}
+
+        # If the item was not found, raise a 404 error
+        print(f"Item not found with ID: {item_id_str} for user: {user_id}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Item not found in user history"
         )
     except Exception as e:
-        logger.error(f"Error in delete_user_history: {e}")
+        print(f"Error during deletion: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal Server Error"
+            detail=f"Internal server error: {str(e)}"
         )
 
 @history_router.put("/{item_id}", response_model=Union[IdiomResponse, SlangResponse])
