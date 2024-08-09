@@ -43,7 +43,7 @@ export default function SignIn() {
 
   return (
     <>
-      <div className="bg-[#F5FBF9] flex justify-center items-center w-screen h-screen relative">
+      <div className="bg-[#F5FBF9] flex justify-center items-center w-screen h-screen relative z-50">
         <div className="animate__animated animate__fadeInUp w-[45%] flex flex-col gap-4 justify-center items-center">
           <div className=" flex flex-col sm:flex sm:flex-row justify-center gap-8 relative">
             <img

@@ -1,13 +1,28 @@
 from beanie import Document, PydanticObjectId
-from pydantic import BaseModel, EmailStr
-from typing import List
+from pydantic import BaseModel, EmailStr, Field
+from typing import List, Optional
+from datetime import datetime
+
+# class FavoriteItem(BaseModel):
+#     item: str
+
+class FavoriteItem(BaseModel):
+    id: str = Field(alias="_id")
+    term: str
+    meaning: str
+    origin: str
+    exampleUse: str
+    equivalentInLanguage: Optional[str] = None
+    createdAt: datetime
+    user_id: str
+    
 
 class User(Document):
 
     id: PydanticObjectId = None  # leslie
     email: EmailStr
     password: str
-    favorite: List[str] = []
+    favorite: List[FavoriteItem] = []
 
     class Settings:
         name = "users"
@@ -34,4 +49,4 @@ class MessageResponse(BaseModel):
 class UserResponse(BaseModel):
     id: PydanticObjectId
     email: EmailStr
-    favorite: List[str] = []
+    favorite: List[FavoriteItem] = []
