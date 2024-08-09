@@ -27,7 +27,7 @@ export default function SingleCard({
               Origin: <span className="text-lg font-normal leading-normal">{favorite.origin}</span>
             </p>
             <p className="text-xl font-medium">
-              example: <span className="text-lg font-normal leading-normal">{favorite.exampleUse}</span>
+              Example: <span className="text-lg font-normal leading-normal">{favorite.exampleUse}</span>
             </p>
             <p className="text-xl font-medium">
               Equivalent: <span className="text-lg font-normal leading-normal">{favorite.equivalentInLanguage}</span>

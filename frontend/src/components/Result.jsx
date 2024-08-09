@@ -30,10 +30,10 @@ export default function Result({ handleShowResult, user }) {
           alt="chat bot icon"
           className="hidden sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]"
         />
-        <div className="sm:relative top-10 -left-6 p-5 w-full sm:w-[90%] h-[90%] md:h-[80%] rounded-xl border-4 border-secondary">
+        <div className="sm:relative top-10 -left-6 p-5 w-full sm:w-[90%] h-[90%] md:h-[80%] rounded-xl border-4 border-secondary overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           <div className="flex justify-between w-full">
-            <h1>Result</h1>
-            <div className="relative group">
+            <h1 className="text-center font-semibold text-3xl text-wrap">{slang.term}</h1>
+            <div className="relative flex flex-col group">
               {user.favorite.find(
                 (favorite) => favorite.term === slang.term
               ) ? (
@@ -63,16 +63,25 @@ export default function Result({ handleShowResult, user }) {
               )}
             </div>
           </div>
-          <p>
-            {/* Definition: A result is the outcome of an event or situation,
-            especially when it is considered to be the most important aspect. */}
-            Definition:{slang?.meaning}
-          </p>
-          <p>
-            {/* Example: The result of the test was positive, so I am going to the
-            hospital for a check-up. */}
-            Example:{slang?.exampleUse}
-          </p>
+          <div className="flex flex-col gap-5 mt-5">
+              <p className="text-xl font-medium">
+              Meaning :{" "}
+              <span className="text-lg font-normal leading-normal">
+                {slang.meaning}
+              </span>
+            </p>
+            <p className="text-xl font-medium">
+              Origin: <span className="text-lg font-normal leading-normal">{slang.origin}</span>
+            </p>
+            <p className="text-xl font-medium">
+              Example: <span className="text-lg font-normal leading-normal">{slang.exampleUse}</span>
+            </p>
+            <p className="text-xl font-medium">
+              Equivalent: <span className="text-lg font-normal leading-normal">{slang.equivalentInLanguage}</span>
+            </p>
+          
+          </div>
+          
         </div>
       </div>
       <button

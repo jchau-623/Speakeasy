@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteUserThunk } from "../store/userReducer";
 import { useNavigate } from "react-router-dom";
 
@@ -9,8 +9,9 @@ export default function Profile({
   handleFavoriteRender,
   handleHistoryRender,
 }) {
-  // console.log("user in profile", user);
 
+  const history = useSelector((state) => state.history);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -69,7 +70,7 @@ export default function Profile({
               >
                 History:{" "}
                 <span className="hover:text-red-200 transition-all duration-200">
-                  90 items
+                  {history == null ? "0" : history.length} items
                 </span>
               </p>
               <span className="absolute top-10 right-0 mb-1 hidden group-hover:block px-2 py-2 text-sm font-normal text-white bg-secondary rounded animate__animated animate__swing">
