@@ -4,6 +4,8 @@ const GET_ONE_SLANG = "GET_ONE_SLANG";
 const CREATE_SLANG = "CREATE_SLANG";
 const SEARCH_SLANG ="SEARCH_SLANG;"
 
+const LOADING = "LOADING"
+
 
 //actions
 const getAllSlangsAction = (slangs) => {
@@ -33,6 +35,14 @@ const searchSlangAction = (slang) => {
     return {
         type: SEARCH_SLANG,
         payload:slang
+    }
+}
+
+
+const loadingAction = (loading)=>{
+    return {
+        type:LOADING,
+        payload:loading
     }
 }
 
