@@ -3,9 +3,13 @@ import { thunk } from 'redux-thunk';
 import logger from 'redux-logger';
 import userReducer from './userReducer';
 import slangReducer from './slangReducer';
+import idiomReducer from './idiomReducer';
+import historyReducer from "./historyReducer";
 
 const rootReducer = combineReducers({
   users: userReducer,
+  history: historyReducer,
+  idioms: idiomReducer,
   slangs:slangReducer
 });
 

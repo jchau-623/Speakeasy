@@ -28,7 +28,6 @@ export default function Home() {
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state.users);
-  // console.log(user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -98,17 +97,15 @@ export default function Home() {
             <img
               src={loadingImg}
               alt="loading image"
-              className={`w-[100px] h-[100px] ${
-                fadeOut ? "animate__animated animate__fadeOut" : ""
-              }`}
+              className={`w-[100px] h-[100px] ${fadeOut ? "animate__animated animate__fadeOut" : ""
+                }`}
             />
           </div>
         )}
 
         <div
-          className={`flex justify-center items-center w-full h-full ${
-            showMainContent ? "animate__animated animate__fadeIn" : "hidden"
-          }`}
+          className={`flex justify-center items-center w-full h-full ${showMainContent ? "animate__animated animate__fadeIn" : "hidden"
+            }`}
         >
           {/* <HomeBG /> */}
 
@@ -136,11 +133,10 @@ export default function Home() {
             <div className="container w-[100%] h-full">
               <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
                 <div
-                  className={` ${
-                    showChatBot
+                  className={` ${showChatBot
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleHomeRender}
                 >
                   {showChatBot ? (
@@ -154,11 +150,10 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${
-                    showHistory
+                  className={` ${showHistory
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleHistoryRender}
                 >
                   {showHistory ? (
@@ -172,11 +167,10 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${
-                    showFavorite
+                  className={` ${showFavorite
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleFavoriteRender}
                 >
                   {showFavorite ? (
@@ -190,11 +184,10 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${
-                    showProfile
+                  className={` ${showProfile
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleProfileRender}
                 >
                   {showProfile ? (
@@ -228,6 +221,16 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <footer className="absolute bottom-0 w-full bg-secondary text-white py-4">
+        <div className="container mx-auto text-center">
+          <a
+            href="/about"
+            className="bg-primary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
+          >
+            About Us
+          </a>
+        </div>
+      </footer>
     </>
   );
 }
