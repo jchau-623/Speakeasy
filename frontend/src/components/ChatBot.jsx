@@ -78,7 +78,7 @@ export default function ChatBot({ user }) {
               alt="chat-bot"
               className="w-[40px] h-[40px] sm:w-[80px] sm:h-[80px]"
             />
-            <p id="typingEffect" className="w-full break-words">
+            <p id="typingEffect" className="w-full break-words text-lg">
               Hi! What slang or idioms would you like to learn today?
             </p>
           </div>
@@ -98,7 +98,7 @@ export default function ChatBot({ user }) {
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   rows={1}
-                  className="flex items-center outline-none text-center p-2 bg-container placeholder-secondary w-[90%] placeholder-center resize-none"
+                  className="flex items-center outline-none text-center p-2 bg-container placeholder-secondary w-[90%] placeholder-center resize-none text-lg"
                 />
                 <button
                   disabled={Object.values(error).length > 0}

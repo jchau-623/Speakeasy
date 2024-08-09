@@ -16,6 +16,9 @@ import bookmarkImg from "../assets/bookmark.gif";
 import profileImg from "../assets/user-profile.gif";
 import signout from "../assets/signout.png";
 import friendshipImg from "../assets/friendships.gif";
+import homeImg from "../assets/home.gif";
+import infoImg from "../assets/info.gif";
+import copyrightImg from "../assets/copyright.gif";
 
 import { getUserThunk, logoutThunk } from "../store/userReducer";
 
@@ -27,7 +30,7 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false);
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const { user } = useSelector((state) => state.users);  
+  const { user } = useSelector((state) => state.users);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,6 +78,7 @@ export default function Home() {
       setTimeout(() => {
         setShowLoading(false);
         setShowContainer(true);
+        // setFadeOut(false);
       }, 2000);
     }, 3000);
 
@@ -101,15 +105,17 @@ export default function Home() {
             <img
               src={loadingImg}
               alt="loading image"
-              className={`w-[100px] h-[100px] ${fadeOut ? "animate__animated animate__fadeOut" : ""
-                }`}
+              className={`w-[100px] h-[100px] ${
+                fadeOut ? "animate__animated animate__fadeOut" : ""
+              }`}
             />
           </div>
         )}
 
         <div
-          className={`flex justify-center items-center w-full h-full ${showMainContent ? "animate__animated animate__fadeIn" : "hidden"
-            }`}
+          className={`flex justify-center items-center w-full h-full ${
+            showMainContent ? "animate__animated animate__fadeIn" : "hidden"
+          }`}
         >
           {/* <HomeBG /> */}
 
@@ -120,7 +126,7 @@ export default function Home() {
               className="w-[100px] h-[100px]"
             />
             <h1 className="font-extrabold text-white text-3xl ">SpeakEasy</h1>
-          </div>
+          </div> 
           <div className="group ">
             <img
               src={signout}
@@ -131,16 +137,18 @@ export default function Home() {
             <span className="absolute top-[90px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-sm font-medium text-white bg-red-300 rounded animate__animated animate__swing">
               Log Out
             </span>
-          </div>
+          </div> 
+
 
           <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
             <div className="container w-[100%] h-full">
               <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
                 <div
-                  className={` ${showChatBot
+                  className={` ${
+                    showChatBot
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                    }`}
+                  }`}
                   onClick={handleHomeRender}
                 >
                   {showChatBot ? (
@@ -154,10 +162,11 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${showHistory
+                  className={` ${
+                    showHistory
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                    }`}
+                  }`}
                   onClick={handleHistoryRender}
                 >
                   {showHistory ? (
@@ -171,10 +180,11 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${showFavorite
+                  className={` ${
+                    showFavorite
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                    }`}
+                  }`}
                   onClick={handleFavoriteRender}
                 >
                   {showFavorite ? (
@@ -188,10 +198,11 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${showProfile
+                  className={` ${
+                    showProfile
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                    }`}
+                  }`}
                   onClick={handleProfileRender}
                 >
                   {showProfile ? (
@@ -223,18 +234,30 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <footer className="absolute bottom-0 w-full bg-secondary text-white py-4 h-[80px] flex items-center">
+            <div className="w-full flex justify-between px-20 items-center ">
+              <div className="flex items-center gap-3">
+                <img src={copyrightImg} alt="copy right icon" className="w-[30px] h-[30px]"/>
+              <p className="text-lg">SpeakEasy 2024</p>
+              </div>
+              <div className="flex items-center">
+                <img
+                  src={infoImg}
+                  alt="information icon"
+                  className="w-[30px] h-[30px]"
+                />
+                <Link
+                  to="/about"
+                  className=" text-white py-2 px-4 rounded-lg text-lg hover:bg-primary hover:scale-90 transition-all duration-200"
+                >
+                  About Us
+                </Link>
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
-      <footer className="absolute bottom-0 w-full bg-secondary text-white py-4">
-        <div className="container mx-auto text-center">
-          <Link 
-            to="/about"
-            className="bg-primary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
-          >
-            About Us
-          </Link>
-        </div>
-      </footer>
     </>
   );
 }
