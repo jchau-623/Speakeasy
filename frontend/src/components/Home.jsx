@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ChatBot from "./ChatBot";
 import History from "./History";
 import Favorites from "./Favorites";
 import Profile from "./Profile";
+import HomeBG from "./HomeBG";
+import NoUser from "./NoUser";
 
 import loadingImg from "../assets/loading.gif";
 import chatBotImg from "../assets/chat-bot.gif";
 import historyImg from "../assets/history.gif";
-import favoriteImg from "../assets/favorites.gif";
+import bookmarkImg from "../assets/bookmark.gif";
 import profileImg from "../assets/user-profile.gif";
 import signout from "../assets/signout.png";
+import friendshipImg from "../assets/friendships.gif";
 
 import { logoutThunk } from "../store/userReducer";
 
@@ -25,7 +28,7 @@ export default function Home() {
   const [showFavorite, setShowFavorite] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state.users);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,8 +39,8 @@ export default function Home() {
     } else {
       alert(result.error.message);
     }
-  }
-  
+  };
+
   function handleHomeRender() {
     setShowChatBot(true);
     setShowHistory(false);
@@ -67,19 +70,24 @@ export default function Home() {
   }
 
   useEffect(() => {
-      const fadeOutTimer = setTimeout(() => {
-        setFadeOut(true);
-        setTimeout(() => {
-          setShowLoading(false);
-          setShowContainer(true);
-        }, 2000);
-      }, 3000);
+    const fadeOutTimer = setTimeout(() => {
+      setFadeOut(true);
+      setTimeout(() => {
+        setShowLoading(false);
+        setShowContainer(true);
+      }, 2000);
+    }, 3000);
 
-      return () => {
-        clearTimeout(fadeOutTimer);
-      };
-    }, []);
+    return () => {
+      clearTimeout(fadeOutTimer);
+    };
+  }, []);
 
+  if (!user) {
+    return (
+      <NoUser />
+    );
+  }
 
   return (
     <>
@@ -89,80 +97,140 @@ export default function Home() {
             <img
               src={loadingImg}
               alt="loading image"
-              className={`w-[100px] h-[100px] ${
-                fadeOut ? "animate__animated animate__fadeOut" : ""
-              }`}
+              className={`w-[100px] h-[100px] ${fadeOut ? "animate__animated animate__fadeOut" : ""
+                }`}
             />
           </div>
         )}
 
         <div
-          className={`flex justify-center items-center w-full h-full ${
-            showMainContent ? "animate__animated animate__fadeIn" : "hidden"
-          }`}
+          className={`flex justify-center items-center w-full h-full ${showMainContent ? "animate__animated animate__fadeIn" : "hidden"
+            }`}
         >
-          <img
-            src={signout}
-            alt="log out button"
-            className="w-[40px] h-[40px] absolute top-[30px] right-[50px]"
-            onClick={handleLogOut}
-          />
+          {/* <HomeBG /> */}
+
+          <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3">
+            <img
+              src={friendshipImg}
+              alt="friendship icon"
+              className="w-[100px] h-[100px]"
+            />
+            <h1 className="font-extrabold text-white text-3xl ">SpeakEasy</h1>
+          </div>
+          <div className="group ">
+            <img
+              src={signout}
+              alt="log out button"
+              className="w-[40px] h-[40px] absolute top-[50px] right-[50px] cursor-pointer hover:scale-90 transition-all duration-200"
+              onClick={handleLogOut}
+            />
+            <span className="absolute top-[90px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-sm font-medium text-white bg-red-300 rounded animate__animated animate__swing">
+              Log Out
+            </span>
+          </div>
 
           <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
             <div className="container w-[100%] h-full">
               <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
                 <div
-                  className={` ${
-                    showChatBot
+                  className={` ${showChatBot
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleHomeRender}
                 >
-                  {showChatBot ?  "EasyChat" : <img src={chatBotImg} alt="chat bot image" className="w-[40px] h-[40px]" />}
+                  {showChatBot ? (
+                    "EasyChat"
+                  ) : (
+                    <img
+                      src={chatBotImg}
+                      alt="chat bot image"
+                      className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200"
+                    />
+                  )}
                 </div>
                 <div
-                  className={` ${
-                    showHistory
+                  className={` ${showHistory
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleHistoryRender}
                 >
-                  {showHistory ? "History" : <img src={historyImg} alt="history image" className="w-[40px] h-[40px]" />}
+                  {showHistory ? (
+                    "History"
+                  ) : (
+                    <img
+                      src={historyImg}
+                      alt="history image"
+                      className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200"
+                    />
+                  )}
                 </div>
                 <div
-                  className={` ${
-                    showFavorite
+                  className={` ${showFavorite
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleFavoriteRender}
                 >
-                  {showFavorite ? "Favorites" : <img src={favoriteImg} alt="favorite image" className="w-[40px] h-[40px]" />}
+                  {showFavorite ? (
+                    "Favorites"
+                  ) : (
+                    <img
+                      src={bookmarkImg}
+                      alt="favorite image"
+                      className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200"
+                    />
+                  )}
                 </div>
                 <div
-                  className={` ${
-                    showProfile
+                  className={` ${showProfile
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
-                  }`}
+                    }`}
                   onClick={handleProfileRender}
                 >
-                  {showProfile ? "Profile" : <img src={profileImg} alt="profile image" className="w-[40px] h-[40px]" />}
+                  {showProfile ? (
+                    "Profile"
+                  ) : (
+                    <img
+                      src={profileImg}
+                      alt="profile image"
+                      className="w-[40px] h-[40px] hover:scale-150 transition-all duration-200"
+                    />
+                  )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 p-8 w-full h-[90%]">
-                {showChatBot && <ChatBot />}
+              <div
+                className="grid grid-cols-1 p-8 w-full h-[90%] overflow-scroll"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {showChatBot && <ChatBot user={user} />}
                 {showHistory && <History />}
-                {showFavorite && <Favorites />}
-                {showProfile && <Profile user={user}/>}
+                {showFavorite && <Favorites user={user} />}
+                {showProfile && (
+                  <Profile
+                    user={user}
+                    handleFavoriteRender={handleFavoriteRender}
+                    handleHistoryRender={handleHistoryRender}
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <footer className="absolute bottom-0 w-full bg-secondary text-white py-4">
+        <div className="container mx-auto text-center">
+          <a
+            href="/about"
+            className="bg-primary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
+          >
+            About Us
+          </a>
+        </div>
+      </footer>
     </>
   );
 }

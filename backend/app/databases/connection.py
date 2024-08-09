@@ -1,10 +1,11 @@
-from beanie import init_beanie, PydanticObjectId
+from beanie import init_beanie, PydanticObjectId, Document
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional, Any, List
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from models.user import User
 from models.slang import Slang
+from models.idiom import Idiom
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -17,12 +18,12 @@ class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     DATABASE_URL: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
-    
+
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(
             database=client.get_default_database(),
-            document_models=[User, Slang]
+            document_models=[User, Slang, Idiom]
         )
 
     class Config:
@@ -37,17 +38,12 @@ class Database:
 
     async def save(self, document) -> None:
         await document.create()
-        return
 
-    async def get(self, id: PydanticObjectId) -> Any:
-        doc = await self.model.get(id)
-        if doc:
-            return doc
-        return False
+    async def get(self, id: PydanticObjectId) -> Optional[Document]:
+        return await self.model.get(id)
 
-    async def get_all(self) -> List[Any]:
-        docs = await self.model.find_all().to_list()
-        return docs
+    async def get_all(self) -> List[Document]:
+        return await self.model.find_all().to_list()
 
     async def update(self, id: PydanticObjectId, body: BaseModel) -> Any:
         doc_id = id
