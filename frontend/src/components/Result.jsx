@@ -2,17 +2,21 @@ import chatBotImg from "../assets/chat-bot.gif";
 import bookMarkImg from "../assets/bookmark.gif";
 import FavoriteImg from "../assets/favorites.gif";
 import { useDispatch } from "react-redux";
+import search from "../assets/search-2.gif"
 
 import {
   addUserFavoriteThunk,
   deleteUserFavoriteThunk,
 } from "../store/userReducer";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function Result({ handleShowResult, user }) {
   const slang = useSelector((state) => state.slangs.slang);
-
+  const loading = useSelector(state=>state.slangs.loading)
   const dispatch = useDispatch();
+
+  // const [isIdiom, setIsIdiom] =useState(false)  ;
 
   async function addToFavoriteFunction(item) {
     await dispatch(addUserFavoriteThunk(item));
@@ -22,7 +26,13 @@ export default function Result({ handleShowResult, user }) {
     await dispatch(deleteUserFavoriteThunk(item));
   }
 
+//   useEffect(()=>{
+// if(slang){
+//   setIsIdiom(slang.term.split(" ").length > 1)
+// }
+//   },[slang])
   return (
+    
     <div className="flex flex-col w-full h-full animate__animated animate__fadeInRight">
       <div className="flex gap-5 h-[80%] w-full">
         <img
@@ -31,8 +41,10 @@ export default function Result({ handleShowResult, user }) {
           className="hidden sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]"
         />
         <div className="sm:relative top-10 -left-6 p-5 w-full sm:w-[90%] h-[90%] md:h-[80%] rounded-xl border-4 border-secondary">
-          <div className="flex justify-between w-full">
-            <h1>Result</h1>
+          {loading && <><img src={search}  className=" sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]" alt="sesrch icon" /></>}
+          {!loading && <>
+            <div className="flex justify-between w-full">
+            {/* <h1>{slang?.term}{slang?.idiom}</h1> */}
             <div className="relative group">
               {user.favorite.find(
                 (favorite) => favorite.term === slang.term
@@ -64,15 +76,28 @@ export default function Result({ handleShowResult, user }) {
             </div>
           </div>
           <p>
-            {/* Definition: A result is the outcome of an event or situation,
-            especially when it is considered to be the most important aspect. */}
-            Definition:{slang?.meaning}
+            
+            Meaning:{slang?.meaning}
           </p>
           <p>
-            {/* Example: The result of the test was positive, so I am going to the
-            hospital for a check-up. */}
+           
+            Origin:{slang?.origin}
+          </p>
+          <p>
+           
             Example:{slang?.exampleUse}
           </p>
+          
+          <p>
+            
+            Equivalent In Language:{slang?.equivalentInLanguage}
+          </p>
+          
+          </>
+          }
+
+          
+          
         </div>
       </div>
       <button

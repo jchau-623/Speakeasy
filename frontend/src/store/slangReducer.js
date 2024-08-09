@@ -31,7 +31,7 @@ const createSlangAction = (slang) => {
     }
 }
 
-const searchSlangAction = (slang) => {
+export const searchSlangAction = (slang) => {
     return {
         type: SEARCH_SLANG,
         payload:slang
@@ -39,7 +39,7 @@ const searchSlangAction = (slang) => {
 }
 
 
-const loadingAction = (loading)=>{
+export const loadingAction = (loading)=>{
     return {
         type:LOADING,
         payload:loading
@@ -156,7 +156,8 @@ const initialState =
 
 { 
     slangs: {},
-    slang:{}
+    slang:null,
+    loading:false
   
  };
 
@@ -184,11 +185,13 @@ const slangReducer = (state = initialState, action) => {
             return newState;
         case SEARCH_SLANG:
             newState = {...state}
-            newState.slangs=action.payload.reduce((acc, curr)=>{
-                acc[curr._id]=curr
-                return acc
-            },{})
-            newState.slang=action.payload[0]
+        
+            newState.slang=action.payload
+            return newState;
+        case LOADING:
+            newState = {...state}
+            
+            newState.loading=action.payload
             return newState;
        
         default:
