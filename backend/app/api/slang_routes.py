@@ -5,7 +5,7 @@ from databases.connection import Database, Settings
 from typing import List
 from uuid import UUID
 import logging
-import re
+
 
 settings = Settings()
 openai.api_key = settings.OPENAI_API_KEY
