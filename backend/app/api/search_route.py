@@ -34,7 +34,7 @@ async def detect_language(term: str) -> str:
     response = await get_chatgpt_response(prompt)
     return response
 
-@search_router.get("/", response_model=List[SlangResponse])
+@search_router.get("/", response_model=SlangResponse)
 async def search(term: str = Query(..., min_length=1), user_id: str = Query(...)):
     try:
      
@@ -43,8 +43,8 @@ async def search(term: str = Query(..., min_length=1), user_id: str = Query(...)
         words = term_lower.split()
         if len(words) == 1:
             # It's a slang
-            slangs = await slang_database.model.find(Slang.term == term_lower).to_list()
-            if not slangs:
+            slang = await slang_database.model.find_one(Slang.term == term_lower)
+            if not slang:
                   # Detect the language of the term
                 detected_language = await detect_language(term_lower)
                 logger.info(f"Detected language: {detected_language}")
@@ -85,8 +85,10 @@ async def search(term: str = Query(..., min_length=1), user_id: str = Query(...)
                 )
                 await new_slang.insert()
             
-                return [SlangResponse(**new_slang.dict(by_alias=True))]
-            return [SlangResponse(**slang.dict(by_alias=True)) for slang in slangs]
+                return SlangResponse(**new_slang.dict(by_alias=True))
+            else:
+                
+                return SlangResponse(**slang.dict(by_alias=True))
         else:
             raise HTTPException(status_code=422, detail="Provided term is not a slang (contains more than one word).")
     except Exception as e:
