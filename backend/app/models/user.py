@@ -8,7 +8,8 @@ from datetime import datetime
 
 class FavoriteItem(BaseModel):
     id: str = Field(alias="_id")
-    term: str
+    term: Optional[str] = None
+    idiom: Optional[str] = None
     meaning: str
     origin: str
     exampleUse: str

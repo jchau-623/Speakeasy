@@ -15,7 +15,7 @@ export default function SingleCard({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <h3 className="text-center font-semibold text-3xl text-wrap">
-              {favorite.term}
+              {favorite.term ? favorite.term : favorite.idiom}
             </h3>
             <p className="text-xl font-medium">
               Meaning :{" "}
@@ -34,7 +34,7 @@ export default function SingleCard({
             </p>
           </div>
 
-          <div className="group">
+          <div className="group self-end">
             <img
               src={deleteImg}
               alt="delete icon"

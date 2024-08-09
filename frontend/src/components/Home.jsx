@@ -14,9 +14,8 @@ import chatBotImg from "../assets/chat-bot.gif";
 import historyImg from "../assets/history.gif";
 import bookmarkImg from "../assets/bookmark.gif";
 import profileImg from "../assets/user-profile.gif";
-import signout from "../assets/signout.png";
+import logoutImg from "../assets/logout.gif";
 import friendshipImg from "../assets/friendships.gif";
-import homeImg from "../assets/home.gif";
 import infoImg from "../assets/info.gif";
 import copyrightImg from "../assets/copyright.gif";
 
@@ -129,12 +128,12 @@ export default function Home() {
           </div> 
           <div className="group ">
             <img
-              src={signout}
+              src={logoutImg}
               alt="log out button"
-              className="w-[40px] h-[40px] absolute top-[50px] right-[50px] cursor-pointer hover:scale-90 transition-all duration-200"
+              className="w-[50px] h-[50px] absolute top-[50px] right-[60px] cursor-pointer hover:scale-110 transition-all duration-200"
               onClick={handleLogOut}
             />
-            <span className="absolute top-[90px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-sm font-medium text-white bg-red-300 rounded animate__animated animate__swing">
+            <span className="absolute top-[100px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-sm font-medium text-white bg-red-300 rounded animate__animated animate__swing">
               Log Out
             </span>
           </div> 

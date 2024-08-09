@@ -28,7 +28,7 @@ const members = [
     name: "Leslie C",
     image: LeslieImg,
     description:
-      "I've always been fascinated by language – how words shape cultures, connect people, and even bridge divides. After moving to the United States, I was baffled by American slang and idioms.  I realized countless others shared this challenge in different environments. I hope this app creates a platform where people can effortlessly explore the world of slang and idioms, breaking down language barriers and fostering deeper connections. Let's connect with new cultures with joy!",
+      "I've always been fascinated by language – how words shape cultures, connect people, and even bridge divides. After moving to the United States, I was baffled by American slang and idioms.  I realized countless others shared this challenge in different environments. I hope this app creates a platform where people can effortlessly explore the world of slang and idioms from different languages, breaking down language barriers and fostering deeper connections. Let's connect with new cultures with joy!",
     github: "https://github.com/YuChienChou",
     linkedin: "https://www.linkedin.com/in/lesliechou921/",
     email: "chouyuchien@gmail.com",
