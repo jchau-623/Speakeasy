@@ -18,6 +18,10 @@ import signout from "../assets/signout.png";
 import friendshipImg from "../assets/friendships.gif";
 
 import { logoutThunk } from "../store/userReducer";
+import {
+  addUserFavoriteThunk,
+  deleteUserFavoriteThunk,
+} from "../store/userReducer";
 
 export default function Home() {
   const [showLoading, setShowLoading] = useState(true);
@@ -39,6 +43,14 @@ export default function Home() {
     } else {
       alert(result.error.message);
     }
+  };
+
+  const addToFavoriteFunction = async (item) => {
+    await dispatch(addUserFavoriteThunk(item));
+  };
+
+  const removeFromFavorite = async (item) => {
+    await dispatch(deleteUserFavoriteThunk(item));
   };
 
   function handleHomeRender() {
@@ -84,9 +96,7 @@ export default function Home() {
   }, []);
 
   if (!user) {
-    return (
-      <NoUser />
-    );
+    return <NoUser />;
   }
 
   return (
@@ -133,7 +143,7 @@ export default function Home() {
             <div className="container w-[100%] h-full">
               <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
                 <div
-                  className={` ${showChatBot
+                  className={`${showChatBot
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                     }`}
@@ -150,7 +160,7 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${showHistory
+                  className={`${showHistory
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                     }`}
@@ -167,7 +177,7 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${showFavorite
+                  className={`${showFavorite
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                     }`}
@@ -184,7 +194,7 @@ export default function Home() {
                   )}
                 </div>
                 <div
-                  className={` ${showProfile
+                  className={`${showProfile
                       ? "bg-container text-secondary flex items-center justify-center rounded-t-xl cursor-pointer text-xl font-bold"
                       : "rounded-t-xl bg-primary border-4 border-secondary flex items-center justify-center text-white cursor-pointer"
                     }`}
@@ -207,7 +217,13 @@ export default function Home() {
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {showChatBot && <ChatBot user={user} />}
-                {showHistory && <History />}
+                {showHistory && (
+                  <History
+                    addToFavoriteFunction={addToFavoriteFunction}
+                    removeFromFavorite={removeFromFavorite}
+                    user={user}
+                  />
+                )}
                 {showFavorite && <Favorites user={user} />}
                 {showProfile && (
                   <Profile
