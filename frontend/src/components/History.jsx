@@ -13,6 +13,7 @@ const History = ({ addToFavoriteFunction, removeFromFavorite, user }) => {
   const dispatch = useDispatch();
   const userId = user ? user.id : null;
   const history = useSelector((state) => state.history);
+  console.log(history)
 
   useEffect(() => {
     if (userId) {
@@ -27,14 +28,14 @@ const History = ({ addToFavoriteFunction, removeFromFavorite, user }) => {
   const deleteHistoryFunction = async (item) => {
     console.log('Attempting to delete item:', item);
 
-    if (!item || !item.term) {
-      console.error('Item term is undefined');
-      alert('Item term is missing or invalid.');
-      return;
-    }
+    // if (!item || !item.term) {
+    //   console.error('Item term is undefined');
+    //   alert('Item term is missing or invalid.');
+    //   return;
+    // }
 
     try {
-      await dispatch(removeHistoryItem(item.term));
+      await dispatch(removeHistoryItem(item));
       setSelectedHistoryItem(null);
     } catch (error) {
       console.error('Error deleting history item:', error);
@@ -82,7 +83,7 @@ const History = ({ addToFavoriteFunction, removeFromFavorite, user }) => {
                     className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-primary transition-all duration-200 cursor-pointer"
                     onClick={() => showSingleHistoryFunction(item)}
                   >
-                    {item.term || item.idiom}  {/* Display term or idiom */}
+                    {item.term || item.idiom}
                   </p>
                   <div className="group relative">
                     {isFavorite ? (

@@ -43,14 +43,26 @@ async def get_user_history(user_id: str = Query(..., alias="user_id")):
         )
 
 
-@history_router.delete("", response_model=Dict[str, str])
-async def delete_user_history(
-    term: str = Query(...),
+@history_router.delete("/delete_history", response_model=Dict[str, str])
+async def delete_user_history(history_item: SlangResponse | IdiomResponse,
     current_user_email: str = Depends(authenticate)
 ) -> Dict[str, str]:
     """Delete a history item for the current user"""
     db = Database(User)
     user = await db.get_by_email(current_user_email)
+    if user is None:
+        raise HTTPException(
+        )
+      # Fetch idioms for the given user_id
+    idioms = await Idiom.find(Idiom.user_id == user.id).to_list()
+    logger.info(f"Fetched idioms: {idioms}")
+
+        # Fetch slangs for the given user_id
+    slangs = await Slang.find(Slang.user_id == user.id).to_list()
+    logger.info(f"Fetched slangs: {slangs}")
+
+        # Combine idioms and slangs
+    history = idioms + slangs
 
     if user is None:
         raise HTTPException(
@@ -58,45 +70,14 @@ async def delete_user_history(
             detail="User not found"
         )
 
-    try:
-        logger.info(f"Attempting to delete item with term: {term} for user: {user.id}")
-
-        # Fetch all idioms and slangs for the user to see what's stored
-        idioms = await Idiom.find(Idiom.user_id == user.id).to_list()
-        slangs = await Slang.find(Slang.user_id == user.id).to_list()
-        logger.info(f"User's idioms: {idioms}")
-        logger.info(f"User's slangs: {slangs}")
-
-        # Use case-insensitive and trimmed query
-        regex_pattern = f"^{term.strip()}$"
-        item = await Idiom.find_one({"idiom": {"$regex": regex_pattern, "$options": "i"}, "user_id": user.id}) or \
-               await Slang.find_one({"term": {"$regex": regex_pattern, "$options": "i"}, "user_id": user.id})
-
-        if not item:
-            logger.error(f"Item with term: {term} not found for user: {user.id}")
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Item not found in user history"
-            )
-
-        logger.info(f"Found item for deletion: {item.dict()}")
-
-        await item.delete()
-        logger.info(f"Successfully deleted item with term: {term}")
-        return {"message": "Item successfully deleted from user history"}
-
-    except HTTPException as http_exc:
-        logger.error(f"HTTPException: {http_exc.detail}")
-        raise http_exc
-
-    except Exception as e:
-        logger.error(f"Error deleting item with term: {term} for user: {user.id} - {str(e)}")
-        logger.error(f"Exception type: {type(e).__name__}, Args: {e.args}")
-        logger.error(traceback.format_exc())  # Logs the full stack trace
+    if history_item in history:
+        history.remove(history_item)
+        await history.save()
+    else:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
-        )
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="History item not found"
+    )
 
 
 @history_router.put("/", response_model=Union[IdiomResponse, SlangResponse])

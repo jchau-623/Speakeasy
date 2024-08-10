@@ -9,23 +9,23 @@ export const loadHistory = (history) => ({
     type: LOAD_HISTORY,
     history: history.map(item => ({
         ...item,
-        id: item._id  // Normalize _id to id
+        id: item._id  
     })),
 });
 
 const addHistoryItem = (item) => ({
     type: ADD_HISTORY_ITEM,
-    item: { ...item, id: item._id }, // Normalize _id to id
+    item: { ...item, id: item._id },
 });
 
 const editHistoryItem = (item) => ({
     type: EDIT_HISTORY_ITEM,
-    item: { ...item, id: item._id }, // Normalize _id to id
+    item: { ...item, id: item._id }, 
 });
 
 const deleteHistoryItem = (id) => ({
     type: DELETE_HISTORY_ITEM,
-    id, // Use id directly
+    id, 
 });
 
 // Thunks for Async Actions
@@ -93,16 +93,18 @@ export const updateHistoryItem = (term, itemData) => async (dispatch) => {
     }
 };
 
-export const removeHistoryItem = (term) => async (dispatch) => {
+export const removeHistoryItem = (history) => async (dispatch) => {
     try {
-        console.log(`Deleting history item with term: ${term}`);
-
-        const response = await fetch(`/api/history?term=${encodeURIComponent(term)}`, {
+        const response = await fetch(`/api/history/delete_history`, {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(history),  // Send history item in the request body
         });
 
         if (response.ok) {
-            dispatch(deleteHistoryItem(term));
+            dispatch(deleteHistoryItem(history));
             console.log('History item successfully deleted');
         } else {
             const errorData = await response.json();
@@ -116,11 +118,13 @@ export const removeHistoryItem = (term) => async (dispatch) => {
 };
 
 
+
 // Initial State
 const initialState = [];
 
 // Reducer
 export default function historyReducer(state = initialState, action) {
+    let newState;
     switch (action.type) {
         case LOAD_HISTORY:
             return action.history;
@@ -131,7 +135,9 @@ export default function historyReducer(state = initialState, action) {
                 item.term === action.item.term ? action.item : item
             );
         case DELETE_HISTORY_ITEM:
-            return state.filter(item => item.term !== action.term);
+            newState = Object.assign({}, state);
+            newState.user = action.payload;
+            return newState;
         default:
             return state;
     }
