@@ -47,14 +47,14 @@ export default function Result({ handleShowResult, user }) {
             <div className="w-full h-[100%] flex justify-center items-center">
               <img
                 src={search}
-                className="sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]"
+                className="sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px] animate-bounce"
                 alt="sesrch icon"
               />
             </div>
           )}
           {!loading && (
-            <>
-              <div className="flex justify-between w-full">
+            <div className="animate__animated animate__fadeInUp">
+              <div className="flex justify-between w-full ">
                 <h1 className="text-3xl text-[#38b0b5] font-extrabold">
                   {slang?.term}
                   {slang?.idiom}
@@ -117,7 +117,7 @@ export default function Result({ handleShowResult, user }) {
                   </span>
                 </p>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

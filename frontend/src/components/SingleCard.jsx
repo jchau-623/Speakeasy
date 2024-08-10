@@ -6,6 +6,11 @@ export default function SingleCard({
   setSelectedFavorite,
 }) {
 
+  function handleDeleteSingleCard(favorite) {
+    deleteFavoriteFunction(favorite);
+    setSelectedFavorite(null);
+  }
+
   return (
     <>
       <div className="w-full flex flex-col items-center gap-3 mt-6">
@@ -39,7 +44,7 @@ export default function SingleCard({
               src={deleteImg}
               alt="delete icon"
               className="w-[30px] h-[30px] cursor-pointer"
-              onClick={() => deleteFavoriteFunction(favorite)}
+              onClick={() => handleDeleteSingleCard(favorite)}
             />
             <span className="absolute right-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing z-10">
               Remove from Favorite

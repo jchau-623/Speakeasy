@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUserThunk } from "../store/userReducer";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getUserHistory } from "../store/historyReducer";
 
 import profileImg from "../assets/user-profile.gif";
 
@@ -9,9 +11,8 @@ export default function Profile({
   handleFavoriteRender,
   handleHistoryRender,
 }) {
-
   const history = useSelector((state) => state.history);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,15 +24,9 @@ export default function Profile({
     }
   };
 
-  if (!user) {
-    return (
-      <div className="flex justify-center items-center h-[100%]">
-        <p className="text-2xl font-semibold text-red-300">
-          Please sign in or create an account.
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    dispatch(getUserHistory(user.id));
+  }, [dispatch, user.id]);
 
   return (
     <>
@@ -51,11 +46,17 @@ export default function Profile({
             <div className="group relative">
               <p
                 onClick={() => handleFavoriteRender()}
-                className="cursor-pointer hover:text-red-200 transition-all duration-200"
+                className="cursor-pointer hover:text-red-200 hover:scale-110 transition-all duration-200"
               >
                 Favorite:{" "}
                 <span>
-                  {user.favorite.length} items
+                  <span>
+                    {user.favorite.length === 0
+                      ? "0 item"
+                      : `${user.favorite.length} ${
+                          user.favorite.length === 1 ? "item" : "items"
+                        }`}
+                  </span>
                 </span>
               </p>
               <span className="absolute hidden top-10 right-0 mb-1 group-hover:block px-2 py-2 text-sm font-normal text-white bg-secondary rounded animate__animated animate__swing">
@@ -66,11 +67,15 @@ export default function Profile({
             <div className="group relative">
               <p
                 onClick={() => handleHistoryRender()}
-                className="cursor-pointer hover:text-red-200 transition-all duration-200"
+                className="cursor-pointer hover:text-red-200 hover:scale-110 transition-all duration-200"
               >
                 History:{" "}
                 <span>
-                  {history == null ? "0" : history.length} items
+                  {history.length === 0
+                    ? "0 item"
+                    : `${history.length} ${
+                        history.length === 1 ? "item" : "items"
+                      }`}
                 </span>
               </p>
               <span className="absolute top-10 right-0 mb-1 hidden group-hover:block px-2 py-2 text-sm font-normal text-white bg-secondary rounded animate__animated animate__swing">
@@ -79,7 +84,7 @@ export default function Profile({
             </div>
 
             <button
-              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white transition-all duration-150"
+              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white hover:scale-90 transition-all duration-200"
               onClick={() => handleDeleteAccount()}
             >
               Delete Account

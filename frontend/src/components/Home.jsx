@@ -118,10 +118,10 @@ export default function Home() {
         >
           {/* <HomeBG /> */}
 
-          <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3">
+          <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3 hover:scale-110 transition-all duration-200">
             <img
               src={friendshipImg}
-              alt="friendship icon"
+              alt="friendship icon"z
               className="w-[100px] h-[100px]"
             />
             <h1 className="font-extrabold text-white text-3xl ">SpeakEasy</h1>

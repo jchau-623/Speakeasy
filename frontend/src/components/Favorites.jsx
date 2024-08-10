@@ -5,7 +5,6 @@ import favoriteImg from "../assets/favorites.gif";
 import deleteImg from "../assets/delete.png";
 import { useState } from "react";
 import SingleCard from "./SingleCard";
-import NoUser from "./NoUser";
 import bookmarkImg from "../assets/bookmark.gif";
 
 export default function Favorites({ user }) {
@@ -19,10 +18,6 @@ export default function Favorites({ user }) {
   const deleteFavoriteFunction = async (item) => {
     await dispatch(deleteUserFavoriteThunk(item));
   };
-
-  if (!user) {
-    return <NoUser />;
-  }
 
   if (user.favorite.length === 0) {
     return (

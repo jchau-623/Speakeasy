@@ -6,7 +6,7 @@ const History = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
   console.log("user", user); 
-  const userId = user ? user._id : null;
+  const userId = user ? user.id : null;
   console.log("user id", userId);  
   const history = useSelector((state) => state.history);
 
