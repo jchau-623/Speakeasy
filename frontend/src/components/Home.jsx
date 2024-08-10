@@ -130,7 +130,7 @@ export default function Home() {
             <img
               src={logoutImg}
               alt="log out button"
-              className="w-[50px] h-[50px] absolute top-[50px] right-[60px] cursor-pointer hover:scale-110 transition-all duration-200"
+              className="w-[50px] h-[50px] absolute top-[50px] right-[60px] cursor-pointer hover:scale-125 transition-all duration-200"
               onClick={handleLogOut}
             />
             <span className="absolute top-[100px] right-[50px] mb-1 hidden group-hover:block px-2 py-2 text-sm font-medium text-white bg-red-300 rounded animate__animated animate__swing">
@@ -217,7 +217,7 @@ export default function Home() {
               </div>
 
               <div
-                className="grid grid-cols-1 p-8 w-full h-[90%] overflow-scroll"
+                className="grid grid-cols-1 p-8 w-full h-[90%] overflow-scroll relative"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {showChatBot && <ChatBot user={user} />}

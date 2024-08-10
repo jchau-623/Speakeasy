@@ -6,6 +6,7 @@ import deleteImg from "../assets/delete.png";
 import { useState } from "react";
 import SingleCard from "./SingleCard";
 import NoUser from "./NoUser";
+import bookmarkImg from "../assets/bookmark.gif";
 
 export default function Favorites({ user }) {
   const [selectedFavorite, setSelectedFavorite] = useState(null);
@@ -37,7 +38,7 @@ export default function Favorites({ user }) {
     <div className="flex justify-between h-[100%] relative m-4 overflow-hidden">
       {!selectedFavorite && (
         <img
-        src={favoriteImg}
+        src={bookmarkImg}
         alt="favorite icon"
         className="hidden sm:block w-[60px] h-[60px] sticky top-[30px] left-2 -rotate-30 "
       />
@@ -52,14 +53,14 @@ export default function Favorites({ user }) {
         />
       ) : (
         <ul
-          className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll"
+          className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll relative"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {user &&
             user.favorite.map((item) => (
               <li
                 key={item.term ? item.term : item.idiom}
-                className="w-[100%] flex items-center gap-5"
+                className="w-[100%] flex items-center gap-5 relative"
               >
                 <p
                   className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-primary transition-all duration-200 cursor-pointer"
@@ -67,16 +68,16 @@ export default function Favorites({ user }) {
                 >
                   {item.term ? item.term : item.idiom}
                 </p>
-                <div className="group">
+                <div className="">
                   <img
                     src={deleteImg}
                     alt="delete icon"
-                    className="w-[30px] h-[30px] cursor-pointer"
+                    className="w-[30px] h-[30px] cursor-pointer hover:scale-125 transition-all duration-200"
                     onClick={() => deleteFavoriteFunction(item)}
                   />
-                  <span className="absolute mb-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
-                    Remove from Favorite
-                  </span>
+                  {/* <span className="absolute w-fit top-10 right-1 hidden z-50 mb-1 group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
+                    Remove
+                  </span> */}
                 </div>
               </li>
             ))}

@@ -51,10 +51,10 @@ export default function Profile({
             <div className="group relative">
               <p
                 onClick={() => handleFavoriteRender()}
-                className="cursor-pointer"
+                className="cursor-pointer hover:text-red-200 transition-all duration-200"
               >
                 Favorite:{" "}
-                <span className="hover:text-red-200 transition-all duration-200">
+                <span>
                   {user.favorite.length} items
                 </span>
               </p>
@@ -66,10 +66,10 @@ export default function Profile({
             <div className="group relative">
               <p
                 onClick={() => handleHistoryRender()}
-                className="cursor-pointer"
+                className="cursor-pointer hover:text-red-200 transition-all duration-200"
               >
                 History:{" "}
-                <span className="hover:text-red-200 transition-all duration-200">
+                <span>
                   {history == null ? "0" : history.length} items
                 </span>
               </p>
