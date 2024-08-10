@@ -15,19 +15,18 @@ export const loadHistory = (history) => ({
 
 const addHistoryItem = (item) => ({
     type: ADD_HISTORY_ITEM,
-    item,
+    item: { ...item, id: item._id }, // Normalize _id to id
 });
 
 const editHistoryItem = (item) => ({
     type: EDIT_HISTORY_ITEM,
-    item,
+    item: { ...item, id: item._id }, // Normalize _id to id
 });
 
 const deleteHistoryItem = (id) => ({
     type: DELETE_HISTORY_ITEM,
-    id,
+    id, // Use id directly
 });
-
 
 // Thunks for Async Actions
 export const getUserHistory = (userId) => async (dispatch) => {
@@ -70,9 +69,9 @@ export const createHistoryItem = (itemData) => async (dispatch) => {
     }
 };
 
-export const updateHistoryItem = (itemData) => async (dispatch) => {
+export const updateHistoryItem = (term, itemData) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/history/${itemData.id}`, {
+        const response = await fetch(`/api/history?term=${encodeURIComponent(term)}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,16 +93,16 @@ export const updateHistoryItem = (itemData) => async (dispatch) => {
     }
 };
 
-export const removeHistoryItem = (id, userId) => async (dispatch) => {
+export const removeHistoryItem = (term) => async (dispatch) => {
     try {
-        console.log(`Deleting history item: ${id} for user: ${userId}`);
+        console.log(`Deleting history item with term: ${term}`);
 
-        const response = await fetch(`/api/history/${id}?user_id=${userId}`, {
+        const response = await fetch(`/api/history?term=${encodeURIComponent(term)}`, {
             method: 'DELETE',
         });
 
         if (response.ok) {
-            dispatch(deleteHistoryItem(id));
+            dispatch(deleteHistoryItem(term));
             console.log('History item successfully deleted');
         } else {
             const errorData = await response.json();
@@ -115,6 +114,7 @@ export const removeHistoryItem = (id, userId) => async (dispatch) => {
         throw error;
     }
 };
+
 
 // Initial State
 const initialState = [];
@@ -128,10 +128,10 @@ export default function historyReducer(state = initialState, action) {
             return [...state, action.item];
         case EDIT_HISTORY_ITEM:
             return state.map(item =>
-                item._id === action.item._id ? action.item : item
+                item.term === action.item.term ? action.item : item
             );
         case DELETE_HISTORY_ITEM:
-            return state.filter(item => item._id !== action.itemId);
+            return state.filter(item => item.term !== action.term);
         default:
             return state;
     }

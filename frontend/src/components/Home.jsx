@@ -239,12 +239,12 @@ export default function Home() {
       </div>
       <footer className="absolute bottom-0 w-full bg-secondary text-white py-4">
         <div className="container mx-auto text-center">
-          <a
-            href="/about"
+          <Link
+            to="/about"
             className="bg-primary text-white py-3 px-6 rounded-lg shadow-md text-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
           >
             About Us
-          </a>
+          </Link>
         </div>
       </footer>
     </>

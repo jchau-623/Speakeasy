@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowLeft } from "react-icons/fa";
+import { Link } from "react-router-dom"; 
 import JustinImage from '../assets/JustinImage.jpg';
 
 const members = [
@@ -52,9 +53,9 @@ export default function About() {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-primary text-secondary p-8">
-            <a href="/home" className="absolute top-4 left-4 text-white text-4xl p-2">
+            <Link to="/home" className="absolute top-4 left-4 text-white text-4xl p-2">
                 <FaArrowLeft />
-            </a>
+            </Link>
             <h1 className="text-4xl font-bold mb-8 text-white">Meet the Team</h1>
             <div className="flex flex-col md:flex-row items-center mb-8 w-full max-w-6xl">
                 <div className="flex flex-col items-center mb-8 md:mb-0 md:mr-8">
@@ -67,29 +68,29 @@ export default function About() {
                     </p>
                     <div className="flex flex-col items-center md:items-start mb-4">
                         <div className="flex items-center mb-2">
-                            <FaGithub className="mr-2 text-2xl text-[#171515]" /> {/* GitHub logo color */}
-                            <a
-                                href={currentMember.github}
+                            <FaGithub className="mr-2 text-2xl text-[#171515]" />
+                            <Link
+                                to={{ pathname: currentMember.github }}  // Use Link instead of a tag
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-xl text-white hover:text-secondary transition-all duration-200"
                             >
                                 GitHub
-                            </a>
+                            </Link>
                         </div>
                         <div className="flex items-center mb-2">
-                            <FaLinkedin className="mr-2 text-2xl text-[#0077B5]" /> {/* LinkedIn logo color */}
-                            <a
-                                href={currentMember.linkedin}
+                            <FaLinkedin className="mr-2 text-2xl text-[#0077B5]" />
+                            <Link
+                                to={{ pathname: currentMember.linkedin }}  // Use Link instead of a tag
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-xl text-white hover:text-secondary transition-all duration-200"
                             >
                                 LinkedIn
-                            </a>
+                            </Link>
                         </div>
                         <div className="flex items-center">
-                            <FaEnvelope className="mr-2 text-2xl text-[#D44638]" /> {/* Envelope logo color */}
+                            <FaEnvelope className="mr-2 text-2xl text-[#D44638]" />
                             <button
                                 onClick={() => handleGmailClick(currentMember.email, currentMember.name)}
                                 className="text-xl text-white hover:text-secondary transition-all duration-200"
@@ -100,7 +101,7 @@ export default function About() {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center mt-12 space-x-4">  {/* Increased margin-top to push the buttons lower */}
+            <div className="flex justify-center mt-12 space-x-4">
                 {members.map((member, index) => (
                     <button
                         key={index}
