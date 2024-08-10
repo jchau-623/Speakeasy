@@ -64,6 +64,7 @@ const History = ({ addToFavoriteFunction, removeFromFavorite, user }) => {
           favorite={selectedHistoryItem}
           deleteFavoriteFunction={deleteHistoryFunction}
           setSelectedFavorite={setSelectedHistoryItem}
+          context="history"
         />
       ) : (
         <ul

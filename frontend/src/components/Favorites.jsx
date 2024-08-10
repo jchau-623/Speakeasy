@@ -46,6 +46,7 @@ export default function Favorites({ user }) {
           favorite={selectedFavorite}
           deleteFavoriteFunction={deleteFavoriteFunction}
           setSelectedFavorite={setSelectedFavorite}
+          context="favorites"
         />
       ) : (
         <ul className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
