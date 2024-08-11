@@ -6,6 +6,8 @@ const USER_LOGOUT = "USER_LOGOUT";
 const DELETE_USER = "DELETE_USER";
 const ADD_USER_FAVORITE = "ADD_USER_FAVORITE";
 const DELETE_USER_FAVORITE = "DELETE_USER_FAVORITE";
+const GET_USER_HISTORY = "GET_USER_HISTORY";
+const DELETE_USER_HISTORY = "DELETE_USER_HISTORY";
 
 //action creator
 const userSignin = (user) => {
@@ -54,6 +56,21 @@ const addUserFavorite = (user) => {
       payload: user,
     };
   };
+
+
+const getUserHistory = (user) => {
+  return {
+    type: GET_USER_HISTORY,
+    payload: user,
+  };
+};
+
+const deleteUserHistory = (user) => {
+  return {
+    type: DELETE_USER_HISTORY,
+    payload: user,
+  };
+};
 
 
 
@@ -209,6 +226,48 @@ export const deleteUserFavoriteThunk = (favorite) => async (dispatch) => {
 };
 
 
+export const getUserHistoryThunk = () => async (dispatch) => {
+  console.log("in the getUserHistoryThunk~~");
+  try {
+    const response = await fetch("/api/user/history", {
+      method: "GET",
+      // credentials: "include",
+    });
+    if (response.ok) {
+      const user = await response.json();
+      dispatch(getUserHistory(user));
+      return user;
+    } else {
+      const error = await response.json();
+      console.error("Error fetching user history:", error);
+      return error;
+    }
+  } catch (err) {
+    console.error("Network error:", err);
+    return { error: "Network error" };
+  }
+};
+
+export const deleteUserHistoryThunk = (term) => async (dispatch) => {
+  try {
+    const response = await fetch(`/api/user/history?term=${term}`, {
+      method: "DELETE",
+      // credentials: "include",
+    });
+    if (response.ok) {
+      const user = await response.json();
+      dispatch(deleteUserHistory(user));
+      return { success: true, user };
+    } else {
+      const error = await response.json();
+      return { success: false, error };
+    }
+  } catch (err) {
+    return { success: false, error: { message: "Network error" } };
+  }
+};
+
+
 //reducer
 
 const initialState = { user: null };
@@ -221,6 +280,8 @@ const userReducer = (state = initialState, action) => {
     case GET_USER:
     case ADD_USER_FAVORITE:
     case DELETE_USER_FAVORITE:
+    case GET_USER_HISTORY:
+    case DELETE_USER_HISTORY:
       newState = Object.assign({}, state);
       newState.user = action.payload;
       return newState;

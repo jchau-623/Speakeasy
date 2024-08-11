@@ -7,9 +7,10 @@ import search from "../assets/search-2.gif";
 import {
   addUserFavoriteThunk,
   deleteUserFavoriteThunk,
+  getUserHistoryThunk,
 } from "../store/userReducer";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Result({ handleShowResult, user }) {
   const slang = useSelector((state) => state.slangs.slang);
@@ -26,11 +27,12 @@ export default function Result({ handleShowResult, user }) {
     await dispatch(deleteUserFavoriteThunk(item));
   }
 
-  //   useEffect(()=>{
-  // if(slang){
-  //   setIsIdiom(slang.term.split(" ").length > 1)
-  // }
-  //   },[slang])
+  useEffect(() => {
+    if (slang) {
+      dispatch(getUserHistoryThunk());
+    }
+  }, [slang, dispatch]);
+
   return (
     <div className="flex flex-col w-full h-full animate__animated animate__fadeInRight">
       <div className="flex gap-5 h-[88%] w-full">

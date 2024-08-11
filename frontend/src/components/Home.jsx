@@ -19,7 +19,7 @@ import friendshipImg from "../assets/friendships.gif";
 import infoImg from "../assets/info.gif";
 import copyrightImg from "../assets/copyright.gif";
 
-import { getUserThunk, logoutThunk } from "../store/userReducer";
+import { getUserHistoryThunk, logoutThunk } from "../store/userReducer";
 
 export default function Home() {
   const [showLoading, setShowLoading] = useState(true);
@@ -87,7 +87,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    dispatch(getUserThunk());
+    dispatch(getUserHistoryThunk());
   }, [dispatch]);
 
   if (!user) {

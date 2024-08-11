@@ -47,7 +47,7 @@ export default function SingleCard({
               onClick={() => handleDeleteSingleCard(favorite)}
             />
             <span className="absolute right-1 hidden group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing z-10">
-              Remove from Favorite
+              Remove from list
             </span>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function SingleCard({
           className="mt-4 p-2 bg-primary text-white text-lg font-semibold rounded hover:scale-90 hover:bg-red-200 transition-all duration-200"
           onClick={() => setSelectedFavorite(null)}
         >
-          Back to Favorites
+          Back to List
         </button>
       </div>
     </>

@@ -3,10 +3,18 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 from datetime import datetime
 
-# class FavoriteItem(BaseModel):
-#     item: str
-
 class FavoriteItem(BaseModel):
+    id: str = Field(alias="_id")
+    term: Optional[str] = None
+    idiom: Optional[str] = None
+    meaning: str
+    origin: str
+    exampleUse: str
+    equivalentInLanguage: Optional[str] = None
+    createdAt: datetime
+    user_id: str
+    
+class HistoryItem(BaseModel):
     id: str = Field(alias="_id")
     term: Optional[str] = None
     idiom: Optional[str] = None
@@ -24,6 +32,7 @@ class User(Document):
     email: EmailStr
     password: str
     favorite: List[FavoriteItem] = []
+    history: List[HistoryItem] = []
 
     class Settings:
         name = "users"
@@ -51,3 +60,4 @@ class UserResponse(BaseModel):
     id: PydanticObjectId
     email: EmailStr
     favorite: List[FavoriteItem] = []
+    history: List[HistoryItem] = []
