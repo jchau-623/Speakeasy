@@ -35,7 +35,7 @@ export default function Favorites({ user }) {
         <img
         src={bookmarkImg}
         alt="favorite icon"
-        className="hidden sm:block w-[60px] h-[60px] sticky top-[30px] left-2 -rotate-30 "
+        className="hidden md:block w-[60px] h-[60px] sticky top-[30px] left-2 -rotate-30 "
       />
       )}
       
@@ -48,7 +48,7 @@ export default function Favorites({ user }) {
         />
       ) : (
         <ul
-          className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll relative"
+          className="w-[100%] h-[90%] md:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll relative"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {user &&
@@ -79,7 +79,7 @@ export default function Favorites({ user }) {
         </ul>
       )}
       {!selectedFavorite && (
-        <div className="relative h-full hidden sm:block">
+        <div className="relative h-full hidden md:block">
         <img
           src={favoriteImg}
           alt="favorite icon"

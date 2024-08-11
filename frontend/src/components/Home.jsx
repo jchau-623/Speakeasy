@@ -118,10 +118,10 @@ export default function Home() {
         >
           {/* <HomeBG /> */}
 
-          <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3 hover:scale-110 transition-all duration-200">
+          <div className="flex absolute top-[30px] left-[50px] justify-center items-center gap-3">
             <img
               src={friendshipImg}
-              alt="friendship icon"z
+              alt="friendship icon"
               className="w-[100px] h-[100px]"
             />
             <h1 className="font-extrabold text-white text-3xl ">SpeakEasy</h1>
@@ -236,11 +236,11 @@ export default function Home() {
 
           <footer className="absolute bottom-0 w-full bg-secondary text-white py-4 h-[80px] flex items-center">
             <div className="w-full flex justify-between px-20 items-center ">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
                 <img src={copyrightImg} alt="copy right icon" className="w-[30px] h-[30px]"/>
               <p className="text-lg">SpeakEasy 2024</p>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center gap-2 py-2 px-4 rounded-lg text-lg hover:bg-primary hover:scale-90 transition-all duration-200">
                 <img
                   src={infoImg}
                   alt="information icon"
@@ -248,7 +248,7 @@ export default function Home() {
                 />
                 <Link
                   to="/about"
-                  className=" text-white py-2 px-4 rounded-lg text-lg hover:bg-primary hover:scale-90 transition-all duration-200"
+                  className=" text-white  "
                 >
                   About Us
                 </Link>

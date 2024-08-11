@@ -38,7 +38,7 @@ export default function Profile({
             className="hidden sm:block sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] lg:w-[300px] lg:h-[300px]"
           />
 
-          <div className="w-full flex flex-col justify-center items-center sm:items-start gap-10 text-secondary font-semibold md:font-bold md:text-2xl md:p-10 lg:font-extrabold lg:text-3xl">
+          <div className="w-full flex flex-col justify-center items-center gap-10 text-secondary font-semibold md:font-bold md:text-2xl md:p-10 lg:font-extrabold lg:text-3xl">
             <div className="mt-6">
               <p>Username: {user.email}</p>
               {/* <button>Update email</button> */}
@@ -84,7 +84,7 @@ export default function Profile({
             </div>
 
             <button
-              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white hover:scale-90 transition-all duration-200"
+              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white transition-all duration-200"
               onClick={() => handleDeleteAccount()}
             >
               Delete Account
