@@ -13,8 +13,8 @@ export default function SingleCard({
 
   return (
     <>
-      <div className="w-full flex flex-col items-center gap-3 mt-6">
-        <div className="w-[100%] h-[80%] flex items-center gap-3 ">
+      <div className="w-full flex flex-col items-center gap-3 mt-4 lg:p-6">
+        <div className="w-[100%] h-[80%] flex items-center gap-3 lg:gap-10 ">
           <div
             className="flex flex-col gap-5 w-[100%] h-[100%] p-5 bg-secondary rounded-2xl text-white font-lg  overflow-scroll relative"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}

@@ -139,9 +139,9 @@ export default function Home() {
           </div> 
 
 
-          <div className="flex flex-col bg-[#F5FBF9] w-4/6 h-3/6 rounded-xl shadow-sm overflow-hidden">
+          <div className="flex flex-col w-[60%] bg-[#F5FBF9] h-3/6 rounded-xl shadow-sm overflow-hidden">
             <div className="container w-[100%] h-full">
-              <div className="grid grid-cols-4 w-full h-[80px] bg-primary">
+              <div className="w-[100%] grid grid-cols-4 h-[80px] bg-primary">
                 <div
                   className={` ${
                     showChatBot

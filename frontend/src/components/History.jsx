@@ -56,12 +56,12 @@ const History = ({ user }) => {
   }
 
   return (
-    <div className="flex w-full h-[100%] gap-10 relative m-4 overflow-hidden">
+    <div className="flex w-full h-[100%] gap-10 lg:gap-28 relative m-4 overflow-hidden">
       {!selectedHistoryItem && (
         <img
           src={historyImg}
           alt="history icon"
-          className="hidden sm:block w-[60px] h-[60px] md:w-[120px] md:h-[120px] sticky top-[2px] left-2 -rotate-30"
+          className="hidden sm:block w-[60px] h-[60px] md:w-[120px] md:h-[120px] sticky top-[2px] left-2 -rotate-30 lg:w-[150px] lg:h-[150px]"
         />
       )}
 
@@ -81,7 +81,7 @@ const History = ({ user }) => {
             return (
               <li
                 key={item._id}
-                className="w-[100%] flex items-center gap-5 relative"
+                className="w-[100%] flex items-center gap-5 lg:gap-10 relative"
               >
                 <p
                   className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-primary transition-all duration-200 cursor-pointer"

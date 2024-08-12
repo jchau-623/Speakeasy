@@ -36,7 +36,7 @@ export default function Favorites({ user }) {
         <img
         src={bookmarkImg}
         alt="favorite icon"
-        className="hidden md:block w-[60px] h-[60px] sticky top-[30px] left-2 -rotate-30 "
+        className="hidden md:block w-[60px] h-[60px] sticky top-[30px] left-2 -rotate-30 lg:w-[120px] lg:h-[120px]"
       />
       )}
       
@@ -56,7 +56,7 @@ export default function Favorites({ user }) {
             user.favorite.map((item) => (
               <li
                 key={item.term ? item.term : item.idiom}
-                className="w-[100%] flex items-center gap-5 relative"
+                className="w-[100%] flex items-center gap-5 lg:gap-10 relative"
               >
                 <p
                   className="w-[100%] bg-secondary text-white p-2 font-lg rounded-2xl text-center font-semibold text-2xl truncate hover:scale-95 hover:bg-primary transition-all duration-200 cursor-pointer"

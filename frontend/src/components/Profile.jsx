@@ -11,7 +11,6 @@ export default function Profile({
   handleFavoriteRender,
   handleHistoryRender,
 }) {
-  const history = useSelector((state) => state.history);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ export default function Profile({
   return (
     <>
       {user && (
-        <div className="flex flex-col md:flex-row gap-10 items-center justify-center">
+        <div className="flex flex-col md:flex-row gap-10 lg:gap-32 items-center justify-center">
           <img
             src={profileImg}
             alt="user profile icon"
@@ -71,10 +70,10 @@ export default function Profile({
               >
                 History:{" "}
                 <span>
-                  {history.length === 0
+                  {user.history.length === 0
                     ? "0 item"
-                    : `${history.length} ${
-                        history.length === 1 ? "item" : "items"
+                    : `${user.history.length} ${
+                        user.history.length === 1 ? "item" : "items"
                       }`}
                 </span>
               </p>
