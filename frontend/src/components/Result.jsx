@@ -17,7 +17,7 @@ export default function Result({ handleShowResult, user }) {
   const loading = useSelector((state) => state.slangs.loading);
   const dispatch = useDispatch();
 
-  // const [isIdiom, setIsIdiom] =useState(false)  ;
+  const [isIdiom, setIsIdiom] =useState(false)  ;
 
   async function addToFavoriteFunction(item) {
     await dispatch(addUserFavoriteThunk(item));

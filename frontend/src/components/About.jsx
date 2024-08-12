@@ -6,37 +6,37 @@ import homeImg from "../assets/home.gif";
 import { Link } from "react-router-dom";
 import NoUser from "./NoUser";
 import { useSelector } from "react-redux";
+import DmytroImage from '../assets/DmytroImage.jpeg'
 
 const members = [
-  {
-    name: "Anthony G",
-    image: "link-to-member-1-image",
-    description: "Description for Member 2",
-    github: "https://github.com/member2",
-    linkedin: "https://www.linkedin.com/in/member2",
-    email: "anthony@example.com",
-  },
-  {
-    name: "Dmytro",
-    image: "link-to-member-2-image",
-    description: "Description for Member 4",
-    github: "https://github.com/member4",
-    linkedin: "https://www.linkedin.com/in/member4",
-    email: "dmytro@example.com",
-  },
-  {
-    name: "Leslie C",
-    image: LeslieImg,
-    description:
-      "I've always been fascinated by language – how words shape cultures, connect people, and even bridge divides. After moving to the United States, I was baffled by American slang and idioms.  I realized countless others shared this challenge in different environments. I hope this app creates a platform where people can effortlessly explore the world of slang and idioms from different languages, breaking down language barriers and fostering deeper connections. Let's connect with new cultures with joy!",
-    github: "https://github.com/YuChienChou",
-    linkedin: "https://www.linkedin.com/in/lesliechou921/",
-    email: "chouyuchien@gmail.com",
-  },
-  {
-    name: "Justin C",
-    image: JustinImage,
-    description: `I am Justin, a first-generation Asian American from Queens, NY.
+    {
+        name: 'Anthony G',
+        image: 'link-to-member-1-image',
+        description: 'Description for Member 2',
+        github: 'https://github.com/member2',
+        linkedin: 'https://www.linkedin.com/in/member2',
+        email: 'anthony@example.com'
+    },
+    {
+        name: 'Dmytro',
+        image: DmytroImage,
+        description: "I am a driven and goal oriented professional. I recently finished the full stack web development program at App Academy, and my passion is to help build innovative and practical technologies. Proficient in Express, Sequelize, JavaScript, React/Redux, Flask, Python, SQLAlchemy, HTML, and CSS.I'm a highly motivated software developer who is driven to excel at anything that I put my mind to. In my free time I enjoy going on adventures and getting out into nature and playing soccer and guitar. Please feel free to check out my portfolio, LinkedIn, and Github for more information!",
+        github: 'https://github.com/Dmytro-Yakovenko',
+        linkedin: 'https://www.linkedin.com/in/dmytro-yakovenko-5b2022230/',
+        email: 'd.yakovenko1986@gmail.com'
+    },
+    {
+        name: 'Leslie C',
+        image: 'link-to-member-3-image',
+        description: 'Description for Member 3',
+        github: 'https://github.com/member3',
+        linkedin: 'https://www.linkedin.com/in/member3',
+        email: 'leslie@example.com'
+    },
+    {
+        name: 'Justin C',
+        image: JustinImage,
+        description: `I am Justin, a first-generation Asian American from Queens, NY.
                   Witnessing firsthand the struggles my parents went through assimilating into this country,
                   I created this translator app to help immigrants and non-English speakers who face language barriers when they first arrive in the U.S.
                   My goal is to make communication easier for everyone, no matter their background.
