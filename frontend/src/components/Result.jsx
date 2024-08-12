@@ -33,6 +33,17 @@ export default function Result({ handleShowResult, user }) {
     }
   }, [slang, dispatch]);
 
+  useEffect(()=>{
+    if(slang && slang.term){
+      setIsIdiom(false)
+    
+    }
+    if(slang && slang.idiom){
+      setIsIdiom(true)
+      
+    }
+      },[slang])
+
   return (
     <div className="flex flex-col w-full h-full animate__animated animate__fadeInRight">
       <div className="flex gap-5 h-[88%] w-full">
@@ -61,6 +72,7 @@ export default function Result({ handleShowResult, user }) {
                   {slang?.term}
                   {slang?.idiom}
                 </h1>
+                 {/* <h1 className="text-3xl text-[#38b0b5] font-extrabold">{isIdiom?"Idiom: ":"Slang: "}{slang?.term}{slang?.idiom}</h1> */}
                 <div className="relative group">
                   {user.favorite.find(
                     (favorite) =>

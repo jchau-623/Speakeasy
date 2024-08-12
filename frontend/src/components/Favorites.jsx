@@ -49,7 +49,7 @@ export default function Favorites({ user }) {
         />
       ) : (
         <ul
-          className="w-[100%] h-[90%] md:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll relative"
+          className="w-[100%] h-[90%] md:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll relative animate__animated animate__fadeInUp"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {user &&
