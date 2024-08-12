@@ -38,7 +38,7 @@ export default function Profile({
             className="hidden sm:block sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] lg:w-[300px] lg:h-[300px]"
           />
 
-          <div className="w-full flex flex-col justify-center items-center gap-10 text-secondary font-semibold md:font-bold md:text-2xl md:p-10 lg:font-extrabold lg:text-3xl">
+          <div className="w-full flex flex-col justify-center md:items-start items-center gap-10 text-secondary font-semibold md:font-bold md:text-2xl md:p-10 lg:font-extrabold lg:text-3xl">
             <div className="mt-6">
               <p>Username: {user.email}</p>
               {/* <button>Update email</button> */}

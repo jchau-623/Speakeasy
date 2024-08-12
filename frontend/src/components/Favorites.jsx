@@ -9,6 +9,7 @@ import bookmarkImg from "../assets/bookmark.gif";
 
 export default function Favorites({ user }) {
   const [selectedFavorite, setSelectedFavorite] = useState(null);
+  const [favoriteItem, setFavoriteItem] = useState(null);
   const dispatch = useDispatch();
 
   const showSingleFavoriteFunction = (favorite) => {
@@ -30,7 +31,7 @@ export default function Favorites({ user }) {
   }
 
   return (
-    <div className="flex justify-between h-[100%] relative m-4 overflow-hidden">
+    <div className="w-full flex justify-between h-[100%] relative mt-4 overflow-hidden">
       {!selectedFavorite && (
         <img
         src={bookmarkImg}
@@ -63,16 +64,20 @@ export default function Favorites({ user }) {
                 >
                   {item.term ? item.term : item.idiom}
                 </p>
-                <div className="">
+                <div className="flex relative">
                   <img
                     src={deleteImg}
                     alt="delete icon"
                     className="w-[30px] h-[30px] cursor-pointer hover:scale-125 transition-all duration-200"
                     onClick={() => deleteFavoriteFunction(item)}
+                    onMouseEnter={() => setFavoriteItem(item)}
+                    onMouseLeave={() => setFavoriteItem(null)}
                   />
-                  {/* <span className="absolute w-fit top-10 right-1 hidden z-50 mb-1 group-hover:block px-2 py-2 text-xs text-white bg-red-300 rounded animate__animated animate__swing">
-                    Remove
-                  </span> */}
+                  {favoriteItem === item && (
+                    <div className="absolute text-center w-[200px] top-0 -left-52 z-20 mb-1 px-2 py-2 text-sm text-white bg-red-300 rounded animate__animated animate__swing">
+                      Remove from favorites
+                    </div>
+                  )}
                 </div>
               </li>
             ))}

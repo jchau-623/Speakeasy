@@ -169,6 +169,8 @@ async def add_favorite_item(favorite_item: FavoriteItem, current_user_email: str
             status_code=status.HTTP_409_CONFLICT,
             detail="Favorite item already exists"
         )
+        
+    user.favorite.sort(key=lambda x: x.createdAt, reverse=True)
 
     user_response = UserResponse(
         id=user.id,
@@ -199,6 +201,8 @@ async def delete_favorite_item(favorite_item: FavoriteItem, current_user_email: 
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Favorite item not found"
         )
+        
+    user.favorite.sort(key=lambda x: x.createdAt, reverse=True)
 
     user_response = UserResponse(
         id=user.id,
@@ -230,6 +234,7 @@ async def get_user_history(current_user_email: str = Depends(authenticate)) -> U
         item.id = str(item.id)
     
     user.history = slang_history + idiom_history
+    user.history.sort(key=lambda x: x.createdAt, reverse=True)
     await user.save()
 
     user_response = UserResponse(
@@ -266,7 +271,6 @@ async def delete_user_history(term: str, current_user_email: str = Depends(authe
             detail="History item not found"
         )
     
-    # Update the user's history list
     slang_history = await Slang.find(Slang.user_id == str(user.id)).to_list()
     idiom_history = await Idiom.find(Idiom.user_id == str(user.id)).to_list()
     
@@ -276,6 +280,9 @@ async def delete_user_history(term: str, current_user_email: str = Depends(authe
         item.id = str(item.id)
     
     user.history = slang_history + idiom_history
+    
+    user.history.sort(key=lambda x: x.createdAt, reverse=True)
+    
     await user.save()
 
     user_response = UserResponse(
