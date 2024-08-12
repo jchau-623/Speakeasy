@@ -74,7 +74,7 @@ const History = ({ user }) => {
         />
       ) : (
         <ul
-          className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll mr-10"
+          className="w-[100%] h-[90%] sm:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll mr-10 animate__animated animate__fadeInUp"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {user.history.map((item) => {
