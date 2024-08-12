@@ -247,15 +247,12 @@ export default function Home() {
               <p className="text-lg">SpeakEasy 2024</p>
               </div>
               <div className="flex items-center gap-2 py-2 px-4 rounded-lg text-lg hover:bg-primary hover:scale-90 transition-all duration-200">
-                <img
-                  src={infoImg}
-                  alt="information icon"
-                  className="w-[30px] h-[30px]"
-                />
-                <Link
-                  to="/about"
-                  className=" text-white  "
-                >
+                <Link to="/about" className="flex items-center gap-2 text-white">
+                  <img
+                    src={infoImg}
+                    alt="information icon"
+                    className="w-[30px] h-[30px]"
+                  />
                   About Us
                 </Link>
               </div>
