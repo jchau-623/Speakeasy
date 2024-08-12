@@ -78,8 +78,6 @@ const History = ({ user }) => {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {user.history.map((item) => {
-
-
             return (
               <li
                 key={item._id}
@@ -93,8 +91,7 @@ const History = ({ user }) => {
                 </p>
                 <div className="relative cursor-pointer">
                   {user.favorite.find(
-                    (favorite) =>
-                      favorite._id === item._id 
+                    (favorite) => favorite._id === item._id
                   ) ? (
                     <div className="flex relative">
                       <img

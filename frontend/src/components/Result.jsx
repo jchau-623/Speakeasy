@@ -10,7 +10,7 @@ import {
   getUserHistoryThunk,
 } from "../store/userReducer";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Result({ handleShowResult, user }) {
   const slang = useSelector((state) => state.slangs.slang);

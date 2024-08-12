@@ -227,7 +227,7 @@ export const deleteUserFavoriteThunk = (favorite) => async (dispatch) => {
 
 
 export const getUserHistoryThunk = () => async (dispatch) => {
-  console.log("in the getUserHistoryThunk~~");
+  // console.log("in the getUserHistoryThunk~~");
   try {
     const response = await fetch("/api/user/history", {
       method: "GET",
