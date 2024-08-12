@@ -118,6 +118,20 @@ async def get_slang(id: UUID):
     except Exception as e:
         logger.error("Error fetching slang: %s", e, exc_info=True)
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+    
+    
+@slang_router.delete("/", response_model=bool)
+async def delete_all_slangs():
+    try:
+        delete_result = await Slang.delete_all()
+        if delete_result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="No slangs found to delete")
+        return True
+    except Exception as e:
+        logger.error("Error deleting all slangs: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
 
 
 
