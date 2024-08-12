@@ -16,7 +16,7 @@ export default function Result({ handleShowResult, user }) {
   const loading = useSelector(state=>state.slangs.loading)
   const dispatch = useDispatch();
 
-  // const [isIdiom, setIsIdiom] =useState(false)  ;
+  const [isIdiom, setIsIdiom] =useState(false)  ;
 
   async function addToFavoriteFunction(item) {
     await dispatch(addUserFavoriteThunk(item));
@@ -26,11 +26,16 @@ export default function Result({ handleShowResult, user }) {
     await dispatch(deleteUserFavoriteThunk(item));
   }
 
-//   useEffect(()=>{
-// if(slang){
-//   setIsIdiom(slang.term.split(" ").length > 1)
-// }
-//   },[slang])
+  useEffect(()=>{
+if(slang && slang.term){
+  setIsIdiom(false)
+
+}
+if(slang && slang.idiom){
+  setIsIdiom(true)
+  
+}
+  },[slang])
   return (
     
     <div className="flex flex-col w-full h-full animate__animated animate__fadeInRight">
@@ -44,7 +49,7 @@ export default function Result({ handleShowResult, user }) {
           {loading && <><img src={search}  className=" sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]" alt="sesrch icon" /></>}
           {!loading && <>
             <div className="flex justify-between w-full">
-            {/* <h1>{slang?.term}{slang?.idiom}</h1> */}
+            <h1>{isIdiom?"Idiom: ":"Slang: "}{slang?.term}{slang?.idiom}</h1>
             <div className="relative group">
               {user.favorite.find(
                 (favorite) => favorite.term === slang.term

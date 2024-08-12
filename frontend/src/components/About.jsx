@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom"; 
 import JustinImage from '../assets/JustinImage.jpg';
+import DmytroImage from '../assets/DmytroImage.jpeg'
 
 const members = [
     {
@@ -14,11 +15,11 @@ const members = [
     },
     {
         name: 'Dmytro',
-        image: 'link-to-member-2-image',
-        description: 'Description for Member 4',
-        github: 'https://github.com/member4',
-        linkedin: 'https://www.linkedin.com/in/member4',
-        email: 'dmytro@example.com'
+        image: DmytroImage,
+        description: "I am a driven and goal oriented professional. I recently finished the full stack web development program at App Academy, and my passion is to help build innovative and practical technologies. Proficient in Express, Sequelize, JavaScript, React/Redux, Flask, Python, SQLAlchemy, HTML, and CSS.I'm a highly motivated software developer who is driven to excel at anything that I put my mind to. In my free time I enjoy going on adventures and getting out into nature and playing soccer and guitar. Please feel free to check out my portfolio, LinkedIn, and Github for more information!",
+        github: 'https://github.com/Dmytro-Yakovenko',
+        linkedin: 'https://www.linkedin.com/in/dmytro-yakovenko-5b2022230/',
+        email: 'd.yakovenko1986@gmail.com'
     },
     {
         name: 'Leslie C',
