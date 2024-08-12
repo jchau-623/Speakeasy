@@ -24,10 +24,12 @@ async def get_user_history(user_id: str = Query(..., alias="user_id")):
         # Fetch idioms for the given user_id
         idioms = await Idiom.find(Idiom.user_id == user_id).to_list()
         logger.info(f"Fetched idioms: {idioms}")
+        # print(f"Idioms: {idioms}")
 
         # Fetch slangs for the given user_id
         slangs = await Slang.find(Slang.user_id == user_id).to_list()
         logger.info(f"Fetched slangs: {slangs}")
+        # print(f"Slangs: {slangs}")
 
         # Combine idioms and slangs
         history = idioms + slangs
