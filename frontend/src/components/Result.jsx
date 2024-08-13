@@ -109,25 +109,25 @@ export default function Result({ handleShowResult, user }) {
                 <p className="text-xl font-medium">
                   Meaning :{" "}
                   <span className="text-lg font-normal leading-normal">
-                    {slang.meaning}
+                    {slang?.meaning}
                   </span>
                 </p>
                 <p className="text-xl font-medium">
                   Origin:{" "}
                   <span className="text-lg font-normal leading-normal">
-                    {slang.origin}
+                    {slang?.origin}
                   </span>
                 </p>
                 <p className="text-xl font-medium">
                   Example:{" "}
                   <span className="text-lg font-normal leading-normal">
-                    {slang.exampleUse}
+                    {slang?.exampleUse}
                   </span>
                 </p>
                 <p className="text-xl font-medium">
                   Equivalent:{" "}
                   <span className="text-lg font-normal leading-normal">
-                    {slang.equivalentInLanguage}
+                    {slang?.equivalentInLanguage}
                   </span>
                 </p>
               </div>

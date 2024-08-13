@@ -43,12 +43,16 @@ async def get_user_history(user_id: str = Query(..., alias="user_id")):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal Server Error"
         )
-
-
 @history_router.delete("/delete_history", response_model=Dict[str, str])
-async def delete_user_history(history_item: SlangResponse | IdiomResponse,
+async def delete_user_history(
+    history_item: Union[SlangResponse, IdiomResponse],
     current_user_email: str = Depends(authenticate)
 ) -> Dict[str, str]:
+
+# @history_router.delete("/delete_history", response_model=Dict[str, str])
+# async def delete_user_history(history_item: SlangResponse | IdiomResponse,
+#     current_user_email: str = Depends(authenticate)
+# ) -> Dict[str, str]:
     """Delete a history item for the current user"""
     db = Database(User)
     user = await db.get_by_email(current_user_email)
