@@ -7,15 +7,16 @@ import { Link } from "react-router-dom";
 import NoUser from "./NoUser";
 import { useSelector } from "react-redux";
 import DmytroImage from "../assets/DmytroImage.jpeg";
+import TonyImage from "../assets/TonyImage.jpg";
 
 const members = [
   {
     name: "Anthony G",
-    image: "link-to-member-1-image",
-    description: "Description for Member 2",
-    github: "https://github.com/member2",
-    linkedin: "https://www.linkedin.com/in/member2",
-    email: "anthony@example.com",
+    image: TonyImage,
+    description: "I’m a Software Engineer with a degree in Computer Science and experience across both frontend and backend development. I thrive on building applications that solve real-world problems. The idea for this app stemmed from my own experiences and observations of the challenges non-native speakers face in understanding colloquial language. Idioms and slang often carry meanings that go beyond their literal translation, creating barriers to effective communication. I wanted to create a tool that not only translates these expressions but also provides the cultural context behind them, making it easier for people to connect and engage across language barriers.",
+    github: "https://github.com/triplegdev",
+    linkedin: "https://www.linkedin.com/in/tony-g-dev/",
+    email: "tony@buildwithme.tech",
   },
   {
     name: "Dmytro",

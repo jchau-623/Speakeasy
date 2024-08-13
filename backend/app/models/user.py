@@ -13,7 +13,7 @@ class FavoriteItem(BaseModel):
     equivalentInLanguage: Optional[str] = None
     createdAt: datetime
     user_id: str
-    
+
 class HistoryItem(BaseModel):
     id: str = Field(alias="_id")
     term: Optional[str] = None
@@ -24,7 +24,7 @@ class HistoryItem(BaseModel):
     equivalentInLanguage: Optional[str] = None
     createdAt: datetime
     user_id: str
-    
+
 
 class User(Document):
 
@@ -38,7 +38,7 @@ class User(Document):
         name = "users"
 
     class Config:
-        schema_extra = {
+        json_chema_extra = {
             "example": {
                 "email": "user@example.com",
                 "password": "password"

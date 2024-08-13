@@ -24,7 +24,7 @@ hash_password = HashPassword()
 @user_router.post("/signup", response_model=UserResponse)
 async def sign_new_user(user: User, response: Response) -> UserResponse:
     user_exist = await User.find_one(User.email == user.email)
-    if user_exist: 
+    if user_exist:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User email already exists"
@@ -140,7 +140,7 @@ async def get_favorite_items(current_user_email: str = Depends(authenticate)) ->
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    
+
     user_response = UserResponse(
         id=user.id,
         email=user.email,
@@ -160,7 +160,7 @@ async def add_favorite_item(favorite_item: FavoriteItem, current_user_email: str
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    
+
     if favorite_item not in user.favorite:
         user.favorite.append(favorite_item)
         await user.save()
@@ -192,7 +192,7 @@ async def delete_favorite_item(favorite_item: FavoriteItem, current_user_email: 
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    
+
     if favorite_item in user.favorite:
         user.favorite.remove(favorite_item)
         await user.save()
