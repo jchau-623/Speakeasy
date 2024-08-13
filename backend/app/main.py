@@ -10,6 +10,7 @@ from api.search_route import search_router
 from api.idiom_routes import idiom_router
 from api.history_routes import history_router
 from databases.connection import Settings
+from pathlib import Path
 import uvicorn
 
 app = FastAPI()
@@ -33,7 +34,10 @@ app.include_router(idiom_router, prefix="/api/idioms", tags=["Idiom"])
 app.include_router(history_router, prefix="/api/history", tags=["History"])
 
 
-app.mount("/", StaticFiles(directory="../../frontend/dist", html=True), name="static")
+project_root = Path(__file__).parent.parent.parent  # Go up two levels from main.py
+dist_dir = project_root / "frontend" / "dist"
+
+app.mount("/", StaticFiles(directory=dist_dir, html=True), name="static")
 
 
 @app.on_event("startup")
