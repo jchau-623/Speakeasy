@@ -46,6 +46,7 @@ export default function Favorites({ user }) {
           favorite={selectedFavorite}
           deleteFavoriteFunction={deleteFavoriteFunction}
           setSelectedFavorite={setSelectedFavorite}
+          context="favorites"
         />
       ) : (
         <ul

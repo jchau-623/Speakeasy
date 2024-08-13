@@ -38,23 +38,24 @@ async def detect_language(term: str) -> str:
 @slang_router.post("/", response_model=SlangResponse)
 async def create_slang(slang: SlangCreate):
     try:
-        
-        existing_slang = await Slang.find_one(Slang.term == slang.term)
+        # Ensure the term is in a consistent format (e.g., lowercase and stripped of extra spaces)
+        term_lower = slang.term.strip().lower()
+
+        # Check if a slang with the same term and user_id already exists
+        existing_slang = await Slang.find_one(Slang.term == term_lower, Slang.user_id == slang.user_id)
         if existing_slang:
             return SlangResponse(**existing_slang.dict(by_alias=True))
       
-      
-        # Detect the language of the term
-        detected_language = await detect_language(slang.term)
+        # Detect the language of the term (continue with the rest of the logic)
+        detected_language = await detect_language(term_lower)
         logger.info(f"Detected language: {detected_language}")
       
-      
-        # Prepare prompts for each required field
+        # Prepare prompts and create a new slang object (as before)
         prompts = {
-            "meaning": f"Define the slang term '{slang.term}' and provide its meaning.",
-            "origin": f"Explain the origin of the slang term '{slang.term}'.",
-            "exampleUse": f"Provide an example use of the slang term '{slang.term}'.",
-            "equivalentInLanguage": f"Is there an equivalent of the slang term '{slang.term}' in other languages? If so, what is it?"
+            "meaning": f"Define the slang term '{term_lower}' and provide its meaning.",
+            "origin": f"Explain the origin of the slang term '{term_lower}'.",
+            "exampleUse": f"Provide an example use of the slang term '{term_lower}'.",
+            "equivalentInLanguage": f"Is there an equivalent of the slang term '{term_lower}' in other languages? If so, what is it?"
         }
 
         # Extract information using the prompts
@@ -73,9 +74,9 @@ async def create_slang(slang: SlangCreate):
             "equivalentInLanguage": result["equivalentInLanguage"] or None
         }
        
-        # Create a new slang object
+        # Create and insert a new slang object
         new_slang = Slang(
-            term=slang.term,
+            term=term_lower,
             meaning=result["meaning"],
             origin=result["origin"],
             exampleUse=result["exampleUse"],
@@ -84,7 +85,6 @@ async def create_slang(slang: SlangCreate):
         )
         await new_slang.insert()
        
-      
         return SlangResponse(**new_slang.dict(by_alias=True))
         
     except Exception as e:

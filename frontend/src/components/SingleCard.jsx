@@ -4,6 +4,7 @@ export default function SingleCard({
   favorite,
   deleteFavoriteFunction,
   setSelectedFavorite,
+  context
 }) {
 
   function handleDeleteSingleCard(favorite) {
@@ -55,7 +56,7 @@ export default function SingleCard({
           className="mt-4 p-2 bg-primary text-white text-lg font-semibold rounded hover:scale-90 hover:bg-red-200 transition-all duration-200"
           onClick={() => setSelectedFavorite(null)}
         >
-          Back to List
+          Back to {context === "history" ? "History" : "Favorites"}
         </button>
       </div>
     </>

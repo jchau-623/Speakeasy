@@ -35,20 +35,24 @@ async def detect_language(term: str) -> str:
 @idiom_router.post("/", response_model=IdiomResponse)
 async def create_idiom(idiom: IdiomCreate):
     try:
-        existing_idiom = await Idiom.find_one(Idiom.idiom == idiom.idiom)
+        # Ensure the idiom is in a consistent format (e.g., lowercase and stripped of extra spaces)
+        idiom_lower = idiom.idiom.strip().lower()
+
+        # Check if an idiom with the same term and user_id already exists
+        existing_idiom = await Idiom.find_one(Idiom.idiom == idiom_lower, Idiom.user_id == idiom.user_id)
         if existing_idiom:
             return IdiomResponse(**existing_idiom.dict(by_alias=True))
 
         # Detect the language of the idiom
-        detected_language = await detect_language(idiom.idiom)
+        detected_language = await detect_language(idiom_lower)
         logger.info(f"Detected language: {detected_language}")
 
         # Prepare prompts for each required field
         prompts = {
-            "meaning": f"Define the idiom '{idiom.idiom}' and provide its meaning.",
-            "origin": f"Explain the origin of the idiom '{idiom.idiom}'.",
-            "exampleUse": f"Provide an example use of the idiom '{idiom.idiom}'.",
-            "equivalentInLanguage": f"Is there an equivalent of the idiom '{idiom.idiom}' in other languages? If so, what is it?"
+            "meaning": f"Define the idiom '{idiom_lower}' and provide its meaning.",
+            "origin": f"Explain the origin of the idiom '{idiom_lower}'.",
+            "exampleUse": f"Provide an example use of the idiom '{idiom_lower}'.",
+            "equivalentInLanguage": f"Is there an equivalent of the idiom '{idiom_lower}' in other languages? If so, what is it?"
         }
 
         # Extract information using the prompts
@@ -69,7 +73,7 @@ async def create_idiom(idiom: IdiomCreate):
 
         # Create a new idiom object
         new_idiom = Idiom(
-            idiom=idiom.idiom,
+            idiom=idiom_lower,
             meaning=result["meaning"],
             origin=result["origin"],
             exampleUse=result["exampleUse"],
