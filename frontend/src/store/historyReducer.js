@@ -5,24 +5,27 @@ const EDIT_HISTORY_ITEM = 'history/EDIT_HISTORY_ITEM';
 const DELETE_HISTORY_ITEM = 'history/DELETE_HISTORY_ITEM';
 
 // Action Creators
-const loadHistory = (history) => ({
+export const loadHistory = (history) => ({
     type: LOAD_HISTORY,
-    history,
+    history: history.map(item => ({
+        ...item,
+        id: item._id  
+    })),
 });
 
 const addHistoryItem = (item) => ({
     type: ADD_HISTORY_ITEM,
-    item,
+    item: { ...item, id: item._id },
 });
 
 const editHistoryItem = (item) => ({
     type: EDIT_HISTORY_ITEM,
-    item,
+    item: { ...item, id: item._id }, 
 });
 
-const deleteHistoryItem = (itemId) => ({
+const deleteHistoryItem = (id) => ({
     type: DELETE_HISTORY_ITEM,
-    itemId,
+    id, 
 });
 
 // Thunks for Async Actions
@@ -31,6 +34,7 @@ export const getUserHistory = (userId) => async (dispatch) => {
         const response = await fetch(`/api/history/?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
+            console.log('Fetched history data:', data.history); // Log to verify data structure
             dispatch(loadHistory(data.history));
         } else {
             const errorData = await response.json();
@@ -65,9 +69,9 @@ export const createHistoryItem = (itemData) => async (dispatch) => {
     }
 };
 
-export const updateHistoryItem = (itemData) => async (dispatch) => {
+export const updateHistoryItem = (term, itemData) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/history/${itemData.id}`, {
+        const response = await fetch(`/api/history?term=${encodeURIComponent(term)}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -89,16 +93,22 @@ export const updateHistoryItem = (itemData) => async (dispatch) => {
     }
 };
 
-export const removeHistoryItem = (itemId) => async (dispatch) => {
+export const removeHistoryItem = (history) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/history/${itemId}`, {
+        const response = await fetch(`/api/history/delete_history`, {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(history),  // Send history item in the request body
         });
 
         if (response.ok) {
-            dispatch(deleteHistoryItem(itemId));
+            dispatch(deleteHistoryItem(history));
+            console.log('History item successfully deleted');
         } else {
             const errorData = await response.json();
+            console.error('Failed to delete history item:', errorData);
             throw new Error(errorData.message || 'Failed to delete history item');
         }
     } catch (error) {
@@ -107,11 +117,14 @@ export const removeHistoryItem = (itemId) => async (dispatch) => {
     }
 };
 
+
+
 // Initial State
 const initialState = [];
 
 // Reducer
 export default function historyReducer(state = initialState, action) {
+    let newState;
     switch (action.type) {
         case LOAD_HISTORY:
             return action.history;
@@ -119,10 +132,12 @@ export default function historyReducer(state = initialState, action) {
             return [...state, action.item];
         case EDIT_HISTORY_ITEM:
             return state.map(item =>
-                item.id === action.item.id ? action.item : item
+                item.term === action.item.term ? action.item : item
             );
         case DELETE_HISTORY_ITEM:
-            return state.filter(item => item.id !== action.itemId);
+            newState = Object.assign({}, state);
+            newState.user = action.payload;
+            return newState;
         default:
             return state;
     }
