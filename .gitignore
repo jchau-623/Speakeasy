@@ -25,4 +25,5 @@ lerna-debug.log*
 *.sln
 *.sw?
 .env
+.env.prod
 /venv/

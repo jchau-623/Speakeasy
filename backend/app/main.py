@@ -12,6 +12,7 @@ from api.history_routes import history_router
 from databases.connection import Settings
 from pathlib import Path
 import uvicorn
+import os
 
 app = FastAPI()
 
@@ -33,8 +34,10 @@ app.include_router(search_router, prefix="/api/search", tags=["User"])
 app.include_router(idiom_router, prefix="/api/idioms", tags=["Idiom"])
 app.include_router(history_router, prefix="/api/history", tags=["History"])
 
+print("Current working directory:", os.getcwd())
+print("Absolute path of frontend/dist:", os.path.abspath("../frontend/dist"))
 
-app.mount("/", StaticFiles(directory="../frontend/dist", html=True), name="static")
+app.mount("/", StaticFiles(directory="../../frontend/dist", html=True), name="static")
 
 
 @app.on_event("startup")
