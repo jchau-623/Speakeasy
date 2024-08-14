@@ -71,7 +71,7 @@ export default function ChatBot({ user }) {
   return (
     <>
       {showResult ? (
-        <div className="w-full h-full overflow-hidden">
+        <div className="w-full h-full overflow-hidden relative">
           <Result handleShowResult={setShowResult} user={user} />
         </div>
       ) : (

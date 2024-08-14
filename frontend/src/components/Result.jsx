@@ -45,15 +45,15 @@ export default function Result({ handleShowResult, user }) {
       },[slang])
 
   return (
-    <div className="flex flex-col w-full h-full animate__animated animate__fadeInRight">
-      <div className="flex gap-5 h-[88%] w-full">
+    <div className="relative -left-4 flex flex-col w-full h-full animate__animated animate__fadeInRight">
+      <div className="flex gap-5 h-[88%] w-full relative">
         <img
           src={chatBotImg}
           alt="chat bot icon"
-          className="hidden sm:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]"
+          className="hidden lg:block sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px]"
         />
         <div
-          className="sm:relative top-10 -left-6 p-5 w-full sm:w-[85%] h-[100%] md:h-[80%] rounded-xl border-4 border-secondary overflow-scroll"
+          className="relative top-10 -left-6 p-5 w-full sm:w-[85%] h-[100%] md:h-[80%] rounded-xl border-4 border-secondary overflow-scroll"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {loading && (
@@ -137,7 +137,7 @@ export default function Result({ handleShowResult, user }) {
       </div>
       <button
         onClick={() => handleShowResult(false)}
-        className="flex justify-center self-end p-2 sm:p-3 text-xs sm:text-base bg-secondary w-fit sm:w-[10%] rounded-full text-white font-medium hover:scale-90 hover:bg-red-200 transition-all duration-200"
+        className="relative bottom-4 flex justify-center self-end p-2 sm:p-3 text-xs sm:text-base bg-secondary w-fit sm:w-[10%] rounded-full text-white font-medium hover:scale-90 hover:bg-red-200 transition-all duration-200"
       >
         Got it
       </button>

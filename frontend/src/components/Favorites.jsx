@@ -31,12 +31,12 @@ export default function Favorites({ user }) {
   }
 
   return (
-    <div className="w-full flex justify-between h-[100%] relative mt-4 overflow-hidden">
+    <div className="flex w-full h-[100%] gap-10 xl:gap-20 relative m-4 overflow-hidden">
       {!selectedFavorite && (
         <img
         src={bookmarkImg}
         alt="favorite icon"
-        className="hidden md:block w-[60px] h-[60px] sticky top-[30px] left-2 -rotate-30 lg:w-[120px] lg:h-[120px]"
+        className="hidden lg:block lg:w-[100px] lg:h-[100px] sticky top-[2px] -rotate-30 xl:w-[150px] xl:h-[150px]"
       />
       )}
       
@@ -50,7 +50,7 @@ export default function Favorites({ user }) {
         />
       ) : (
         <ul
-          className="w-[100%] h-[90%] md:w-[70%] flex flex-col items-center gap-6 mt-3 overflow-scroll relative animate__animated animate__fadeInUp"
+          className="w-[100%] h-[90%] pr-8 flex flex-col items-center gap-6 mt-3 overflow-scroll relative animate__animated animate__fadeInUp"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {user &&
@@ -84,7 +84,7 @@ export default function Favorites({ user }) {
             ))}
         </ul>
       )}
-      {!selectedFavorite && (
+      {/* {!selectedFavorite && (
         <div className="relative h-full hidden md:block">
         <img
           src={favoriteImg}
@@ -92,7 +92,7 @@ export default function Favorites({ user }) {
           className="w-[50px] h-[50px] sticky top-80 rotate-30"
         />
       </div>
-      )}
+      )} */}
       
     </div>
   );
