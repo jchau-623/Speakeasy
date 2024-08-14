@@ -145,7 +145,7 @@ export default function Home() {
           </div> 
 
 
-          <div className="flex flex-col w-[60%] bg-[#F5FBF9] h-3/6 rounded-xl shadow-sm overflow-hidden">
+          <div className="flex flex-col w-fit lg:w-[80%] xl:w-[60%] bg-[#F5FBF9] h-3/6 rounded-xl shadow-sm overflow-hidden">
             <div className="container w-[100%] h-full">
               <div className="w-[100%] grid grid-cols-4 h-[80px] bg-primary">
                 <div

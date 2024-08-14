@@ -30,14 +30,14 @@ export default function Profile({
   return (
     <>
       {user && (
-        <div className="flex flex-col md:flex-row gap-10 lg:gap-32 items-center justify-center">
+        <div className="flex flex-col md:flex-row gap-10 xl:gap-32 items-center justify-center">
           <img
             src={profileImg}
             alt="user profile icon"
-            className="hidden sm:block sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] lg:w-[300px] lg:h-[300px]"
+            className="hidden sm:block sm:w-[80px] sm:h-[80px] lg:w-[200px] lg:h-[200px] xl:w-[300px] xl:h-[300px]"
           />
 
-          <div className="w-full flex flex-col justify-center md:items-start items-center gap-10 text-secondary font-semibold md:font-bold md:text-2xl md:p-10 lg:font-extrabold lg:text-3xl animate__animated animate__fadeInRight">
+          <div className="w-full flex flex-col justify-center items-center gap-8 text-secondary font-semibold md:font-bold md:text-2xl md:p-10 lg:font-extrabold lg:text-3xl animate__animated animate__fadeInRight">
             <div className="mt-6">
               <p>Username: {user.email}</p>
               {/* <button>Update email</button> */}
@@ -83,7 +83,7 @@ export default function Profile({
             </div>
 
             <button
-              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center md:self-end mt-10 hover:bg-red-400 hover:text-white transition-all duration-200"
+              className="px-5 py-3 text-sm sm:text-lg lg:text-2xl bg-red-200 rounded self-center hover:bg-red-400 hover:text-white transition-all duration-200"
               onClick={() => handleDeleteAccount()}
             >
               Delete Account
